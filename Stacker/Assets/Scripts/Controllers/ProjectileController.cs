@@ -1,8 +1,11 @@
 ﻿using Stacker.Components;
 using Stacker.Extensions.Components;
+using Stacker.Extensions.Utils;
 using Stacker.Templates.Rounds;
 using System.Collections;
 using UnityEngine;
+
+#pragma warning disable 0649
 
 namespace Stacker.Controllers
 {
@@ -14,14 +17,30 @@ namespace Stacker.Controllers
 
         [SerializeField] private GameObject projectilePrefab;
 
-        [Space]
+        [Header("Spawning settings")]
         [SerializeField] private float projectileSpawnRadiusPadding = 1f;
+        [SerializeField] private float projectileSpawnHeight = 1f;
+
+        [Header("Misc")]
+        [SerializeField] private LayerMask structureLayerMask;
 
         #endregion
 
         #region Private variables
 
         private GameObjectPool<Projectile> projectilePool;
+
+        #endregion
+
+        #region Public properties
+
+        public LayerMask StructureLayerMask
+        {
+            get
+            {
+                return structureLayerMask;
+            }
+        }
 
         #endregion
 
@@ -40,13 +59,12 @@ namespace Stacker.Controllers
 
         public IEnumerator FireProjectiles()
         {
-            Projectile currentProjectile;
+            ChainEventQueue<Projectile> chainEventQueue = new ChainEventQueue<Projectile>(projectilePool.UnavailableGameObjects);
+            chainEventQueue.StartChain();
 
-            for (int i = 0; i < projectilePool.UnavailableGameObjects.Count; i++)
+            while (!chainEventQueue.IsChainDone)
             {
-                currentProjectile = projectilePool.UnavailableGameObjects[i];
-
-                yield return StartCoroutine(currentProjectile.FireProjectile());
+                yield return new WaitForEndOfFrame();
             }
 
             projectilePool.DespawnAll();
@@ -59,7 +77,7 @@ namespace Stacker.Controllers
             float deg = Random.Range(0f, 360f);
             float radius = RoundController.Singleton.CurrentRound.BuildRadius + projectileSpawnRadiusPadding;
 
-            return new Vector3(Mathf.Cos(deg) * radius, 0, Mathf.Sin(deg) * radius);
+            return new Vector3(Mathf.Cos(deg) * radius, projectileSpawnHeight, Mathf.Sin(deg) * radius);
         }
 
         #endregion

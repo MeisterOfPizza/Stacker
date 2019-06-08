@@ -4,6 +4,8 @@ using Stacker.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+#pragma warning disable 0649
+
 namespace Stacker.Components
 {
 

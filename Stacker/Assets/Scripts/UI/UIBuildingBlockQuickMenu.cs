@@ -3,6 +3,8 @@ using Stacker.Controllers;
 using UnityEngine;
 using UnityEngine.UI;
 
+#pragma warning disable 0649
+
 namespace Stacker.UI
 {
 

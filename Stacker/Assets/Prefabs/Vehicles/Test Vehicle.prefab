@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8904812064452753497}
   - component: {fileID: 8904812064452753498}
   - component: {fileID: 8904812064452753499}
-  - component: {fileID: 8904812064452753500}
   - component: {fileID: 8904812064452753501}
+  - component: {fileID: 1412729312324345575}
   m_Layer: 0
   m_Name: Test Vehicle
   m_TagString: Untagged
@@ -96,20 +96,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &8904812064452753500
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8904812064452753502}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8904812064452753501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,7 +110,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 8904812064452753499}
   meshRenderer: {fileID: 8904812064452753498}
+  collider: {fileID: 1412729312324345575}
   moveSpeed: 5
   _defaultVehicleShader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   _vehicleWarningShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104,
     type: 3}
+--- !u!65 &1412729312324345575
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8904812064452753502}
+  m_Material: {fileID: 13400000, guid: 73200b1c4c3a0ae47aba17d899e77713, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 2}
+  m_Center: {x: 0, y: 0.5, z: 0}
