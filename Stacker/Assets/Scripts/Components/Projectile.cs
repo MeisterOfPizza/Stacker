@@ -1,10 +1,16 @@
-﻿using System.Collections;
+﻿using Stacker.Controllers;
+using Stacker.Extensions.Utils;
+using System;
+using System.Collections;
 using UnityEngine;
+
+#pragma warning disable 0108
+#pragma warning disable 0649
 
 namespace Stacker.Components
 {
 
-    class Projectile : MonoBehaviour
+    class Projectile : MonoBehaviour, IChainEventable
     {
 
         #region Editor
@@ -12,9 +18,10 @@ namespace Stacker.Components
         [Header("References")]
         [SerializeField] private Rigidbody    rigidbody;
         [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private Collider     collider;
 
         [Header("Values")]
-        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float fireSpeed = 5f;
 
         [Header("Shaders")]
         [SerializeField] private Shader _defaultProjectileShader;
@@ -24,9 +31,12 @@ namespace Stacker.Components
 
         #region Private variables
 
+        private bool collisionDetected;
         private bool hitStructure;
 
         #endregion
+
+        #region Projectile events
 
         /// <summary>
         /// Sets this vehicle as a warning.
@@ -34,35 +44,59 @@ namespace Stacker.Components
         public void SetAsWarning()
         {
             rigidbody.useGravity = false;
+            collider.enabled     = false;
             ChangeToWarningMaterials();
         }
 
-        public IEnumerator FireProjectile()
+        private IEnumerator FireProjectile(Action doneCallback)
         {
             rigidbody.useGravity = true;
+            collider.enabled     = true;
             ChangeToDefaultMaterials();
 
-            Vector3 target = -transform.position;
+            Vector3 target = new Vector3(-transform.position.x, transform.position.y, -transform.position.z);
             float distanceToTarget = float.MaxValue;
-            hitStructure = false;
+
+            collisionDetected = false;
+            hitStructure      = false;
 
             // Fire the projectile towards the target with the speed of moveSpeed.
-            rigidbody.AddForce((target - transform.position) * moveSpeed);
+            rigidbody.AddForce((target - transform.position) * fireSpeed);
 
-            while (distanceToTarget > 0.1f && !hitStructure)
+            while (distanceToTarget > 0.1f && !collisionDetected)
             {
                 distanceToTarget = Vector3.Distance(transform.position, target);
 
                 yield return new WaitForEndOfFrame();
             }
+
+            // Deactive vehicle:
+            gameObject.SetActive(false);
+
+            // If we did not hit a structure, then we want to continue the chain event.
+            if (!hitStructure)
+            {
+                doneCallback();
+            }
         }
+
+        #endregion
+
+        #region Physics
 
         private void OnCollisionEnter(Collision collision)
         {
-            hitStructure = true;
+            if (MathExtensions.IsLayerInLayerMask(ProjectileController.Singleton.StructureLayerMask, collision.gameObject.layer))
+            {
+                hitStructure = true;
 
-            // TODO: Send msg to player that the projectile hit something.
+                // TODO: Send msg to player that the projectile hit a structure (building block).
+            }
+
+            collisionDetected = true;
         }
+
+        #endregion
 
         #region FX
 
@@ -80,6 +114,15 @@ namespace Stacker.Components
             {
                 material.shader = _defaultProjectileShader;
             }
+        }
+
+        #endregion
+
+        #region IChainEventable
+
+        public void TriggerChainEvent(Action nextCallback)
+        {
+            StartCoroutine("FireProjectile", nextCallback);
         }
 
         #endregion

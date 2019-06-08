@@ -16,7 +16,7 @@ MonoBehaviour:
   - prefab: {fileID: 43335289048785936, guid: fce6767a33efcda43950027b5097995e, type: 3}
     quantity: 3
     canRotate: 1
-  buildRadius: 2
+  buildRadius: 5
   timeRestraint: 1
   useTimeRestraint: 1
   roundChallengePool:
@@ -33,4 +33,11 @@ MonoBehaviour:
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 0
+    vehiclePattern: 0
+  - type: 4
+    starsReward: 1
+    buildHeight: 2
+    projectiles: 2
+    structuralIntegrity: 0.3
+    vehicles: 2
     vehiclePattern: 0

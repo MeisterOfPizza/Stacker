@@ -1,9 +1,12 @@
 ﻿using Stacker.Components;
 using Stacker.Extensions.Components;
+using Stacker.Extensions.Utils;
 using Stacker.Rounds;
 using System;
 using System.Collections;
 using UnityEngine;
+
+#pragma warning disable 0649
 
 namespace Stacker.Controllers
 {
@@ -16,14 +19,29 @@ namespace Stacker.Controllers
         [SerializeField] private Transform    vehicleAnchor;
         [SerializeField] private GameObject[] vehiclePrefabs;
 
-        [Space]
+        [Header("Spawning settings")]
         [SerializeField] private float vehicleSpawnRadiusPadding = 1f;
+
+        [Header("Misc")]
+        [SerializeField] private LayerMask structureLayerMask;
 
         #endregion
 
         #region Private variables
 
         private GameObjectPool<Vehicle> vehiclePool;
+
+        #endregion
+
+        #region Public properties
+
+        public LayerMask StructureLayerMask
+        {
+            get
+            {
+                return structureLayerMask;
+            }
+        }
 
         #endregion
 
@@ -53,13 +71,12 @@ namespace Stacker.Controllers
 
         public IEnumerator LaunchVehicles()
         {
-            Vehicle currentVehicle;
+            ChainEventQueue<Vehicle> chainEventQueue = new ChainEventQueue<Vehicle>(vehiclePool.UnavailableGameObjects);
+            chainEventQueue.StartChain();
 
-            for (int i = 0; i < vehiclePool.UnavailableGameObjects.Count; i++)
+            while (!chainEventQueue.IsChainDone)
             {
-                currentVehicle = vehiclePool.UnavailableGameObjects[i];
-
-                yield return StartCoroutine(currentVehicle.StartVehicle());
+                yield return new WaitForEndOfFrame();
             }
 
             vehiclePool.DespawnAll();

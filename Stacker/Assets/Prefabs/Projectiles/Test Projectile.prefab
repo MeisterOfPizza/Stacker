@@ -123,7 +123,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 8778089528839640802}
   meshRenderer: {fileID: 8778089528839640734}
-  moveSpeed: 5
+  collider: {fileID: 8778089528839640735}
+  fireSpeed: 100
   _defaultProjectileShader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   _projectileWarningShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104,
     type: 3}

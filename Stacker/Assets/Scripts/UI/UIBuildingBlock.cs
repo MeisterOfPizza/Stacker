@@ -4,6 +4,8 @@ using Stacker.Templates.Rounds;
 using TMPro;
 using UnityEngine;
 
+#pragma warning disable 0649
+
 namespace Stacker.UI
 {
 
