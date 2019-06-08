@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Stacker.Extensions.Components
 {
 
-    class GameObjectPool
+    class GameObjectPool<T> where T : MonoBehaviour
     {
 
         #region Private variables
 
         private Transform anchor;
 
-        private List<GameObject> availableGameObjects;
-        private List<GameObject> unavailableGameObjects;
+        private List<T> availableGameObjects;
+        private List<T> unavailableGameObjects;
 
         #endregion
 
@@ -26,7 +27,35 @@ namespace Stacker.Extensions.Components
             }
         }
 
+        public List<T> AvailableGameObjects
+        {
+            get
+            {
+                return availableGameObjects.ToList();
+            }
+        }
+
+        public List<T> UnavailableGameObjects
+        {
+            get
+            {
+                return unavailableGameObjects.ToList();
+            }
+        }
+
         #endregion
+
+        #region Constructors
+
+        public GameObjectPool(Transform anchor, GameObject prefab, int maxPrefabInstances)
+        {
+            this.anchor = anchor;
+
+            availableGameObjects   = new List<T>(maxPrefabInstances + 5); // Give a little extra buffer space so that it doesn't have to resize instantly.
+            unavailableGameObjects = new List<T>(maxPrefabInstances + 5); // -||-
+
+            CreatePrefabPool(new GameObject[] { prefab }, maxPrefabInstances);
+        }
 
         public GameObjectPool(Transform anchor, GameObject[] prefabs, int maxPrefabInstances)
         {
@@ -34,11 +63,15 @@ namespace Stacker.Extensions.Components
 
             int poolSize = prefabs.Length * maxPrefabInstances;
 
-            availableGameObjects   = new List<GameObject>(poolSize + 5); // Give a little extra buffer space so that it doesn't have to resize instantly.
-            unavailableGameObjects = new List<GameObject>(poolSize + 5); // -||-
+            availableGameObjects   = new List<T>(poolSize + 5); // Give a little extra buffer space so that it doesn't have to resize instantly.
+            unavailableGameObjects = new List<T>(poolSize + 5); // -||-
 
             CreatePrefabPool(prefabs, maxPrefabInstances);
         }
+
+        #endregion
+
+        #region Setup
 
         private void CreatePrefabPool(GameObject[] prefabs, int maxPrefabInstances)
         {
@@ -46,27 +79,31 @@ namespace Stacker.Extensions.Components
             {
                 for (int j = 0; j < maxPrefabInstances; j++)
                 {
-                    availableGameObjects.Add(GameObject.Instantiate(prefabs[i], anchor));
+                    availableGameObjects.Add(GameObject.Instantiate(prefabs[i], anchor).GetComponent<T>());
 
                     // Deactivate the newly created GameObject:
-                    availableGameObjects[unavailableGameObjects.Count - 1].SetActive(false);
+                    availableGameObjects[availableGameObjects.Count - 1].gameObject.SetActive(false);
                 }
             }
         }
 
-        public GameObject Spawn(Vector3 position, Quaternion rotation)
+        #endregion
+
+        #region Pool methods
+
+        public T Spawn(Vector3 position, Quaternion rotation)
         {
             if (availableGameObjects.Count > 0)
             {
                 int index = Random.Range(0, availableGameObjects.Count);
 
-                GameObject taken = availableGameObjects[index];
+                T taken = availableGameObjects[index];
                 availableGameObjects.RemoveAt(index);
 
                 unavailableGameObjects.Add(taken);
 
                 taken.transform.SetPositionAndRotation(position, rotation);
-                taken.SetActive(true);
+                taken.gameObject.SetActive(true);
 
                 return taken;
             }
@@ -74,15 +111,33 @@ namespace Stacker.Extensions.Components
             return null;
         }
 
+        public bool Despawn(T item)
+        {
+            bool existed = unavailableGameObjects.Remove(item);
+
+            if (existed)
+            {
+                availableGameObjects.Add(item);
+
+                item.gameObject.SetActive(false);
+            }
+
+            return existed;
+        }
+
         public void DespawnAll()
         {
             for (int i = 0; i < unavailableGameObjects.Count; i++)
             {
                 availableGameObjects.Add(unavailableGameObjects[i]);
+
+                unavailableGameObjects[i].gameObject.SetActive(false);
             }
 
             unavailableGameObjects.Clear();
         }
+
+        #endregion
 
     }
 

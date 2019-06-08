@@ -10,10 +10,12 @@ namespace Stacker.Templates.Rounds
         #region Editor
 
         [Header("Building")]
-        [SerializeField]                   private RoundBuildingBlock[] roundBuildingBlocks;
-        [SerializeField, Range(0.5f, 10f)] private float                buildRadius      = 2f;
-        [SerializeField]                   private float                timeRestraint    = 15f;
-        [SerializeField]                   private bool                 useTimeRestraint = true;
+        [SerializeField] private RoundBuildingBlock[] roundBuildingBlocks;
+
+        [Space]
+        [SerializeField, Range(0.5f, 10f)] private float buildRadius      = 2f;
+        [SerializeField]                   private float timeRestraint    = 15f;
+        [SerializeField]                   private bool  useTimeRestraint = true;
 
         [Header("Challenges")]
         [SerializeField] private RoundChallengeTemplate[] roundChallengePool;

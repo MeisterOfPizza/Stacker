@@ -9,10 +9,16 @@ namespace Stacker.Components
 
         #region Editor
 
-        [SerializeField] private Rigidbody rigidbody;
+        [Header("References")]
+        [SerializeField] private Rigidbody    rigidbody;
+        [SerializeField] private MeshRenderer meshRenderer;
 
-        [Space]
+        [Header("Values")]
         [SerializeField] private float moveSpeed = 5f;
+
+        [Header("Shaders")]
+        [SerializeField] private Shader _defaultProjectileShader;
+        [SerializeField] private Shader _projectileWarningShader;
 
         #endregion
 
@@ -22,8 +28,20 @@ namespace Stacker.Components
 
         #endregion
 
+        /// <summary>
+        /// Sets this vehicle as a warning.
+        /// </summary>
+        public void SetAsWarning()
+        {
+            rigidbody.useGravity = false;
+            ChangeToWarningMaterials();
+        }
+
         public IEnumerator FireProjectile()
         {
+            rigidbody.useGravity = true;
+            ChangeToDefaultMaterials();
+
             Vector3 target = -transform.position;
             float distanceToTarget = float.MaxValue;
             hitStructure = false;
@@ -45,6 +63,26 @@ namespace Stacker.Components
 
             // TODO: Send msg to player that the projectile hit something.
         }
+
+        #region FX
+
+        private void ChangeToWarningMaterials()
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.shader = _projectileWarningShader;
+            }
+        }
+
+        private void ChangeToDefaultMaterials()
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.shader = _defaultProjectileShader;
+            }
+        }
+
+        #endregion
 
     }
 

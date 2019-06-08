@@ -56,8 +56,8 @@ namespace Stacker.Templates.Rounds
 
         [SerializeField]
         [EnumShowField("type", (int)RoundChallengeType.Fortress)]
-        [Range(0.0f, 1.0f)]
         [Tooltip("How much of the structure should still be standing after the projectiles have been fired?")]
+        [Range(0.0f, 1.0f)]
         private float structuralIntegrity = 0.5f;
 
         // Tunnel type //

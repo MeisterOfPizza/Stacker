@@ -3,7 +3,6 @@ using Stacker.Extensions.Components;
 using Stacker.Rounds;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Stacker.Controllers
@@ -24,52 +23,46 @@ namespace Stacker.Controllers
 
         #region Private variables
 
-        private GameObjectPool vehiclePool;
-        
-        private List<Vehicle> vehicles;
+        private GameObjectPool<Vehicle> vehiclePool;
 
         #endregion
 
         public override void OnAwake()
         {
             //TEST: Change the number of max prefab instances:
-            vehiclePool = new GameObjectPool(vehicleAnchor, vehiclePrefabs, 10);
-
-            vehicles = new List<Vehicle>(15);
+            vehiclePool = new GameObjectPool<Vehicle>(vehicleAnchor, vehiclePrefabs, 10);
         }
 
         public void SetupVehicles(TunnelChallenge challenge)
         {
-            vehicles.Clear();
-            vehiclePool.DespawnAll();
-
-            Tuple<Vector3, Quaternion>[] vehiclePosRot = GetVehiclePositions();
-
-            vehiclePool.Anchor.rotation = Quaternion.identity; // Reset rotation.
-
-            for (int i = 0; i < RoundController.Singleton.CurrentRound.MaxVehicles; i++)
+            if (challenge != null)
             {
-                vehicles.Add(vehiclePool.Spawn(vehiclePosRot[i].Item1, vehiclePosRot[i].Item2).GetComponent<Vehicle>());
-            }
+                Tuple<Vector3, Quaternion>[] vehiclePosRot = GetVehiclePositions();
 
-            int randomRot = 90 * UnityEngine.Random.Range(0, 4);
-            vehiclePool.Anchor.rotation = Quaternion.Euler(0, randomRot, 0); // Apply new random rotation.
+                vehiclePool.Anchor.rotation = Quaternion.identity; // Reset rotation.
+
+                for (int i = 0; i < RoundController.Singleton.CurrentRound.ProminentTunnelChallenge.Vehicles; i++)
+                {
+                    vehiclePool.Spawn(vehiclePosRot[i].Item1, vehiclePosRot[i].Item2).SetAsWarning();
+                }
+
+                int randomRot = 90 * UnityEngine.Random.Range(0, 4);
+                vehiclePool.Anchor.rotation = Quaternion.Euler(0, randomRot, 0); // Apply new random rotation.
+            }
         }
 
         public IEnumerator LaunchVehicles()
         {
-            if (vehicles.Count > 0)
+            Vehicle currentVehicle;
+
+            for (int i = 0; i < vehiclePool.UnavailableGameObjects.Count; i++)
             {
-                Vehicle currentVehicle;
+                currentVehicle = vehiclePool.UnavailableGameObjects[i];
 
-                while (vehicles.Count > 0)
-                {
-                    currentVehicle = vehicles[0];
-                    vehicles.RemoveAt(0);
-
-                    yield return StartCoroutine(currentVehicle.StartVehicle());
-                }
+                yield return StartCoroutine(currentVehicle.StartVehicle());
             }
+
+            vehiclePool.DespawnAll();
         }
 
         #region Helper methods
@@ -91,7 +84,7 @@ namespace Stacker.Controllers
             // With m being the middle, r the radius and v the vehicle spawn.
             // Each pattern can be rotated 360 deg with 90 deg intervals, however, this will happen AFTER the vehicles have been spawned.
 
-            switch (RoundController.Singleton.CurrentRound.VehiclePattern)
+            switch (RoundController.Singleton.CurrentRound.ProminentTunnelChallenge.VehiclePattern)
             {
                 case Templates.Rounds.TunnelChallengeVehiclePattern.Cross:
                     return new Tuple<Vector3, Quaternion>[]

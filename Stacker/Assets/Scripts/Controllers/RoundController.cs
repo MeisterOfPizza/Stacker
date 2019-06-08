@@ -28,6 +28,12 @@ namespace Stacker.Controllers
 
         #endregion
 
+        public Templates.Rounds.RoundTemplate roundTemplate;
+        public override void OnAwake()
+        {
+            BeginRound(new Round(roundTemplate));
+        }
+
         #region Round cycle
 
         public void BeginRound(Round round)
@@ -36,6 +42,9 @@ namespace Stacker.Controllers
             StopCoroutine("ActionPhase");
             roundHasEnded = false;
 
+            currentRound = round;
+
+            ReadyChallengeControllers();
             BeginBuildPhase();
             StartCoroutine("RoundCycle");
         }
@@ -89,6 +98,12 @@ namespace Stacker.Controllers
         #endregion
 
         #region Challenge helpers
+
+        private void ReadyChallengeControllers()
+        {
+            ProjectileController.Singleton.SetupProjectiles();
+            VehicleController.Singleton.SetupVehicles(currentRound.ProminentTunnelChallenge);
+        }
 
         private IEnumerator ProjectilePhase()
         {

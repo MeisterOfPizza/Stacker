@@ -9,17 +9,20 @@ namespace Stacker.Rounds
     class Round
     {
 
+        #region Properties
+
         public RoundTemplate Template { get; private set; }
 
         public float BuildRadius      { get; private set; }
         public float TimeRestraint    { get; private set; }
         public bool  UseTimeRestraint { get; private set; }
         
-        public int                           MaxProjectiles { get; private set; }
-        public int                           MaxVehicles    { get; private set; }
-        public TunnelChallengeVehiclePattern VehiclePattern { get; private set; }
+        public int             MaxProjectiles           { get; private set; }
+        public TunnelChallenge ProminentTunnelChallenge { get; private set; }
 
         public RoundChallenge[] RoundChallenges { get; private set; }
+
+        #endregion
 
         public Round(RoundTemplate roundTemplate)
         {
@@ -52,11 +55,11 @@ namespace Stacker.Rounds
 
         private void SetupChallengeValues()
         {
-            MaxProjectiles = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Fortress).Max(rc => ((FortressChallenge)rc).Projectiles);
-            MaxVehicles    = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel).Max(rc => ((TunnelChallenge)rc).Vehicles);
+            var fortressChallenges = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Fortress);
+            var tunnelChallenges   = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel);
 
-            var tunnelChallenges = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel).Cast<TunnelChallenge>().OrderBy(rc => rc.Vehicles);
-            VehiclePattern = tunnelChallenges.Count() > 0 ? tunnelChallenges.Last().VehiclePattern : TunnelChallengeVehiclePattern.Cross;
+            MaxProjectiles = fortressChallenges.Count() > 0 ? fortressChallenges.Max(rc => ((FortressChallenge)rc).Projectiles) : 0;
+            ProminentTunnelChallenge = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel).Cast<TunnelChallenge>().OrderBy(tc => tc.Vehicles).FirstOrDefault();
         }
 
         #region Helper methods

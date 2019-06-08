@@ -13,10 +13,24 @@ MonoBehaviour:
   m_Name: Test 1
   m_EditorClassIdentifier: 
   roundBuildingBlocks:
-  - prefab: {fileID: 0}
-    quantity: 0
+  - prefab: {fileID: 43335289048785936, guid: fce6767a33efcda43950027b5097995e, type: 3}
+    quantity: 3
     canRotate: 1
   buildRadius: 2
-  timeRestraint: 15
+  timeRestraint: 1
   useTimeRestraint: 1
-  roundChallengesPool: []
+  roundChallengePool:
+  - type: 1
+    starsReward: 1
+    buildHeight: 2
+    projectiles: 0
+    structuralIntegrity: 0
+    vehicles: 0
+    vehiclePattern: 0
+  - type: 2
+    starsReward: 1
+    buildHeight: 2
+    projectiles: 2
+    structuralIntegrity: 0.3
+    vehicles: 0
+    vehiclePattern: 0

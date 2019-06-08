@@ -10,10 +10,16 @@ namespace Stacker.Components
 
         #region Editor
 
-        [SerializeField] private Rigidbody rigidbody;
+        [Header("References")]
+        [SerializeField] private Rigidbody    rigidbody;
+        [SerializeField] private MeshRenderer meshRenderer;
 
-        [Space]
+        [Header("Values")]
         [SerializeField] private float moveSpeed = 5;
+
+        [Header("Shaders")]
+        [SerializeField] private Shader _defaultVehicleShader;
+        [SerializeField] private Shader _vehicleWarningShader;
 
         #endregion
 
@@ -25,15 +31,18 @@ namespace Stacker.Components
 
         /// <summary>
         /// Sets this vehicle as a warning.
-        /// This will make the vehicle red.
         /// </summary>
         public void SetAsWarning()
         {
-
+            rigidbody.useGravity = false;
+            ChangeToWarningMaterials();
         }
 
         public IEnumerator StartVehicle()
         {
+            rigidbody.useGravity = true;
+            ChangeToDefaultMaterials();
+
             Vector3 target = -transform.position; // Invert the position to find the target to drive to.
             float distanceToTarget = float.MaxValue;
             hitStructure = false;
@@ -53,6 +62,26 @@ namespace Stacker.Components
 
             // TODO: Send msg to player that the vehicle hit something.
         }
+
+        #region FX
+
+        private void ChangeToWarningMaterials()
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.shader = _vehicleWarningShader;
+            }
+        }
+
+        private void ChangeToDefaultMaterials()
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.shader = _defaultVehicleShader;
+            }
+        }
+
+        #endregion
 
     }
 

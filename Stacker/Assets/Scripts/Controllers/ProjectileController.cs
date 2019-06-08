@@ -2,7 +2,6 @@
 using Stacker.Extensions.Components;
 using Stacker.Templates.Rounds;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Stacker.Controllers
@@ -22,27 +21,20 @@ namespace Stacker.Controllers
 
         #region Private variables
 
-        private GameObjectPool projectilePool;
-
-        private List<Projectile> projectiles;
+        private GameObjectPool<Projectile> projectilePool;
 
         #endregion
 
         public override void OnAwake()
         {
-            projectilePool = new GameObjectPool(null, new GameObject[] { projectilePrefab }, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES);
-
-            projectiles = new List<Projectile>(RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES + 5); // Add extra buffer size.
+            projectilePool = new GameObjectPool<Projectile>(null, projectilePrefab, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES);
         }
 
         public void SetupProjectiles()
         {
-            projectilePool.DespawnAll();
-            projectiles.Clear();
-
             for (int i = 0; i < RoundController.Singleton.CurrentRound.MaxProjectiles; i++)
             {
-                projectiles.Add(projectilePool.Spawn(GetProjectilePosition(), Quaternion.identity).GetComponent<Projectile>());
+                projectilePool.Spawn(GetProjectilePosition(), Quaternion.identity).SetAsWarning();
             }
         }
 
@@ -50,13 +42,14 @@ namespace Stacker.Controllers
         {
             Projectile currentProjectile;
 
-            while (projectiles.Count > 0)
+            for (int i = 0; i < projectilePool.UnavailableGameObjects.Count; i++)
             {
-                currentProjectile = projectiles[0];
-                projectiles.RemoveAt(0);
+                currentProjectile = projectilePool.UnavailableGameObjects[i];
 
                 yield return StartCoroutine(currentProjectile.FireProjectile());
             }
+
+            projectilePool.DespawnAll();
         }
 
         #region Helper methods
