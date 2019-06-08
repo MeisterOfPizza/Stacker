@@ -1,4 +1,5 @@
 ﻿using Stacker.Components;
+using Stacker.Extensions.Utils;
 using Stacker.UI;
 using UnityEngine;
 
@@ -16,14 +17,16 @@ namespace Stacker.Controllers
         [SerializeField] private UIBuildingBlockQuickMenu uiBuildingBlockQuickMenu;
 
         [Header("References")]
-        [SerializeField] private MeshFilter     constructionBlock;
-        [SerializeField] private LineRenderer   constructionBlockLandLine;
-        [SerializeField] private SpriteRenderer constructionBlockLandPoint;
+        [SerializeField] private ConstructionBuildingBlock constructionBuildingBlock;
+        [SerializeField] private LineRenderer              constructionBlockLandLine;
+        [SerializeField] private SpriteRenderer            constructionBlockLandPoint;
 
         [Header("Building")]
-        [SerializeField] private float     constructionBlockBuildHeight  = 10f;
-        [SerializeField] private float     constructionBlockRotateSpeed  = 5f;
-        [SerializeField] private LayerMask constructionBlockLayerMask;
+        [SerializeField] private float     constructionBlockBuildHeight = 5f;
+        [SerializeField] private LayerMask constructionBuildingBlockLayerMask;
+
+        [Header("Storing building blocks")]
+        [SerializeField] private Vector3 temporaryBuildingBlockPosition;
 
         #endregion
 
@@ -35,18 +38,28 @@ namespace Stacker.Controllers
 
         #region Public properties
 
-        /// <summary>
-        /// Used by <see cref="BuildingBlock"/> to position itself when the user is finished editing.
-        /// </summary>
-        public Vector3 ConstructionBlockPosition
+        public Vector3 TemporaryBuildingBlockPosition
         {
             get
             {
-                return constructionBlock.transform.position;
+                return temporaryBuildingBlockPosition;
             }
         }
 
         #endregion
+
+        #region Construction of building blocks
+
+        public void InitializeBuildingBlockFromDrag(BuildingBlock buildingBlock, Ray ray)
+        {
+            Physics.Raycast(ray, out RaycastHit hit, 100);
+
+            float buildRadius = RoundController.Singleton.CurrentRound.BuildRadius;
+            Vector3 hitPoint = hit.point.TrapInBox(new Vector3(-buildRadius, -1000, -buildRadius), new Vector3(buildRadius, 1000, buildRadius));
+
+            buildingBlock.Select();
+            MoveConstructionBuildingBlock(hitPoint);
+        }
 
         public void SelectBuildingBlock(BuildingBlock buildingBlock)
         {
@@ -55,9 +68,10 @@ namespace Stacker.Controllers
 
             selectedBuildingBlock = buildingBlock;
 
-            constructionBlock.gameObject.SetActive(true);
-            constructionBlock.transform.rotation = Quaternion.identity;
-            constructionBlock.mesh = buildingBlock.ConstructionMesh;
+            constructionBuildingBlock.gameObject.SetActive(true);
+            constructionBuildingBlock.transform.rotation = Quaternion.identity;
+
+            constructionBuildingBlock.Initialize(buildingBlock);
         }
 
         public void DeselectBuildingBlock()
@@ -65,18 +79,18 @@ namespace Stacker.Controllers
             uiBuildingBlockQuickMenu.IsActive = false;
             selectedBuildingBlock = null;
 
-            constructionBlock.gameObject.SetActive(false);
+            constructionBuildingBlock.gameObject.SetActive(false);
         }
 
-        public void MoveConstructionBlock(Vector3 worldPosition)
+        public void MoveConstructionBuildingBlock(Vector3 worldPosition)
         {
             // Set the y coordinate to the construction build height to avoid hitting anything.
             worldPosition.y = constructionBlockBuildHeight;
-            constructionBlock.transform.position = worldPosition;
+            constructionBuildingBlock.transform.position = worldPosition;
 
             // Cast a ray down to determine where the block would land if the player dropped it:
             Ray ray = new Ray(worldPosition, Vector3.down);
-            Physics.Raycast(ray, out RaycastHit hit, constructionBlockBuildHeight * 2, constructionBlockLayerMask);
+            Physics.Raycast(ray, out RaycastHit hit, constructionBlockBuildHeight * 2, ~constructionBuildingBlockLayerMask);
 
             // Update the land line and land point sprite:
             constructionBlockLandLine.SetPosition(0, worldPosition);
@@ -84,10 +98,13 @@ namespace Stacker.Controllers
             constructionBlockLandPoint.transform.position = hit.point + Vector3.up * 0.025f;
         }
 
-        public void RotateConstructionBlock(Quaternion target)
+        public void PlaceBuildingBlock()
         {
-            constructionBlock.transform.rotation = Quaternion.Slerp(constructionBlock.transform.rotation, target, Time.fixedDeltaTime * constructionBlockRotateSpeed);
+            selectedBuildingBlock.PlaceBuildingBlock(constructionBuildingBlock.transform.position, constructionBuildingBlock.TargetRotation);
+            selectedBuildingBlock.Deselect();
         }
+
+        #endregion
 
     }
 

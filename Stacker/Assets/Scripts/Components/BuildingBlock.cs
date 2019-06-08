@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 namespace Stacker.Components
 {
 
-    class BuildingBlock : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    class BuildingBlock : MonoBehaviour
     {
 
         #region Constants
@@ -24,14 +24,8 @@ namespace Stacker.Components
         [SerializeField] private MeshRenderer meshRenderer;
 
         [Header("Selection")]
-        [SerializeField] private Mesh constructionMesh;
-
-        [SerializeField] private Shader _defaultBuildingBlockShader;
-
-        /// <summary>
-        /// Shader used on the actual building block (which is still in the same spot) while the user is moving the construction block.
-        /// </summary>
-        [SerializeField] private Shader _hologramShader;
+        [SerializeField] private Material _defaultMaterial;
+        [SerializeField] private Material _selectedMaterial;
 
         #endregion
 
@@ -43,17 +37,17 @@ namespace Stacker.Components
         private float lastClickCountdown;
         private bool  isSelected;
 
+        private Mesh primaryMesh;
+
         #endregion
 
         #region Public properties
 
-        public Quaternion TargetRotation { get; set; }
-
-        public Mesh ConstructionMesh
+        public Mesh PrimaryMesh
         {
             get
             {
-                return constructionMesh;
+                return primaryMesh;
             }
         }
 
@@ -67,11 +61,17 @@ namespace Stacker.Components
 
         #endregion
 
+        public void Initialize(RoundBuildingBlock roundBuildingBlock, UIBuildingBlock uiBuildingBlock)
+        {
+            this.roundBuildingBlock = roundBuildingBlock;
+            this.uiBuildingBlock    = uiBuildingBlock;
+        }
+
         #region MonoBehaviour methods
 
         private void Awake()
         {
-            TargetRotation = transform.rotation;
+            primaryMesh = GetComponent<MeshFilter>().mesh;
         }
 
         private void Update()
@@ -87,14 +87,6 @@ namespace Stacker.Components
             }
         }
 
-        private void FixedUpdate()
-        {
-            if (isSelected && roundBuildingBlock.CanRotate)
-            {
-                BuildController.Singleton.RotateConstructionBlock(TargetRotation);
-            }
-        }
-
         #endregion
 
         #region Selection
@@ -106,13 +98,16 @@ namespace Stacker.Components
 
         public void Select()
         {
-            // Restart the countdown to deselection:
-            lastClickCountdown = QUICK_MENU_SHOW_DURATION;
-            isSelected         = true;
+            if (!isSelected)
+            {
+                // Restart the countdown to deselection:
+                lastClickCountdown = QUICK_MENU_SHOW_DURATION;
+                isSelected         = true;
 
-            BuildController.Singleton.SelectBuildingBlock(this);
+                BuildController.Singleton.SelectBuildingBlock(this);
 
-            meshRenderer.material.shader = _hologramShader;
+                meshRenderer.material = _selectedMaterial;
+            }
         }
 
         public void Deselect()
@@ -123,7 +118,7 @@ namespace Stacker.Components
 
                 isSelected = false;
 
-                meshRenderer.material.shader = _defaultBuildingBlockShader;
+                meshRenderer.material = _defaultMaterial;
             }
         }
 
@@ -131,48 +126,18 @@ namespace Stacker.Components
 
         #region Positioning
 
-        private void FollowPointer()
+        public void PlaceBuildingBlock(Vector3 position, Quaternion rotation)
         {
-            Vector3 worldPosition;
-
-#if UNITY_STANDALONE
-            worldPosition = CameraController.MainCamera.ScreenToWorldPoint(Input.mousePosition);
-#elif UNITY_IOS || UNITY_ANDROID
-            worldPosition = CameraController.MainCamera.ScreenToWorldPoint(Input.GetTouch(0).position);
-#endif
-
-            BuildController.Singleton.MoveConstructionBlock(worldPosition);
-        }
-
-        private void PlaceBuildingBlock()
-        {
-            transform.position = BuildController.Singleton.ConstructionBlockPosition;
+            transform.SetPositionAndRotation(position, rotation);
         }
 
         #endregion
 
         #region Events systems
 
-        public void OnPointerClick(PointerEventData eventData)
+        private void OnMouseDown()
         {
             Select();
-        }
-
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            FollowPointer();
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            FollowPointer();
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            FollowPointer();
-            PlaceBuildingBlock();
-            Deselect();
         }
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿using Stacker.Rounds;
+using Stacker.UIControllers;
 using System.Collections;
 using UnityEngine;
 
@@ -53,7 +54,7 @@ namespace Stacker.Controllers
 
         private void BeginBuildPhase()
         {
-
+            UIBuildController.Singleton.StartBuildPhaseUI(currentRound.Template.RoundBuildingBlocks);
         }
 
         private IEnumerator RoundCycle()

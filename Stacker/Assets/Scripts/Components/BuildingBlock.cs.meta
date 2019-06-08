@@ -5,10 +5,8 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - meshRenderer: {instanceID: 0}
-  - constructionMesh: {instanceID: 0}
-  - _defaultBuildingBlockShader: {fileID: 46, guid: 0000000000000000f000000000000000,
-      type: 0}
-  - _hologramShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104, type: 3}
+  - _defaultMaterial: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  - _selectedMaterial: {fileID: 2100000, guid: c6ab5c51e96890e44b380d8c257363a2, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

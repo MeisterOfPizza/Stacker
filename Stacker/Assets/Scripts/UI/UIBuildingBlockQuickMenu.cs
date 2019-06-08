@@ -14,6 +14,9 @@ namespace Stacker.UI
         #region Editor
 
         [Header("References")]
+        [SerializeField] private ConstructionBuildingBlock constructionBuildingBlock;
+
+        [Header("UI References")]
         [SerializeField] private Button btnRotateX;
         [SerializeField] private Button btnRotateY;
         [SerializeField] private Button btnRotateZ;
@@ -55,11 +58,16 @@ namespace Stacker.UI
         {
             if (isActive)
             {
-                transform.position = CameraController.MainCamera.WorldToScreenPoint(currentBuildingBlock.transform.position); 
+                transform.position = CameraController.MainCamera.WorldToScreenPoint(constructionBuildingBlock.transform.position); 
             }
         }
 
         #region Click events
+
+        public void PlaceBlock()
+        {
+            BuildController.Singleton.PlaceBuildingBlock();
+        }
 
         public void ResetBlock()
         {
@@ -68,17 +76,17 @@ namespace Stacker.UI
 
         public void RotateX()
         {
-            currentBuildingBlock.TargetRotation *= Quaternion.Euler(90, 0, 0); // Rotate 90 degrees on the X-axis.
+            constructionBuildingBlock.TargetRotation *= Quaternion.Euler(90, 0, 0); // Rotate 90 degrees on the X-axis.
         }
 
         public void RotateY()
         {
-            currentBuildingBlock.TargetRotation *= Quaternion.Euler(0, 90, 0); // Rotate 90 degrees on the Y-axis.
+            constructionBuildingBlock.TargetRotation *= Quaternion.Euler(0, 90, 0); // Rotate 90 degrees on the Y-axis.
         }
 
         public void RotateZ()
         {
-            currentBuildingBlock.TargetRotation *= Quaternion.Euler(0, 0, 90); // Rotate 90 degrees on the Z-axis.
+            constructionBuildingBlock.TargetRotation *= Quaternion.Euler(0, 0, 90); // Rotate 90 degrees on the Z-axis.
         }
 
         #endregion
