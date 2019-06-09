@@ -12,12 +12,6 @@ namespace Stacker.Components
     class BuildingBlock : MonoBehaviour
     {
 
-        #region Constants
-
-        private const float QUICK_MENU_SHOW_DURATION = 10f;
-
-        #endregion
-
         #region Editor
 
         [Header("References")]
@@ -33,9 +27,8 @@ namespace Stacker.Components
 
         private RoundBuildingBlock roundBuildingBlock;
         private UIBuildingBlock    uiBuildingBlock;
-
-        private float lastClickCountdown;
-        private bool  isSelected;
+        
+        private bool isSelected;
 
         private Mesh primaryMesh;
 
@@ -74,19 +67,6 @@ namespace Stacker.Components
             primaryMesh = GetComponent<MeshFilter>().mesh;
         }
 
-        private void Update()
-        {
-            if (isSelected)
-            {
-                lastClickCountdown += Time.deltaTime;
-
-                if (lastClickCountdown <= 0)
-                {
-                    Deselect();
-                }
-            }
-        }
-
         #endregion
 
         #region Selection
@@ -100,9 +80,7 @@ namespace Stacker.Components
         {
             if (!isSelected)
             {
-                // Restart the countdown to deselection:
-                lastClickCountdown = QUICK_MENU_SHOW_DURATION;
-                isSelected         = true;
+                isSelected  = true;
 
                 BuildController.Singleton.SelectBuildingBlock(this);
 

@@ -86,7 +86,7 @@ namespace Stacker.Components
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (Extensions.Utils.Extensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer))
+            if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer))
             {
                 hitStructure = true;
 

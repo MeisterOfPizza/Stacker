@@ -17,13 +17,14 @@ namespace Stacker.Controllers
         [SerializeField] private UIBuildingBlockQuickMenu uiBuildingBlockQuickMenu;
 
         [Header("References")]
+        [SerializeField] private Transform                 constructionBuildingBlockContainer;
         [SerializeField] private ConstructionBuildingBlock constructionBuildingBlock;
-        [SerializeField] private LineRenderer              constructionBlockLandLine;
-        [SerializeField] private SpriteRenderer            constructionBlockLandPoint;
+        [SerializeField] private LineRenderer              constructionBuildingBlockLandLine;
+        [SerializeField] private SpriteRenderer            constructionBuildingBlockLandPoint;
 
         [Header("Building")]
+        [SerializeField] private LayerMask buildLayerMask;
         [SerializeField] private float     constructionBlockBuildHeight = 5f;
-        [SerializeField] private LayerMask constructionBuildingBlockLayerMask;
 
         [Header("Storing building blocks")]
         [SerializeField] private Vector3 temporaryBuildingBlockPosition;
@@ -48,17 +49,49 @@ namespace Stacker.Controllers
 
         #endregion
 
+        #region MonoBehaviour methods
+
+        private void Update()
+        {
+            if (selectedBuildingBlock != null)
+            {
+                ChasePointer();
+            }
+        }
+
+        #endregion
+
         #region Construction of building blocks
 
-        public void InitializeBuildingBlockFromDrag(BuildingBlock buildingBlock, Ray ray)
+        private void ChasePointer()
         {
-            Physics.Raycast(ray, out RaycastHit hit, 100);
+            int uiElementsUnderMouse = int.MaxValue;
+            bool follow = false;
+            Ray cameraRay;
+            
+#if UNITY_STANDALONE
+            cameraRay = CameraController.MainCamera.ScreenPointToRay(Input.mousePosition);
+            uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition).Count;
+            follow = Input.GetMouseButton(0);
+#elif UNITY_IOS || UNITY_ANDROID
+            if (Input.touchCount > 0)
+            {
+                cameraRay = CameraController.MainCamera.ScreenPointToRay(Input.GetTouch(0).position);
+                uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.GetTouch(0).position).Count;
+                follow = Input.touchCount > 0;
+            }
+#endif
 
-            float buildRadius = RoundController.Singleton.CurrentRound.BuildRadius;
-            Vector3 hitPoint = hit.point.TrapInBox(new Vector3(-buildRadius, -1000, -buildRadius), new Vector3(buildRadius, 1000, buildRadius));
+            if (follow && uiElementsUnderMouse == 0)
+            {
+                MoveConstructionBuildingBlock(cameraRay);
+            }
+        }
 
+        public void InitializeBuildingBlockFromDrag(BuildingBlock buildingBlock, Ray cameraRay)
+        {
             buildingBlock.Select();
-            MoveConstructionBuildingBlock(hitPoint);
+            MoveConstructionBuildingBlock(cameraRay);
         }
 
         public void SelectBuildingBlock(BuildingBlock buildingBlock)
@@ -68,7 +101,7 @@ namespace Stacker.Controllers
 
             selectedBuildingBlock = buildingBlock;
 
-            constructionBuildingBlock.gameObject.SetActive(true);
+            constructionBuildingBlockContainer.gameObject.SetActive(true);
             constructionBuildingBlock.transform.rotation = Quaternion.identity;
 
             constructionBuildingBlock.Initialize(buildingBlock);
@@ -79,23 +112,31 @@ namespace Stacker.Controllers
             uiBuildingBlockQuickMenu.IsActive = false;
             selectedBuildingBlock = null;
 
-            constructionBuildingBlock.gameObject.SetActive(false);
+            constructionBuildingBlockContainer.gameObject.SetActive(false);
         }
 
-        public void MoveConstructionBuildingBlock(Vector3 worldPosition)
+        public void MoveConstructionBuildingBlock(Ray cameraRay)
         {
-            // Set the y coordinate to the construction build height to avoid hitting anything.
-            worldPosition.y = constructionBlockBuildHeight;
+            Physics.Raycast(cameraRay, out RaycastHit cameraGroundHit, 100, buildLayerMask, QueryTriggerInteraction.Ignore);
+
+            // Create the world position where the construction building block should be and
+            // set the y coordinate to the construction build height to avoid hitting anything:
+            Vector3 worldPosition = new Vector3(cameraGroundHit.point.x, constructionBlockBuildHeight, cameraGroundHit.point.z);
+
+            // Trap the world position inside the build area:
+            float buildRadius = RoundController.Singleton.CurrentRound.BuildRadius;
+            worldPosition = worldPosition.TrapInBox(new Vector3(-buildRadius, -1000, -buildRadius), new Vector3(buildRadius, 1000, buildRadius));
+
             constructionBuildingBlock.transform.position = worldPosition;
 
             // Cast a ray down to determine where the block would land if the player dropped it:
-            Ray ray = new Ray(worldPosition, Vector3.down);
-            Physics.Raycast(ray, out RaycastHit hit, constructionBlockBuildHeight * 2, ~constructionBuildingBlockLayerMask);
+            Ray groundRay = new Ray(worldPosition, Vector3.down);
+            Physics.Raycast(groundRay, out RaycastHit groundHit, constructionBlockBuildHeight * 2, buildLayerMask, QueryTriggerInteraction.Ignore);
 
             // Update the land line and land point sprite:
-            constructionBlockLandLine.SetPosition(0, worldPosition);
-            constructionBlockLandLine.SetPosition(0, hit.point);
-            constructionBlockLandPoint.transform.position = hit.point + Vector3.up * 0.025f;
+            constructionBuildingBlockLandLine.SetPosition(0, worldPosition);
+            constructionBuildingBlockLandLine.SetPosition(1, groundHit.point);
+            constructionBuildingBlockLandPoint.transform.position = groundHit.point + Vector3.up * 0.025f;
         }
 
         public void PlaceBuildingBlock()

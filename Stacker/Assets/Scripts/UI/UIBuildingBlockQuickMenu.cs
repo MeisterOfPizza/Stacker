@@ -69,6 +69,11 @@ namespace Stacker.UI
             BuildController.Singleton.PlaceBuildingBlock();
         }
 
+        public void CancelBlock()
+        {
+            BuildController.Singleton.DeselectBuildingBlock();
+        }
+
         public void ResetBlock()
         {
             currentBuildingBlock.ResetBlock();

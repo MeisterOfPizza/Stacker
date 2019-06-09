@@ -72,10 +72,10 @@ namespace Stacker.UI
         {
             if (quantityLeft > 0)
             {
-                Ray ray = CameraController.MainCamera.ScreenPointToRay(dropPixelPosition);
-
                 quantityLeft--;
                 UpdateUI();
+
+                Ray ray = CameraController.MainCamera.ScreenPointToRay(dropPixelPosition);
 
                 BuildController.Singleton.InitializeBuildingBlockFromDrag(buildingBlockPool.Spawn(BuildController.Singleton.TemporaryBuildingBlockPosition, Quaternion.identity), ray);
             }
@@ -83,6 +83,7 @@ namespace Stacker.UI
 
         public void ResetBlock(BuildingBlock buildingBlock)
         {
+            buildingBlock.Deselect();
             buildingBlockPool.Despawn(buildingBlock);
             quantityLeft++;
 
