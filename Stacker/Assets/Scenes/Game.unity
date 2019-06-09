@@ -290,8 +290,8 @@ GameObject:
   - component: {fileID: 51404400}
   - component: {fileID: 51404399}
   m_Layer: 5
-  m_Name: Reset Block
-  m_TagString: Untagged
+  m_Name: Remove Copy
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -360,7 +360,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 429240404}
-        m_MethodName: ResetBlock
+        m_MethodName: RemoveCopy
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -422,8 +422,8 @@ GameObject:
   - component: {fileID: 64096587}
   - component: {fileID: 64096586}
   m_Layer: 5
-  m_Name: Cancel Block
-  m_TagString: Untagged
+  m_Name: Cancel Copy
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -492,7 +492,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 429240404}
-        m_MethodName: CancelBlock
+        m_MethodName: CancelCopy
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -680,6 +680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c13ff2cf16695b7438217d477ea5b304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiBuildMenuAnchor: {fileID: 302973137}
   uiBuildingBlockAnchor: {fileID: 1475425662}
   uiBuildingBlockPrefab: {fileID: 122772035749528323, guid: 841f2748b5d1532439432e88f4630faf,
     type: 3}
@@ -1116,7 +1117,7 @@ GameObject:
   - component: {fileID: 429240404}
   m_Layer: 5
   m_Name: Building Block Quick Menu
-  m_TagString: Untagged
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1159,6 +1160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   constructionBuildingBlock: {fileID: 720444823}
+  btnRemoveCopy: {fileID: 51404399}
   btnRotateX: {fileID: 2110129873}
   btnRotateY: {fileID: 1358806784}
   btnRotateZ: {fileID: 562069149}
@@ -6342,7 +6344,7 @@ GameObject:
   - component: {fileID: 562069149}
   m_Layer: 5
   m_Name: Rotate Z
-  m_TagString: Untagged
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6552,6 +6554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 720444821}
+  constructionBlockMoveSpeed: 5
   constructionBlockRotateSpeed: 5
 --- !u!65 &720444824
 BoxCollider:
@@ -6579,8 +6582,8 @@ GameObject:
   - component: {fileID: 822303462}
   - component: {fileID: 822303461}
   m_Layer: 5
-  m_Name: Place Block
-  m_TagString: Untagged
+  m_Name: Place Copy
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6649,7 +6652,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 429240404}
-        m_MethodName: PlaceBlock
+        m_MethodName: PlaceCopy
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11978,7 +11981,7 @@ GameObject:
   - component: {fileID: 1358806784}
   m_Layer: 5
   m_Name: Rotate Y
-  m_TagString: Untagged
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12426,6 +12429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiBuildingBlockQuickMenu: {fileID: 429240404}
+  uiBuildingBlockQuickMenuTag: UI Building Block Quick Menu
   constructionBuildingBlockContainer: {fileID: 1509858399}
   constructionBuildingBlock: {fileID: 720444823}
   constructionBuildingBlockLandLine: {fileID: 2033867120}
@@ -12434,7 +12438,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 50331648
   constructionBlockBuildHeight: 5
-  temporaryBuildingBlockPosition: {x: 1000, y: 2, z: 1000}
 --- !u!4 &1587339356
 Transform:
   m_ObjectHideFlags: 0
@@ -13544,7 +13547,7 @@ GameObject:
   - component: {fileID: 2110129873}
   m_Layer: 5
   m_Name: Rotate X
-  m_TagString: Untagged
+  m_TagString: UI Building Block Quick Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

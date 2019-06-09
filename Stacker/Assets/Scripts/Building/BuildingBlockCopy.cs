@@ -1,15 +1,12 @@
 ﻿using Stacker.Controllers;
-using Stacker.Templates.Rounds;
-using Stacker.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 #pragma warning disable 0649
 
-namespace Stacker.Components
+namespace Stacker.Building
 {
 
-    class BuildingBlock : MonoBehaviour
+    class BuildingBlockCopy : MonoBehaviour
     {
 
         #region Editor
@@ -25,22 +22,27 @@ namespace Stacker.Components
 
         #region Private variables
 
-        private RoundBuildingBlock roundBuildingBlock;
-        private UIBuildingBlock    uiBuildingBlock;
-        
-        private bool isSelected;
+        private BuildingBlock buildingBlock;
 
-        private Mesh primaryMesh;
+        private BuildingBlockState state = BuildingBlockState.Inactive;
 
         #endregion
 
         #region Public properties
 
-        public Mesh PrimaryMesh
+        public BuildingBlock BuildingBlock
         {
             get
             {
-                return primaryMesh;
+                return buildingBlock;
+            }
+        }
+
+        public BuildingBlockState State
+        {
+            get
+            {
+                return state;
             }
         }
 
@@ -48,41 +50,49 @@ namespace Stacker.Components
         {
             get
             {
-                return roundBuildingBlock.CanRotate;
+                return buildingBlock.RoundBuildingBlockTemplate.CanRotate;
             }
         }
 
         #endregion
 
-        public void Initialize(RoundBuildingBlock roundBuildingBlock, UIBuildingBlock uiBuildingBlock)
+        #region Enums
+
+        internal enum BuildingBlockState
         {
-            this.roundBuildingBlock = roundBuildingBlock;
-            this.uiBuildingBlock    = uiBuildingBlock;
+            Inactive,
+            Active,
+            Selected
+        }
+
+        #endregion
+
+        public void Initialize(BuildingBlock buildingBlock)
+        {
+            this.buildingBlock = buildingBlock;
         }
 
         #region MonoBehaviour methods
 
-        private void Awake()
+        private void OnEnable()
         {
-            primaryMesh = GetComponent<MeshFilter>().mesh;
+            state = BuildingBlockState.Active;
+        }
+
+        private void OnDisable()
+        {
+            state = BuildingBlockState.Inactive;
         }
 
         #endregion
 
         #region Selection
-
-        public void ResetBlock()
-        {
-            uiBuildingBlock.ResetBlock(this);
-        }
-
+        
         public void Select()
         {
-            if (!isSelected)
+            if (state != BuildingBlockState.Selected)
             {
-                isSelected  = true;
-
-                BuildController.Singleton.SelectBuildingBlock(this);
+                state = BuildingBlockState.Selected;
 
                 meshRenderer.material = _selectedMaterial;
             }
@@ -90,11 +100,9 @@ namespace Stacker.Components
 
         public void Deselect()
         {
-            if (isSelected)
+            if (state == BuildingBlockState.Selected)
             {
-                BuildController.Singleton.DeselectBuildingBlock();
-
-                isSelected = false;
+                state = BuildingBlockState.Active;
 
                 meshRenderer.material = _defaultMaterial;
             }
@@ -115,7 +123,7 @@ namespace Stacker.Components
 
         private void OnMouseDown()
         {
-            Select();
+            BuildController.Singleton.SelectCopy(this);
         }
 
         #endregion

@@ -54,7 +54,7 @@ namespace Stacker.Controllers
 
         private void BeginBuildPhase()
         {
-            UIBuildController.Singleton.StartBuildPhaseUI(currentRound.Template.RoundBuildingBlocks);
+            BuildController.Singleton.BeginBuildPhase(currentRound.Template.RoundBuildingBlockTemplates);
         }
 
         private IEnumerator RoundCycle()

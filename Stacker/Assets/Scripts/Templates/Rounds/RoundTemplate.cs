@@ -12,7 +12,7 @@ namespace Stacker.Templates.Rounds
         #region Editor
 
         [Header("Building")]
-        [SerializeField] private RoundBuildingBlock[] roundBuildingBlocks;
+        [SerializeField] private RoundBuildingBlockTemplate[] roundBuildingBlockTemplates;
 
         [Space]
         [SerializeField, Range(0.5f, 10f)] private float buildRadius      = 2f;
@@ -26,11 +26,11 @@ namespace Stacker.Templates.Rounds
 
         #region Getters
 
-        public RoundBuildingBlock[] RoundBuildingBlocks
+        public RoundBuildingBlockTemplate[] RoundBuildingBlockTemplates
         {
             get
             {
-                return roundBuildingBlocks;
+                return roundBuildingBlockTemplates;
             }
         }
 

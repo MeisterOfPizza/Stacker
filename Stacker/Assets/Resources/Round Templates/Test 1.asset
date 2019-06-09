@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24f7d654637fe448a40d8f6054552c2, type: 3}
   m_Name: Test 1
   m_EditorClassIdentifier: 
-  roundBuildingBlocks:
-  - prefab: {fileID: 43335289048785936, guid: fce6767a33efcda43950027b5097995e, type: 3}
+  roundBuildingBlockTemplates:
+  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
+      type: 2}
     quantity: 3
     canRotate: 1
   buildRadius: 5

@@ -57,9 +57,10 @@ namespace Stacker.Extensions.Utils
         }
 
         /// <summary>
-        /// Raycasts everything under the given position in UI space with LayerMask as filter.
+        /// Raycasts everything under the given position in UI space.
+        /// Removes any results that does not have a tag equal to <paramref name="tagFilter"/>.
         /// </summary>
-        public static List<RaycastResult> UIRaycastResults(Vector2 position, LayerMask layerMask)
+        public static List<RaycastResult> UIRaycastResults(Vector2 position, string tagFilter)
         {
             PointerEventData pointerData = new PointerEventData(EventSystem.current)
             {
@@ -71,10 +72,10 @@ namespace Stacker.Extensions.Utils
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
 
-            // Remove objects based on layer mask:
+            // Remove objects based on tag:
             foreach (var result in results.ToList())
             {
-                if (!IsLayerInLayerMask(layerMask, result.gameObject.layer))
+                if (!result.gameObject.tag.Equals(tagFilter))
                 {
                     results.Remove(result);
                 }

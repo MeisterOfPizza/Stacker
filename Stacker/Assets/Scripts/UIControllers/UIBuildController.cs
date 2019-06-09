@@ -1,9 +1,11 @@
-﻿using Stacker.Controllers;
+﻿using Stacker.Building;
+using Stacker.Controllers;
 using Stacker.Extensions.Utils;
-using Stacker.Rounds;
-using Stacker.Templates.Rounds;
-using Stacker.UI;
+using Stacker.UI.Building;
+using System.Collections.Generic;
 using UnityEngine;
+
+#pragma warning disable 0649
 
 namespace Stacker.UIControllers
 {
@@ -14,6 +16,7 @@ namespace Stacker.UIControllers
         #region Editor
 
         [Header("Anchors")]
+        [SerializeField] private RectTransform uiBuildMenuAnchor;
         [SerializeField] private RectTransform uiBuildingBlockAnchor;
 
         [Header("Prefabs")]
@@ -21,13 +24,28 @@ namespace Stacker.UIControllers
 
         #endregion
 
-        public void StartBuildPhaseUI(RoundBuildingBlock[] roundBuildingBlocks)
+        #region Public properties
+
+        public RectTransform UIBuildMenuAnchor
+        {
+            get
+            {
+                return uiBuildMenuAnchor;
+            }
+        }
+
+        #endregion
+
+        public void BeginBuildPhaseUI(IList<BuildingBlock> buildingBlocks)
         {
             uiBuildingBlockAnchor.Clear();
 
-            foreach (var roundBuildingBlock in roundBuildingBlocks)
+            foreach (var buildingBlock in buildingBlocks)
             {
-                Instantiate(uiBuildingBlockPrefab, uiBuildingBlockAnchor).GetComponent<UIBuildingBlock>().Initialize(roundBuildingBlock);
+                GameObject uiElement = Instantiate(uiBuildingBlockPrefab, uiBuildingBlockAnchor);
+                UIBuildingBlock uiBuildingBlock = uiElement.GetComponent<UIBuildingBlock>();
+                uiBuildingBlock.Initialize(buildingBlock);
+                buildingBlock.SetUIElement(uiBuildingBlock);
             }
         }
 

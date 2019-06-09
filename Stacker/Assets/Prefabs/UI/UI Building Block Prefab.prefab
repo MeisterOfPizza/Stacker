@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quantityLeftText: {fileID: 122772035810521480}
+  draggableRect: {fileID: 8310267572834076719}
 --- !u!1 &122772035810521482
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +426,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 122772035749528321}
-        m_MethodName: InitializeBlock
+        m_MethodName: PreviewCopy
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

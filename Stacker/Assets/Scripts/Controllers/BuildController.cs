@@ -1,6 +1,9 @@
-﻿using Stacker.Components;
+﻿using Stacker.Building;
 using Stacker.Extensions.Utils;
-using Stacker.UI;
+using Stacker.Templates.Rounds;
+using Stacker.UI.Building;
+using Stacker.UIControllers;
+using System.Collections.Generic;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -15,6 +18,7 @@ namespace Stacker.Controllers
 
         [Header("UI Elements")]
         [SerializeField] private UIBuildingBlockQuickMenu uiBuildingBlockQuickMenu;
+        [SerializeField] private string                   uiBuildingBlockQuickMenuTag = "UI Building Block Quick Menu";
 
         [Header("References")]
         [SerializeField] private Transform                 constructionBuildingBlockContainer;
@@ -26,26 +30,15 @@ namespace Stacker.Controllers
         [SerializeField] private LayerMask buildLayerMask;
         [SerializeField] private float     constructionBlockBuildHeight = 5f;
 
-        [Header("Storing building blocks")]
-        [SerializeField] private Vector3 temporaryBuildingBlockPosition;
-
         #endregion
 
         #region Private variables
 
-        private BuildingBlock selectedBuildingBlock;
+        private List<BuildingBlock> buildingBlocks = new List<BuildingBlock>(25);
 
-        #endregion
+        private BuildingBlockCopy selectedBuildingBlock;
 
-        #region Public properties
-
-        public Vector3 TemporaryBuildingBlockPosition
-        {
-            get
-            {
-                return temporaryBuildingBlockPosition;
-            }
-        }
+        private List<BuildingBlockCopy> placedBuildingBlockCopies = new List<BuildingBlockCopy>(100);
 
         #endregion
 
@@ -53,15 +46,22 @@ namespace Stacker.Controllers
 
         private void Update()
         {
-            if (selectedBuildingBlock != null)
-            {
-                ChasePointer();
-            }
+            ChasePointer();
         }
 
         #endregion
 
-        #region Construction of building blocks
+        public void BeginBuildPhase(RoundBuildingBlockTemplate[] roundBuildingBlockTemplates)
+        {
+            buildingBlocks.Clear();
+
+            foreach (var template in roundBuildingBlockTemplates)
+            {
+                buildingBlocks.Add(new BuildingBlock(template));
+            }
+
+            UIBuildController.Singleton.BeginBuildPhaseUI(buildingBlocks);
+        }
 
         private void ChasePointer()
         {
@@ -71,13 +71,13 @@ namespace Stacker.Controllers
             
 #if UNITY_STANDALONE
             cameraRay = CameraController.MainCamera.ScreenPointToRay(Input.mousePosition);
-            uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition).Count;
+            uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition, uiBuildingBlockQuickMenuTag).Count;
             follow = Input.GetMouseButton(0);
 #elif UNITY_IOS || UNITY_ANDROID
             if (Input.touchCount > 0)
             {
                 cameraRay = CameraController.MainCamera.ScreenPointToRay(Input.GetTouch(0).position);
-                uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.GetTouch(0).position).Count;
+                uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition, uiBuildingBlockQuickMenuTag).Count;
                 follow = Input.touchCount > 0;
             }
 #endif
@@ -88,32 +88,115 @@ namespace Stacker.Controllers
             }
         }
 
-        public void InitializeBuildingBlockFromDrag(BuildingBlock buildingBlock, Ray cameraRay)
-        {
-            buildingBlock.Select();
-            MoveConstructionBuildingBlock(cameraRay);
-        }
+        #region Previewing building block copies
 
-        public void SelectBuildingBlock(BuildingBlock buildingBlock)
+        /// <summary>
+        /// Activates a hologram copy of the building block copy but does not activate the actual building block.
+        /// </summary>
+        public void PreviewCopy(BuildingBlock buildingBlock)
         {
-            uiBuildingBlockQuickMenu.Initialize(buildingBlock);
+            DeselectCopy();
+
+            constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
+            constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Mesh);
+
+            uiBuildingBlockQuickMenu.Initialize(buildingBlock, true);
             uiBuildingBlockQuickMenu.IsActive = true;
-
-            selectedBuildingBlock = buildingBlock;
-
-            constructionBuildingBlockContainer.gameObject.SetActive(true);
-            constructionBuildingBlock.transform.rotation = Quaternion.identity;
-
-            constructionBuildingBlock.Initialize(buildingBlock);
         }
 
-        public void DeselectBuildingBlock()
+        /// <summary>
+        /// Deactives the hologram copy of the current building block copy, preventing the actual building block from being activated.
+        /// </summary>
+        public void CancelPreviewCopy()
         {
+            constructionBuildingBlock.SetConstructionBuildingBlockActive(false);
             uiBuildingBlockQuickMenu.IsActive = false;
-            selectedBuildingBlock = null;
-
-            constructionBuildingBlockContainer.gameObject.SetActive(false);
         }
+
+        #endregion
+
+        #region Adding, removing and clearing building blocks
+
+        /// <summary>
+        /// Adds and places the currently selected building block, deactivating the hologram copy.
+        /// </summary>
+        public void AddCopy(BuildingBlock buildingBlock)
+        {
+            CancelPreviewCopy(); // The block still hasn't been placed yet, which means that we're technically still in preview mode.
+
+            BuildingBlockCopy copy = buildingBlock.AddCopy();
+
+            selectedBuildingBlock = copy;
+            placedBuildingBlockCopies.Add(copy);
+
+            PlaceCopy();
+        }
+
+        /// <summary>
+        /// Removes the currently selected building block copy and places it back into "memory" (deactivating it).
+        /// </summary>
+        public void RemoveCopy()
+        {
+            placedBuildingBlockCopies.Remove(selectedBuildingBlock);
+            selectedBuildingBlock.BuildingBlock.RemoveCopy(selectedBuildingBlock);
+
+            DeselectCopy();
+        }
+
+        /// <summary>
+        /// Removes all building blocks copies.
+        /// </summary>
+        public void ClearCopies()
+        {
+            CancelPreviewCopy();
+            DeselectCopy();
+
+            foreach (var buildingBlock in buildingBlocks)
+            {
+                buildingBlock.ClearCopies();
+            }
+        }
+
+        #endregion
+
+        #region Selecting, deselecting and placing building blocks
+
+        /// <summary>
+        /// Selects a new copy and deactivates the old one.
+        /// </summary>
+        public void SelectCopy(BuildingBlockCopy buildingBlockCopy)
+        {
+            DeselectCopy();
+
+            selectedBuildingBlock = buildingBlockCopy;
+            selectedBuildingBlock.Select();
+
+            constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
+            constructionBuildingBlock.Initialize(buildingBlockCopy.BuildingBlock.RoundBuildingBlockTemplate.Mesh);
+
+            uiBuildingBlockQuickMenu.Initialize(buildingBlockCopy, false);
+            uiBuildingBlockQuickMenu.IsActive = true;
+        }
+
+        public void DeselectCopy()
+        {
+            if (selectedBuildingBlock != null)
+            {
+                selectedBuildingBlock.Deselect();
+                selectedBuildingBlock = null;
+            }
+
+            constructionBuildingBlock.SetConstructionBuildingBlockActive(false);
+            uiBuildingBlockQuickMenu.IsActive = false;
+        }
+
+        public void PlaceCopy()
+        {
+            selectedBuildingBlock.PlaceBuildingBlock(constructionBuildingBlock.TargetPosition, constructionBuildingBlock.TargetRotation);
+            DeselectCopy();
+        }
+
+        #endregion
 
         public void MoveConstructionBuildingBlock(Ray cameraRay)
         {
@@ -127,7 +210,7 @@ namespace Stacker.Controllers
             float buildRadius = RoundController.Singleton.CurrentRound.BuildRadius;
             worldPosition = worldPosition.TrapInBox(new Vector3(-buildRadius, -1000, -buildRadius), new Vector3(buildRadius, 1000, buildRadius));
 
-            constructionBuildingBlock.transform.position = worldPosition;
+            constructionBuildingBlock.TargetPosition = worldPosition;
 
             // Cast a ray down to determine where the block would land if the player dropped it:
             Ray groundRay = new Ray(worldPosition, Vector3.down);
@@ -138,14 +221,6 @@ namespace Stacker.Controllers
             constructionBuildingBlockLandLine.SetPosition(1, groundHit.point);
             constructionBuildingBlockLandPoint.transform.position = groundHit.point + Vector3.up * 0.025f;
         }
-
-        public void PlaceBuildingBlock()
-        {
-            selectedBuildingBlock.PlaceBuildingBlock(constructionBuildingBlock.transform.position, constructionBuildingBlock.TargetRotation);
-            selectedBuildingBlock.Deselect();
-        }
-
-        #endregion
 
     }
 

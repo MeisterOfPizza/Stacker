@@ -7,7 +7,7 @@ namespace Stacker.UIControllers
     class UIController : Controller<UIController>
     {
 
-        // TODO: Remove or fill empty class.
+        // TODO: Remove if not used.
 
     }
 
