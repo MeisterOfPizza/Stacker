@@ -21,6 +21,9 @@ namespace Stacker.Controllers
         [SerializeField] private string                   uiBuildingBlockQuickMenuTag = "UI Building Block Quick Menu";
 
         [Header("References")]
+        [SerializeField] private Transform buildContainer;
+
+        [Space]
         [SerializeField] private Transform                 constructionBuildingBlockContainer;
         [SerializeField] private ConstructionBuildingBlock constructionBuildingBlock;
         [SerializeField] private LineRenderer              constructionBuildingBlockLandLine;
@@ -28,7 +31,7 @@ namespace Stacker.Controllers
 
         [Header("Building")]
         [SerializeField] private LayerMask buildLayerMask;
-        [SerializeField] private float     constructionBlockBuildHeight = 5f;
+        [SerializeField] private float     constructionBuildHeight = 5f;
 
         #endregion
 
@@ -40,19 +43,39 @@ namespace Stacker.Controllers
 
         private List<BuildingBlockCopy> placedBuildingBlockCopies = new List<BuildingBlockCopy>(100);
 
+        private bool canBuild;
+
+        #endregion
+
+        #region Static properties
+
+        public static Transform BuildContainer
+        {
+            get
+            {
+                return Singleton.buildContainer;
+            }
+        }
+
         #endregion
 
         #region MonoBehaviour methods
 
         private void Update()
         {
-            ChasePointer();
+            if (canBuild)
+            {
+                ChasePointer();
+                BuildHeightController.CalculateCurrentBuildHeight();
+            }
         }
 
         #endregion
 
         public void BeginBuildPhase(RoundBuildingBlockTemplate[] roundBuildingBlockTemplates)
         {
+            this.canBuild = true;
+
             buildingBlocks.Clear();
 
             foreach (var template in roundBuildingBlockTemplates)
@@ -61,6 +84,14 @@ namespace Stacker.Controllers
             }
 
             UIBuildController.Singleton.BeginBuildPhaseUI(buildingBlocks);
+        }
+
+        public void EndBuildPhase()
+        {
+            canBuild = false;
+
+            CancelPreviewCopy();
+            DeselectCopy();
         }
 
         private void ChasePointer()
@@ -95,13 +126,16 @@ namespace Stacker.Controllers
         /// </summary>
         public void PreviewCopy(BuildingBlock buildingBlock)
         {
-            DeselectCopy();
+            if (canBuild)
+            {
+                DeselectCopy();
 
-            constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
-            constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Mesh);
+                constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
+                constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Mesh);
 
-            uiBuildingBlockQuickMenu.Initialize(buildingBlock, true);
-            uiBuildingBlockQuickMenu.IsActive = true;
+                uiBuildingBlockQuickMenu.Initialize(buildingBlock, true);
+                uiBuildingBlockQuickMenu.IsActive = true;
+            }
         }
 
         /// <summary>
@@ -166,16 +200,19 @@ namespace Stacker.Controllers
         /// </summary>
         public void SelectCopy(BuildingBlockCopy buildingBlockCopy)
         {
-            DeselectCopy();
+            if (canBuild)
+            {
+                DeselectCopy();
 
-            selectedBuildingBlock = buildingBlockCopy;
-            selectedBuildingBlock.Select();
+                selectedBuildingBlock = buildingBlockCopy;
+                selectedBuildingBlock.Select();
 
-            constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
-            constructionBuildingBlock.Initialize(buildingBlockCopy.BuildingBlock.RoundBuildingBlockTemplate.Mesh);
+                constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
+                constructionBuildingBlock.Initialize(buildingBlockCopy.BuildingBlock.RoundBuildingBlockTemplate.Mesh);
 
-            uiBuildingBlockQuickMenu.Initialize(buildingBlockCopy, false);
-            uiBuildingBlockQuickMenu.IsActive = true;
+                uiBuildingBlockQuickMenu.Initialize(buildingBlockCopy, false);
+                uiBuildingBlockQuickMenu.IsActive = true;
+            }
         }
 
         public void DeselectCopy()
@@ -198,29 +235,35 @@ namespace Stacker.Controllers
 
         #endregion
 
+        #region Construction building block
+
         public void MoveConstructionBuildingBlock(Ray cameraRay)
         {
             Physics.Raycast(cameraRay, out RaycastHit cameraGroundHit, 100, buildLayerMask, QueryTriggerInteraction.Ignore);
 
+            float buildHeight = BuildHeightController.CurrentBuildHeight + constructionBuildHeight;
+
             // Create the world position where the construction building block should be and
             // set the y coordinate to the construction build height to avoid hitting anything:
-            Vector3 worldPosition = new Vector3(cameraGroundHit.point.x, constructionBlockBuildHeight, cameraGroundHit.point.z);
+            Vector3 worldPosition = new Vector3(cameraGroundHit.point.x, buildHeight, cameraGroundHit.point.z);
 
             // Trap the world position inside the build area:
             float buildRadius = RoundController.Singleton.CurrentRound.BuildRadius;
-            worldPosition = worldPosition.TrapInBox(new Vector3(-buildRadius, -1000, -buildRadius), new Vector3(buildRadius, 1000, buildRadius));
+            worldPosition = worldPosition.TrapInBox(new Vector3(-buildRadius, -100, -buildRadius), new Vector3(buildRadius, 100, buildRadius));
 
             constructionBuildingBlock.TargetPosition = worldPosition;
 
             // Cast a ray down to determine where the block would land if the player dropped it:
             Ray groundRay = new Ray(worldPosition, Vector3.down);
-            Physics.Raycast(groundRay, out RaycastHit groundHit, constructionBlockBuildHeight * 2, buildLayerMask, QueryTriggerInteraction.Ignore);
+            Physics.Raycast(groundRay, out RaycastHit groundHit, buildHeight * 2, buildLayerMask, QueryTriggerInteraction.Ignore);
 
             // Update the land line and land point sprite:
             constructionBuildingBlockLandLine.SetPosition(0, worldPosition);
             constructionBuildingBlockLandLine.SetPosition(1, groundHit.point);
             constructionBuildingBlockLandPoint.transform.position = groundHit.point + Vector3.up * 0.025f;
         }
+
+        #endregion
 
     }
 

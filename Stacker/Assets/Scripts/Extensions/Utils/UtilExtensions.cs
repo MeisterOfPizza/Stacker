@@ -75,7 +75,7 @@ namespace Stacker.Extensions.Utils
             // Remove objects based on tag:
             foreach (var result in results.ToList())
             {
-                if (!result.gameObject.tag.Equals(tagFilter))
+                if (!result.gameObject.CompareTag(tagFilter))
                 {
                     results.Remove(result);
                 }

@@ -16,7 +16,7 @@ namespace Stacker.Controllers
 
         #region Editor
 
-        [SerializeField] private Transform    vehicleAnchor;
+        [SerializeField] private Transform    vehicleContainer;
         [SerializeField] private GameObject[] vehiclePrefabs;
 
         [Header("Spawning settings")]
@@ -48,7 +48,7 @@ namespace Stacker.Controllers
         public override void OnAwake()
         {
             //TEST: Change the number of max prefab instances:
-            vehiclePool = new GameObjectPool<Vehicle>(vehicleAnchor, vehiclePrefabs, 10);
+            vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, 10);
         }
 
         public void SetupVehicles(TunnelChallenge challenge)

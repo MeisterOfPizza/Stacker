@@ -15,6 +15,7 @@ namespace Stacker.Controllers
 
         #region Editor
 
+        [SerializeField] private Transform  projectileContainer;
         [SerializeField] private GameObject projectilePrefab;
 
         [Header("Spawning settings")]
@@ -46,7 +47,7 @@ namespace Stacker.Controllers
 
         public override void OnAwake()
         {
-            projectilePool = new GameObjectPool<Projectile>(null, projectilePrefab, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES);
+            projectilePool = new GameObjectPool<Projectile>(projectileContainer, projectilePrefab, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES);
         }
 
         public void SetupProjectiles()
@@ -77,7 +78,7 @@ namespace Stacker.Controllers
             float deg = Random.Range(0f, 360f);
             float radius = RoundController.Singleton.CurrentRound.BuildRadius + projectileSpawnRadiusPadding;
 
-            return new Vector3(Mathf.Cos(deg) * radius, projectileSpawnHeight, Mathf.Sin(deg) * radius);
+            return new Vector3(Mathf.Cos(deg * Mathf.Deg2Rad) * radius, projectileSpawnHeight, Mathf.Sin(deg * Mathf.Deg2Rad) * radius);
         }
 
         #endregion

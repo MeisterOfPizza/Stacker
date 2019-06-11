@@ -1,5 +1,4 @@
 ﻿using Stacker.Rounds;
-using Stacker.UIControllers;
 using System.Collections;
 using UnityEngine;
 
@@ -32,7 +31,7 @@ namespace Stacker.Controllers
         #endregion
 
         public Templates.Rounds.RoundTemplate roundTemplate;
-        public override void OnAwake()
+        private void Start()
         {
             BeginRound(new Round(roundTemplate));
         }
@@ -47,6 +46,7 @@ namespace Stacker.Controllers
 
             currentRound = round;
 
+            RoundCleanController.Singleton.ResetRound();
             ReadyChallengeControllers();
             BeginBuildPhase();
             StartCoroutine("RoundCycle");
@@ -54,6 +54,7 @@ namespace Stacker.Controllers
 
         private void BeginBuildPhase()
         {
+            CameraController.Singleton.CanReadInput = true;
             BuildController.Singleton.BeginBuildPhase(currentRound.Template.RoundBuildingBlockTemplates);
         }
 
@@ -88,13 +89,16 @@ namespace Stacker.Controllers
 
         private void EndBuildPhase()
         {
-
+            BuildController.Singleton.EndBuildPhase();
         }
 
         public void EndRound()
         {
             StopCoroutine("RoundCycle");
 
+            CameraController.Singleton.CanReadInput = false;
+            RoundCleanController.Singleton.CleanRound();
+            
             roundHasEnded = true;
         }
 

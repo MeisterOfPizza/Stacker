@@ -10,7 +10,38 @@ namespace Stacker.Controllers
 
         #region Editor
 
-        [SerializeField] private Camera mainCamera;
+        [Header("References")]
+        [SerializeField] private Transform cameraContainer;
+        [SerializeField] private Camera    mainCamera;
+
+        [Header("Settings")]
+        [SerializeField] private bool canReadInput = false;
+
+        [Header("Rotate settings")]
+        [SerializeField] private float cameraRotateSpeed = 5f;
+
+        [Header("Zoom settings")]
+        [SerializeField]                private float   zoomSpeed        = 5f;
+        [SerializeField]                private Vector3 minZoomPosition  = new Vector3(5, 5, 5);
+        [SerializeField]                private Vector3 maxZoomPosition  = new Vector3(25, 25, 25);
+        [SerializeField, Range(0, 100)] private int     zoomLevels       = 10;
+        [SerializeField, Range(0, 100)] private int     defaultZoomLevel = 2;
+
+        #endregion
+
+        #region Private variables
+
+        private int     currentZoomLevel;
+        private Vector3 targetZoomPosition;
+        private Vector3 deltaZoom;
+
+        #endregion
+
+        #region Public properties
+
+        public bool CanReadInput { get; set; } = true;
+        public bool CanRotate    { get; set; } = true;
+        public bool CanZoom      { get; set; } = true;
 
         #endregion
 
@@ -24,7 +55,116 @@ namespace Stacker.Controllers
             }
         }
 
+        public static Vector3 LeftOfCamera
+        {
+            get
+            {
+                return -MainCamera.transform.right;
+            }
+        }
+
         #endregion
+
+        #region MonoBehaviour methods
+
+        public override void OnAwake()
+        {
+            this.CanReadInput = canReadInput;
+
+            this.deltaZoom          = maxZoomPosition - minZoomPosition;
+            this.currentZoomLevel   = defaultZoomLevel;
+            this.targetZoomPosition = GetZoomLevelPosition(currentZoomLevel);
+        }
+
+        private void Update()
+        {
+            if (CanReadInput)
+            {
+                if (CanRotate)
+                {
+                    InputRotate();
+                }
+                if (CanZoom)
+                {
+                    InputZoom();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Rotating the camera
+
+        /// <summary>
+        /// Search for input to rotate by.
+        /// </summary>
+        private void InputRotate()
+        {
+            float direction = 0;
+
+#if UNITY_STANDALONE
+            if (Input.GetKey(KeyCode.Q))
+            {
+                direction = 1;
+            }
+            else if (Input.GetKey(KeyCode.E))
+            {
+                direction = -1;
+            }
+            //TODO: Fix camera rotation on phone devices.
+#elif UNITY_IOS || UNITY_ANDROID
+#endif
+
+            RotateCamera(direction);
+        }
+
+        private void RotateCamera(float direction)
+        {
+            cameraContainer.RotateAround(Vector3.zero, Vector3.up, direction * cameraRotateSpeed * 100 * Time.deltaTime);
+        }
+
+        #endregion
+
+        #region Zooming
+
+        private void InputZoom()
+        {
+            int zoomChange = 0;
+
+#if UNITY_STANDALONE
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                zoomChange = -1;
+            }
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                zoomChange = 1;
+            }
+            //TODO: Fix camera zoom on phone devices.
+#elif UNITY_IOS || UNITY_ANDROIOD
+#endif
+
+            currentZoomLevel = Mathf.Clamp(currentZoomLevel + zoomChange, 0, zoomLevels);
+
+            if (zoomChange != 0)
+            {
+                targetZoomPosition = GetZoomLevelPosition(currentZoomLevel);
+            }
+
+            ZoomCamera();
+        }
+
+        private void ZoomCamera()
+        {
+            mainCamera.transform.localPosition = Vector3.Lerp(mainCamera.transform.localPosition, targetZoomPosition, zoomSpeed * Time.deltaTime);
+        }
+
+        private Vector3 GetZoomLevelPosition(int zoomLevel)
+        {
+            return minZoomPosition + deltaZoom * (zoomLevel / (float)zoomLevels);
+        }
+
+#endregion
 
     }
 
