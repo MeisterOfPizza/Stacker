@@ -55,6 +55,7 @@ namespace Stacker.Controllers
         private void BeginBuildPhase()
         {
             CameraController.Singleton.CanReadInput = true;
+            BorderController.SetupBorder();
             BuildController.Singleton.BeginBuildPhase(currentRound.Template.RoundBuildingBlockTemplates);
         }
 
@@ -89,6 +90,7 @@ namespace Stacker.Controllers
 
         private void EndBuildPhase()
         {
+            BorderController.HideBorder();
             BuildController.Singleton.EndBuildPhase();
         }
 

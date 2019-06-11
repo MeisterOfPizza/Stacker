@@ -15,9 +15,9 @@ namespace Stacker.Templates.Rounds
         [SerializeField] private RoundBuildingBlockTemplate[] roundBuildingBlockTemplates;
 
         [Space]
-        [SerializeField, Range(0.5f, 10f)] private float buildRadius      = 2f;
-        [SerializeField]                   private float timeRestraint    = 15f;
-        [SerializeField]                   private bool  useTimeRestraint = true;
+        [SerializeField, Range(1f, 10f)] private float buildRadius      = 2f;
+        [SerializeField]                 private float timeRestraint    = 15f;
+        [SerializeField]                 private bool  useTimeRestraint = true;
 
         [Header("Challenges")]
         [SerializeField] private RoundChallengeTemplate[] roundChallengePool;
