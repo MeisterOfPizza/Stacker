@@ -55,20 +55,21 @@ namespace Stacker.Components
             ChangeToDefaultMaterials();
 
             Vector3 target = -transform.position; // Invert the position to find the target to drive to.
-            float distanceToTarget = float.MaxValue;
+            float distanceToTravel = transform.position.magnitude + 0.01f; // Distance to middle with small extra distance added to remove any risk at floating-point value issues.
+            float currentDistance = 0;
             
             hitStructure = false;
-
-            while (distanceToTarget > 0.1f && !hitStructure)
+            
+            while (currentDistance < distanceToTravel && !hitStructure)
             {
                 rigidbody.velocity = transform.forward * moveSpeed;
-                distanceToTarget = Vector3.Distance(transform.position, target);
+                currentDistance = transform.position.magnitude;
 
                 yield return new WaitForFixedUpdate();
             }
 
             // If we made it to the target without hitting anything, deactive vehicle:
-            if (distanceToTarget <= 0.1f && !hitStructure)
+            if (currentDistance > distanceToTravel && !hitStructure)
             {
                 gameObject.SetActive(false);
             }
@@ -86,7 +87,7 @@ namespace Stacker.Components
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (MathExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer))
+            if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer))
             {
                 hitStructure = true;
 

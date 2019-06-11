@@ -10,7 +10,7 @@
     }
     SubShader
     {
-        Tags { "Queue"="Transparent" "RenderType" = "Transparent" "IgnoreProjector" = "True" "ForceNoShadowCasting" = "True" }
+        Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" "ForceNoShadowCasting"="True" }
         LOD 100
 
         CGPROGRAM
@@ -39,7 +39,7 @@
 			float2 screenPos2D = IN.screenPos.xy / IN.screenPos.w;
 
 			// Create the final uv coordinates.
-			float speed = _Time[0] * _HologramSpeed;
+			float speed = _HologramSpeed * _Time[0];
 			float2 uv = TRANSFORM_TEX(screenPos2D * _HologramTex_ST.xy + float2(speed, speed), _HologramTex);
 
             // Albedo comes from a texture tinted by color.

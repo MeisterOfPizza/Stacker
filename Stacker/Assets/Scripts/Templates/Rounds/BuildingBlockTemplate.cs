@@ -1,20 +1,18 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 #pragma warning disable 0649
 
 namespace Stacker.Templates.Rounds
 {
 
-    [Serializable]
-    class RoundBuildingBlock
+    [CreateAssetMenu(menuName = "Templates/Building Block Template")]
+    class BuildingBlockTemplate : ScriptableObject
     {
 
         #region Editor
 
         [SerializeField] private GameObject prefab;
-        [SerializeField] private int        quantity  = 1;
-        [SerializeField] private bool       canRotate = true;
+        [SerializeField] private Mesh       mesh;
 
         #endregion
 
@@ -28,19 +26,11 @@ namespace Stacker.Templates.Rounds
             }
         }
 
-        public int Quantity
+        public Mesh Mesh
         {
             get
             {
-                return quantity;
-            }
-        }
-
-        public bool CanRotate
-        {
-            get
-            {
-                return canRotate;
+                return mesh;
             }
         }
 

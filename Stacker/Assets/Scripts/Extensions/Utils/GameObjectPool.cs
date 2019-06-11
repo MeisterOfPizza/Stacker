@@ -91,6 +91,25 @@ namespace Stacker.Extensions.Components
 
         #region Pool methods
 
+        public T Spawn()
+        {
+            if (availableGameObjects.Count > 0)
+            {
+                int index = Random.Range(0, availableGameObjects.Count);
+
+                T taken = availableGameObjects[index];
+                availableGameObjects.RemoveAt(index);
+
+                unavailableGameObjects.Add(taken);
+
+                taken.gameObject.SetActive(true);
+
+                return taken;
+            }
+
+            return null;
+        }
+
         public T Spawn(Vector3 position, Quaternion rotation)
         {
             if (availableGameObjects.Count > 0)
