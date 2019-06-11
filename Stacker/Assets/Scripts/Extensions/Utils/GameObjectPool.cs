@@ -156,6 +156,19 @@ namespace Stacker.Extensions.Components
             unavailableGameObjects.Clear();
         }
 
+        public void DestroyAll()
+        {
+            foreach (T item in unavailableGameObjects)
+            {
+                GameObject.Destroy(item.gameObject);
+            }
+
+            foreach (T item in availableGameObjects)
+            {
+                GameObject.Destroy(item.gameObject);
+            }
+        }
+
         #endregion
 
     }

@@ -57,6 +57,22 @@ namespace Stacker.Controllers
             }
         }
 
+        public static bool CanBuild
+        {
+            get
+            {
+                return Singleton.canBuild;
+            }
+        }
+
+        public static int PlacedBuildingBlockCopies
+        {
+            get
+            {
+                return Singleton.placedBuildingBlockCopies.Count;
+            }
+        }
+
         #endregion
 
         #region MonoBehaviour methods
@@ -71,6 +87,8 @@ namespace Stacker.Controllers
         }
 
         #endregion
+
+        #region Build phases
 
         public void BeginBuildPhase(RoundBuildingBlockTemplate[] roundBuildingBlockTemplates)
         {
@@ -93,6 +111,10 @@ namespace Stacker.Controllers
             CancelPreviewCopy();
             DeselectCopy();
         }
+
+        #endregion
+
+        #region Building helpers
 
         private void ChasePointer()
         {
@@ -118,6 +140,8 @@ namespace Stacker.Controllers
                 MoveConstructionBuildingBlock(cameraRay);
             }
         }
+
+        #endregion
 
         #region Previewing building block copies
 
@@ -189,6 +213,8 @@ namespace Stacker.Controllers
             {
                 buildingBlock.ClearCopies();
             }
+
+            placedBuildingBlockCopies.Clear();
         }
 
         #endregion
@@ -261,6 +287,28 @@ namespace Stacker.Controllers
             constructionBuildingBlockLandLine.SetPosition(0, worldPosition);
             constructionBuildingBlockLandLine.SetPosition(1, groundHit.point);
             constructionBuildingBlockLandPoint.transform.position = groundHit.point + Vector3.up * 0.025f;
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        /// <summary>
+        /// Calculates the height of the stack (all building blocks).
+        /// </summary>
+        public float CalculateStackHeight()
+        {
+            float highest = 0f;
+
+            foreach (BuildingBlockCopy copy in placedBuildingBlockCopies)
+            {
+                if (copy.transform.position.y > highest)
+                {
+                    highest = copy.transform.position.y;
+                }
+            }
+
+            return highest;
         }
 
         #endregion

@@ -65,20 +65,9 @@ namespace Stacker.Rounds
         #region Helper methods
 
         /// <summary>
-        /// Run a update check to see which challenges are completed.
+        /// Returns the total amount of stars the player has earned after the round is finished.
         /// </summary>
-        public void CheckChallenges()
-        {
-            foreach (var challenge in RoundChallenges)
-            {
-                challenge.CheckCompleted();
-            }
-        }
-
-        /// <summary>
-        /// Return the total amount of stars the player has earned after the round is finished.
-        /// </summary>
-        public int RoundStarReward()
+        public int RoundStarsReward()
         {
             return RoundChallenges.Where(rc => rc.IsCompleted).Sum(rc => rc.StarsReward);
         }

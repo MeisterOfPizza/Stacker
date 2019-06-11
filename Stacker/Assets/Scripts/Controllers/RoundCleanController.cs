@@ -49,7 +49,7 @@ namespace Stacker.Controllers
                 rigidbodies[i].isKinematic = true;
             }
 
-            StartCoroutine(CleanRoundGround());
+            StartCoroutine("CleanRoundGround");
         }
 
         /// <summary>
@@ -57,7 +57,9 @@ namespace Stacker.Controllers
         /// </summary>
         public void ResetRound()
         {
-            StopCoroutine(CleanRoundGround());
+            StopCoroutine("CleanRoundGround");
+
+            BuildController.Singleton.ClearCopies();
 
             roundContainer.position = Vector3.zero;
 

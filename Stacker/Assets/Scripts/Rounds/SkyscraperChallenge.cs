@@ -1,4 +1,5 @@
-﻿using Stacker.Templates.Rounds;
+﻿using Stacker.Controllers;
+using Stacker.Templates.Rounds;
 
 namespace Stacker.Rounds
 {
@@ -23,7 +24,12 @@ namespace Stacker.Rounds
 
         public override bool CheckCompleted()
         {
-            throw new System.NotImplementedException();
+            if (!IsCompleted)
+            {
+                IsCompleted = ChallengesController.BuildHeight >= BuildHeight;
+            }
+
+            return IsCompleted;
         }
 
     }

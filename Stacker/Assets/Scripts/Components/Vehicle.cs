@@ -1,4 +1,5 @@
-﻿using Stacker.Controllers;
+﻿using Stacker.Building;
+using Stacker.Controllers;
 using Stacker.Extensions.Utils;
 using System;
 using System.Collections;
@@ -91,7 +92,9 @@ namespace Stacker.Components
             {
                 hitStructure = true;
 
-                // TODO: Send msg to player that the vehicle hit a structure (building block).
+                ChallengesController.VehicleHitStructure = true;
+
+                RoundController.Singleton.LoseRound();
             }
         }
 
