@@ -14,7 +14,6 @@ namespace Stacker.Building
 
         public RoundBuildingBlockTemplate RoundBuildingBlockTemplate { get; private set; }
         public UIBuildingBlock            UIBuildingBlock            { get; private set; }
-        public BuildingBlockCopy[]        BuildingBlockCopies        { get; private set; }
 
         public GameObjectPool<BuildingBlockCopy> BuildingBlockCopyPool { get; private set; }
         public int                               QuantityLeft          { get; private set; }
@@ -79,6 +78,7 @@ namespace Stacker.Building
         public void ClearCopies()
         {
             BuildingBlockCopyPool.DespawnAll();
+            BuildingBlockCopyPool.DestroyAll();
 
             QuantityLeft = RoundBuildingBlockTemplate.Quantity;
             UpdateUI();

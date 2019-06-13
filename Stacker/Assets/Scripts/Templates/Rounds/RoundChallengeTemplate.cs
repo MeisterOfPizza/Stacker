@@ -84,7 +84,7 @@ namespace Stacker.Templates.Rounds
                 case RoundChallengeType.Fortress:
                     return new FortressChallenge(starsReward, string.Format("{0} of the structure should remain after {1} projectiles have been fired.", structuralIntegrity.ToString("P0"), projectiles), projectiles, structuralIntegrity);
                 case RoundChallengeType.Tunnel:
-                    return new TunnelChallenge(starsReward, string.Format("Do not let the {0} vehicles crash into the structure", vehicles), vehicles, vehiclePattern);
+                    return new TunnelChallenge(starsReward, string.Format("Do not let the {0} vehicles crash into the structure.", vehicles), vehicles, vehiclePattern);
                 default:
                     return null;
             }

@@ -18,7 +18,7 @@ MonoBehaviour:
     quantity: 3
     canRotate: 1
   buildRadius: 2
-  timeRestraint: 15
+  timeRestraint: 3
   useTimeRestraint: 1
   roundChallengePool:
   - type: 1
@@ -29,14 +29,14 @@ MonoBehaviour:
     vehicles: 0
     vehiclePattern: 0
   - type: 2
-    starsReward: 1
+    starsReward: 3
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 0
     vehiclePattern: 0
   - type: 4
-    starsReward: 1
+    starsReward: 2
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3

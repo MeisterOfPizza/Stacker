@@ -1,4 +1,5 @@
-﻿using Stacker.Controllers;
+﻿using Stacker.Building;
+using Stacker.Controllers;
 using Stacker.Extensions.Utils;
 using System;
 using System.Collections;
@@ -63,6 +64,9 @@ namespace Stacker.Components
             // Fire the projectile towards the target with the speed of moveSpeed.
             rigidbody.AddForce((target - transform.position) * fireSpeed);
 
+            // Notify the challenge controller that a projectile has been fired:
+            ChallengesController.ProjectilesFired++;
+
             while (distanceToTarget > 0.1f && !collisionDetected)
             {
                 distanceToTarget = Vector3.Distance(transform.position, target);
@@ -70,7 +74,7 @@ namespace Stacker.Components
                 yield return new WaitForEndOfFrame();
             }
 
-            // Deactive vehicle:
+            // Deactive projectile:
             gameObject.SetActive(false);
 
             // If we did not hit a structure, then we want to continue the chain event.
@@ -86,9 +90,14 @@ namespace Stacker.Components
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (UtilExtensions.IsLayerInLayerMask(ProjectileController.Singleton.StructureLayerMask, collision.gameObject.layer))
+            if (UtilExtensions.IsLayerInLayerMask(ProjectileController.Singleton.StructureLayerMask, collision.gameObject.layer) && !hitStructure)
             {
                 hitStructure = true;
+
+                if (collision.gameObject.GetComponent<BuildingBlockCopy>() is BuildingBlockCopy)
+                {
+                    ChallengesController.BlocksHitByProjectiles++;
+                }
 
                 // TODO: Send msg to player that the projectile hit a structure (building block).
             }
