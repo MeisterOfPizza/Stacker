@@ -25,6 +25,7 @@
 		float3 _FresnelColor;
 		float _FresnelExponent;
 		float _HologramSpeed;
+		float _Flicker;
 
         struct Input
         {
@@ -45,7 +46,7 @@
             // Albedo comes from a texture tinted by color.
             fixed4 col = tex2D(_HologramTex, uv) * _Color;
             o.Albedo = col.rgb;
-			o.Alpha = (col.r + col.g + col.b + col.a) / 4;
+			o.Alpha = (col.r + col.g + col.b + col.a) / 4 * _Flicker;
 
 			// Taken from https://www.ronja-tutorials.com/2018/05/26/fresnel.html.
 			// Get the dot product between the normal and the view direction.
