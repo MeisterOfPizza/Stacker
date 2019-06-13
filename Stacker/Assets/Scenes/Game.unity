@@ -16917,8 +16917,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicleContainer: {fileID: 1365075307}
   vehiclePrefabs:
-  - {fileID: 8904812064452753502, guid: ee7ffd6e6b905cb43aefe654725148a2, type: 3}
-  vehicleSpawnRadiusPadding: 1
+  - {fileID: 7160074684152685722, guid: b2d8d32dabe35564798299936e24256a, type: 3}
+  vehicleSpawnRadiusPadding: 10
   structureLayerMask:
     serializedVersion: 2
     m_Bits: 33554432
@@ -16935,9 +16935,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileContainer: {fileID: 1262196393}
-  projectilePrefab: {fileID: 8778089528839640728, guid: cf1ebcd034328b645977723f111ee92d,
+  projectilePrefab: {fileID: 483585518832956960, guid: 0347841c59d097d468843f7b94ee34e5,
     type: 3}
-  projectileSpawnRadiusPadding: 1
+  projectileSpawnRadiusPadding: 5
   projectileSpawnHeight: 4
   structureLayerMask:
     serializedVersion: 2

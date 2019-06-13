@@ -1,5 +1,4 @@
-﻿using Stacker.Building;
-using Stacker.Controllers;
+﻿using Stacker.Controllers;
 using Stacker.Extensions.Utils;
 using System;
 using System.Collections;
@@ -15,25 +14,61 @@ namespace Stacker.Components
     class Vehicle : MonoBehaviour, IChainEventable
     {
 
+        #region Private constants
+        
+        private string VEHICLE_ANIMATION_RUN = "Run vehicle";
+
+        #endregion
+
         #region Editor
 
         [Header("References")]
-        [SerializeField] private Rigidbody    rigidbody;
-        [SerializeField] private MeshRenderer meshRenderer;
-        [SerializeField] private Collider     collider;
+        [SerializeField] private Rigidbody      rigidbody;
+        [SerializeField] private MeshRenderer[] meshRenderers;
+        [SerializeField] private Collider       collider;
+        [SerializeField] private ParticleSystem collisionParticleSystem;
+
+        [Header("FX")]
+        [SerializeField] private ParticleSystem[] wheelDustParticleSystems;
+
+        [Header("Animations")]
+        [SerializeField] private Animator animator;
 
         [Header("Values")]
         [SerializeField] private float moveSpeed = 5;
 
-        [Header("Shaders")]
-        [SerializeField] private Shader _defaultVehicleShader;
-        [SerializeField] private Shader _vehicleWarningShader;
+        [Header("Warning material")]
+        [SerializeField] private Material _warningMaterial;
 
         #endregion
 
         #region Private variables
-        
+
+        private Material[][] defaultMaterials;
+
         private bool hitStructure;
+
+        #endregion
+
+        #region MonoBehaviour methods
+
+        private void Awake()
+        {
+            defaultMaterials = new Material[meshRenderers.Length][];
+
+            for (int i = 0; i < meshRenderers.Length; i++)
+            {
+                defaultMaterials[i] = meshRenderers[i].materials;
+            }
+        }
+
+        private void OnDisable()
+        {
+            rigidbody.velocity        = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+
+            StopWheelDustEffect();
+        }
 
         #endregion
 
@@ -54,6 +89,10 @@ namespace Stacker.Components
             rigidbody.useGravity = true;
             collider.enabled     = true;
             ChangeToDefaultMaterials();
+
+            // Play effects and animations:
+            PlayWheelDustEffect();
+            animator.Play(VEHICLE_ANIMATION_RUN);
 
             Vector3 target = -transform.position; // Invert the position to find the target to drive to.
             float distanceToTravel = transform.position.magnitude + 0.01f; // Distance to middle with small extra distance added to remove any risk at floating-point value issues.
@@ -90,6 +129,13 @@ namespace Stacker.Components
         {
             if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer))
             {
+                StopWheelDustEffect();
+
+                if (!hitStructure)
+                {
+                    PlayCollisionEffect(collision);
+                }
+
                 hitStructure = true;
 
                 ChallengesController.VehicleHitStructure = true;
@@ -102,19 +148,51 @@ namespace Stacker.Components
 
         #region FX
 
+        private void PlayCollisionEffect(Collision collision)
+        {
+            ContactPoint contactPoint = collision.contacts[0];
+
+            collisionParticleSystem.transform.SetPositionAndRotation(contactPoint.point, Quaternion.LookRotation(contactPoint.normal, Vector3.up));
+
+            collisionParticleSystem.Play(true);
+        }
+
+        private void PlayWheelDustEffect()
+        {
+            foreach (var ps in wheelDustParticleSystems)
+            {
+                ps.Play();
+            }
+        }
+
+        private void StopWheelDustEffect()
+        {
+            foreach (var ps in wheelDustParticleSystems)
+            {
+                ps.Stop();
+            }
+        }
+
         private void ChangeToWarningMaterials()
         {
-            foreach (Material material in meshRenderer.materials)
+            for (int i = 0; i < meshRenderers.Length; i++)
             {
-                material.shader = _vehicleWarningShader;
+                Material[] materials = meshRenderers[i].materials;
+
+                for (int j = 0; j < materials.Length; j++)
+                {
+                    materials[j] = _warningMaterial;
+                }
+
+                meshRenderers[i].materials = materials;
             }
         }
 
         private void ChangeToDefaultMaterials()
         {
-            foreach (Material material in meshRenderer.materials)
+            for (int i = 0; i < meshRenderers.Length; i++)
             {
-                material.shader = _defaultVehicleShader;
+                meshRenderers[i].materials = defaultMaterials[i];
             }
         }
 

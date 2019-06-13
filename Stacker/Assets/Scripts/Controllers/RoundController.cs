@@ -154,7 +154,8 @@ namespace Stacker.Controllers
         /// </summary>
         private void CheckRoundWinLossState()
         {
-            RoundCleanController.Singleton.CleanRound();
+            // TODO: Reintroduce cleaning
+            //RoundCleanController.Singleton.CleanRound();
 
             // Count stars:
             int starsReceived = currentRound.RoundStarsReward();

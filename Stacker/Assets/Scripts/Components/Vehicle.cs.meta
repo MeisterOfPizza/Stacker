@@ -6,9 +6,8 @@ MonoImporter:
   defaultReferences:
   - rigidbody: {instanceID: 0}
   - meshRenderer: {instanceID: 0}
-  - _defaultVehicleShader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  - _vehicleWarningShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104,
-      type: 3}
+  - collider: {instanceID: 0}
+  - _warningMaterial: {fileID: 2100000, guid: a3e45281abe75d543afaa070804ef1c0, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
