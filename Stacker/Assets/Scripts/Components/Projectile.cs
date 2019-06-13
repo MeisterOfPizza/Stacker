@@ -17,23 +17,42 @@ namespace Stacker.Components
         #region Editor
 
         [Header("References")]
-        [SerializeField] private Rigidbody    rigidbody;
-        [SerializeField] private MeshRenderer meshRenderer;
-        [SerializeField] private Collider     collider;
+        [SerializeField] private Rigidbody      rigidbody;
+        [SerializeField] private MeshRenderer   meshRenderer;
+        [SerializeField] private Collider       collider;
+        [SerializeField] private ParticleSystem collisionParticleSystem;
+        [SerializeField] private ParticleSystem trailParticleSystem;
+        [SerializeField] private Spin           spin;
 
         [Header("Values")]
-        [SerializeField] private float fireSpeed = 5f;
+        [SerializeField] private float fireSpeed = 100f;
 
-        [Header("Shaders")]
-        [SerializeField] private Shader _defaultProjectileShader;
-        [SerializeField] private Shader _projectileWarningShader;
+        [Header("Warning material")]
+        [SerializeField] private Material _warningMaterial;
 
         #endregion
 
         #region Private variables
 
+        private Material[] defaultMaterials;
+
         private bool collisionDetected;
         private bool hitStructure;
+
+        #endregion
+
+        #region MonoBehaviour methods
+
+        private void Awake()
+        {
+            defaultMaterials = meshRenderer.materials;
+        }
+
+        private void OnDisable()
+        {
+            rigidbody.velocity        = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+        }
 
         #endregion
 
@@ -44,13 +63,23 @@ namespace Stacker.Components
         /// </summary>
         public void SetAsWarning()
         {
+            spin.Stop();
+            trailParticleSystem.Stop();
+
             rigidbody.useGravity = false;
             collider.enabled     = false;
             ChangeToWarningMaterials();
+
+            // Set up the rotation to make the effects look better.
+            Vector3 target = new Vector3(-transform.position.x, transform.position.y, -transform.position.z);
+            transform.rotation = Quaternion.LookRotation(target - transform.position);
         }
 
         private IEnumerator FireProjectile(Action doneCallback)
         {
+            spin.Play();
+            trailParticleSystem.Play();
+
             rigidbody.useGravity = true;
             collider.enabled     = true;
             ChangeToDefaultMaterials();
@@ -71,17 +100,13 @@ namespace Stacker.Components
             {
                 distanceToTarget = Vector3.Distance(transform.position, target);
 
+                // Make the projectile look in the direction of the target. This to make effects look better.
+                transform.rotation = Quaternion.LookRotation(rigidbody.velocity.normalized);
+
                 yield return new WaitForEndOfFrame();
             }
 
-            // Deactive projectile:
-            gameObject.SetActive(false);
-
-            // If we did not hit a structure, then we want to continue the chain event.
-            if (!hitStructure)
-            {
-                doneCallback();
-            }
+            doneCallback();
         }
 
         #endregion
@@ -90,6 +115,13 @@ namespace Stacker.Components
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (!collisionDetected)
+            {
+                PlayCollisionEffect(collision);
+                spin.Stop();
+                trailParticleSystem.Stop();
+            }
+
             if (UtilExtensions.IsLayerInLayerMask(ProjectileController.Singleton.StructureLayerMask, collision.gameObject.layer) && !hitStructure)
             {
                 hitStructure = true;
@@ -109,20 +141,30 @@ namespace Stacker.Components
 
         #region FX
 
+        private void PlayCollisionEffect(Collision collision)
+        {
+            ContactPoint contactPoint = collision.contacts[0];
+
+            collisionParticleSystem.transform.SetPositionAndRotation(contactPoint.point, Quaternion.LookRotation(contactPoint.normal, Vector3.up));
+
+            collisionParticleSystem.Play(true);
+        }
+
         private void ChangeToWarningMaterials()
         {
-            foreach (Material material in meshRenderer.materials)
+            Material[] materials = meshRenderer.materials;
+
+            for (int i = 0; i < materials.Length; i++)
             {
-                material.shader = _projectileWarningShader;
+                materials[i] = _warningMaterial;
             }
+
+            meshRenderer.materials = materials;
         }
 
         private void ChangeToDefaultMaterials()
         {
-            foreach (Material material in meshRenderer.materials)
-            {
-                material.shader = _defaultProjectileShader;
-            }
+            meshRenderer.materials = defaultMaterials;
         }
 
         #endregion

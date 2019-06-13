@@ -6,10 +6,9 @@ MonoImporter:
   defaultReferences:
   - rigidbody: {instanceID: 0}
   - meshRenderer: {instanceID: 0}
-  - _defaultProjectileShader: {fileID: 46, guid: 0000000000000000f000000000000000,
-      type: 0}
-  - _projectileWarningShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104,
-      type: 3}
+  - collider: {instanceID: 0}
+  - collisionParticleSystem: {instanceID: 0}
+  - _warningMaterial: {fileID: 2100000, guid: 79052d164e3a29f41a4f29e0d3d4c98e, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
