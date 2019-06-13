@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Stacker.Components
 {
 
-    [RequireComponent(typeof(MeshRenderer))]
+    [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody), typeof(Collider))]
     class Vehicle : MonoBehaviour, IChainEventable
     {
 
@@ -25,7 +25,7 @@ namespace Stacker.Components
         [Header("References")]
         [SerializeField] private Rigidbody      rigidbody;
         [SerializeField] private MeshRenderer[] meshRenderers;
-        [SerializeField] private Collider       collider;
+        [SerializeField] private Collider[]     colliders;
         [SerializeField] private ParticleSystem collisionParticleSystem;
 
         [Header("FX")]
@@ -80,14 +80,14 @@ namespace Stacker.Components
         public void SetAsWarning()
         {
             rigidbody.useGravity = false;
-            collider.enabled     = false;
+            SetCollidersActive(false);
             ChangeToWarningMaterials();
         }
 
         private IEnumerator StartVehicle(Action doneCallback)
         {
             rigidbody.useGravity = true;
-            collider.enabled     = true;
+            SetCollidersActive(true);
             ChangeToDefaultMaterials();
 
             // Play effects and animations:
@@ -141,6 +141,14 @@ namespace Stacker.Components
                 ChallengesController.VehicleHitStructure = true;
 
                 RoundController.Singleton.EndRound();
+            }
+        }
+
+        private void SetCollidersActive(bool active)
+        {
+            foreach (var collider in colliders)
+            {
+                collider.enabled = active;
             }
         }
 

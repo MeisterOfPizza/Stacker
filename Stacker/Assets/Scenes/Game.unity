@@ -16918,6 +16918,8 @@ MonoBehaviour:
   vehicleContainer: {fileID: 1365075307}
   vehiclePrefabs:
   - {fileID: 7160074684152685722, guid: b2d8d32dabe35564798299936e24256a, type: 3}
+  - {fileID: 5425980497688434989, guid: 7d1f14f79d294164ea49597a249aa588, type: 3}
+  - {fileID: 5535034101457135270, guid: 302c4d5c30ab4df459ddd21c998a3a41, type: 3}
   vehicleSpawnRadiusPadding: 10
   structureLayerMask:
     serializedVersion: 2

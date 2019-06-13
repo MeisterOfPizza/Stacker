@@ -21,6 +21,8 @@ namespace Stacker.Components
         [SerializeField] private MeshRenderer   meshRenderer;
         [SerializeField] private Collider       collider;
         [SerializeField] private ParticleSystem collisionParticleSystem;
+        [SerializeField] private ParticleSystem trailParticleSystem;
+        [SerializeField] private Spin           spin;
 
         [Header("Values")]
         [SerializeField] private float fireSpeed = 100f;
@@ -61,6 +63,9 @@ namespace Stacker.Components
         /// </summary>
         public void SetAsWarning()
         {
+            spin.Stop();
+            trailParticleSystem.Stop();
+
             rigidbody.useGravity = false;
             collider.enabled     = false;
             ChangeToWarningMaterials();
@@ -72,6 +77,9 @@ namespace Stacker.Components
 
         private IEnumerator FireProjectile(Action doneCallback)
         {
+            spin.Play();
+            trailParticleSystem.Play();
+
             rigidbody.useGravity = true;
             collider.enabled     = true;
             ChangeToDefaultMaterials();
@@ -110,6 +118,8 @@ namespace Stacker.Components
             if (!collisionDetected)
             {
                 PlayCollisionEffect(collision);
+                spin.Stop();
+                trailParticleSystem.Stop();
             }
 
             if (UtilExtensions.IsLayerInLayerMask(ProjectileController.Singleton.StructureLayerMask, collision.gameObject.layer) && !hitStructure)

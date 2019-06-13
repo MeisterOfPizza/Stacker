@@ -46,6 +46,7 @@ namespace Stacker.Components
 
         private float   angle;
         private Vector3 spin;
+        private bool    isPlaying = true;
 
         #endregion
 
@@ -58,12 +59,25 @@ namespace Stacker.Components
 
         private void FixedUpdate()
         {
-            SpinTransform();
+            if (isPlaying)
+            {
+                SpinTransform();
+            }
         }
 
         #endregion
 
         #region Spin
+
+        public void Play()
+        {
+            isPlaying = true;
+        }
+
+        public void Stop()
+        {
+            isPlaying = false;
+        }
 
         private void ApplySettings()
         {

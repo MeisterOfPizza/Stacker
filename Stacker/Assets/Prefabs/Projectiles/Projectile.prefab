@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695475758}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -148,7 +148,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!135 &483585518832956966
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -178,6 +178,8 @@ MonoBehaviour:
   meshRenderer: {fileID: 1695475760}
   collider: {fileID: 483585518832956966}
   collisionParticleSystem: {fileID: 1575075039060588799}
+  trailParticleSystem: {fileID: 8473495631223796432}
+  spin: {fileID: 1361739615042240356}
   fireSpeed: 100
   _warningMaterial: {fileID: 2100000, guid: 79052d164e3a29f41a4f29e0d3d4c98e, type: 2}
 --- !u!1 &8473495631223796435
@@ -228,7 +230,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1

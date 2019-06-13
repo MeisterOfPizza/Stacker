@@ -72,8 +72,6 @@ namespace Stacker.Controllers
             {
                 yield return new WaitForEndOfFrame();
             }
-
-            projectilePool.DespawnAll();
         }
 
         #region Helper methods
