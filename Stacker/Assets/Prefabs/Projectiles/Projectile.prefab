@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 483585518832956965}
   - component: {fileID: 483585518832956966}
   - component: {fileID: 483585518832956967}
+  - component: {fileID: 7167267871377070823}
   m_Layer: 26
   m_Name: Projectile
   m_TagString: Untagged
@@ -182,6 +183,23 @@ MonoBehaviour:
   spin: {fileID: 1361739615042240356}
   fireSpeed: 100
   _warningMaterial: {fileID: 2100000, guid: 79052d164e3a29f41a4f29e0d3d4c98e, type: 2}
+--- !u!114 &7167267871377070823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483585518832956960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3d1c7f052dcb2429f6c4d084b3c1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderers:
+  - {fileID: 1695475760}
+  flickerChance: 0.1
+  flickerAlpha: 0.5
+  _hologramShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104, type: 3}
 --- !u!1 &8473495631223796435
 GameObject:
   m_ObjectHideFlags: 0

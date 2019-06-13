@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 5535034101457135275}
   - component: {fileID: 8144170722831287427}
   - component: {fileID: 5459157904186255684}
+  - component: {fileID: 933567372876664548}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -392,6 +393,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2114519, y: 0.5670726, z: 1.0185981}
   m_Center: {x: 0, y: 0.2857794, z: 0.76032996}
+--- !u!114 &933567372876664548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5535034101457135270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3d1c7f052dcb2429f6c4d084b3c1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderers:
+  - {fileID: 6119461967822623354}
+  - {fileID: 8198084952257679395}
+  - {fileID: 2273271688565392989}
+  - {fileID: 1491273852647793637}
+  - {fileID: 4330703317854427533}
+  flickerChance: 0.1
+  flickerAlpha: 0.5
+  _hologramShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104, type: 3}
 --- !u!1 &7579145315996774168
 GameObject:
   m_ObjectHideFlags: 0

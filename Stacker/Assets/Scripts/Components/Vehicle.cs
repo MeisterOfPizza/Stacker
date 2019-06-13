@@ -108,12 +108,6 @@ namespace Stacker.Components
                 yield return new WaitForFixedUpdate();
             }
 
-            // If we made it to the target without hitting anything, deactive vehicle:
-            if (currentDistance > distanceToTravel && !hitStructure)
-            {
-                gameObject.SetActive(false);
-            }
-
             // If we did not hit a structure, then we want to continue the chain event.
             if (!hitStructure)
             {

@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 7455234773259233444}
   - component: {fileID: 7160074684152685721}
   - component: {fileID: 5048548723128090192}
+  - component: {fileID: 3097170028408902610}
   m_Layer: 27
   m_Name: Van
   m_TagString: Untagged
@@ -465,6 +466,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3771397, y: 0.643291, z: 0.4741361}
   m_Center: {x: 0, y: 0.32075274, z: 1.0286165}
+--- !u!114 &3097170028408902610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160074684152685722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3d1c7f052dcb2429f6c4d084b3c1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderers:
+  - {fileID: 8890501428077006918}
+  - {fileID: 2936677440179720046}
+  - {fileID: 38530374746926338}
+  - {fileID: 7347828418088779429}
+  - {fileID: 9195427344523927485}
+  flickerChance: 0.1
+  flickerAlpha: 0.5
+  _hologramShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104, type: 3}
 --- !u!1 &7830869334305264598
 GameObject:
   m_ObjectHideFlags: 0

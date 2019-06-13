@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: 5425980497688434992}
   - component: {fileID: 249603437131040317}
   - component: {fileID: 844685724361470133}
+  - component: {fileID: 9143673213471877455}
   m_Layer: 27
   m_Name: Pick-up
   m_TagString: Untagged
@@ -358,6 +359,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.2114519, y: 0.28835404, z: 0.5288514}
   m_Center: {x: 0, y: 0.77286446, z: -0.009062365}
+--- !u!114 &9143673213471877455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5425980497688434989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3d1c7f052dcb2429f6c4d084b3c1d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderers:
+  - {fileID: 6012343500374846961}
+  - {fileID: 1747761672951464268}
+  - {fileID: 8167274798449994365}
+  - {fileID: 4172433831001889054}
+  - {fileID: 1508515975125350243}
+  flickerChance: 0.1
+  flickerAlpha: 0.5
+  _hologramShader: {fileID: 4800000, guid: 7f14864f2f8e26d4988c35a4ab8ba104, type: 3}
 --- !u!1 &6126849553839259158
 GameObject:
   m_ObjectHideFlags: 0
