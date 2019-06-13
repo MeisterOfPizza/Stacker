@@ -74,7 +74,7 @@ namespace Stacker.Components
                 yield return new WaitForEndOfFrame();
             }
 
-            // Deactive vehicle:
+            // Deactive projectile:
             gameObject.SetActive(false);
 
             // If we did not hit a structure, then we want to continue the chain event.

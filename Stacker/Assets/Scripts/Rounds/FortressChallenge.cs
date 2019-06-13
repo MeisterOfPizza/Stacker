@@ -28,7 +28,7 @@ namespace Stacker.Rounds
         {
             if (!IsCompleted)
             {
-                IsCompleted = ChallengesController.ProjectilesFired >= Projectiles && StructuralIntegrity >= ChallengesController.StructuralIntegrity;
+                IsCompleted = ChallengesController.ProjectilesFired >= Projectiles && StructuralIntegrity <= ChallengesController.StructuralIntegrity;
             }
 
             return IsCompleted;

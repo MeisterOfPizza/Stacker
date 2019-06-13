@@ -63,6 +63,8 @@ namespace Stacker.Controllers
 
             currentRound = new Round(roundTemplates[Random.Range(0, roundTemplates.Length)]);
 
+            ProjectileController.Singleton.ClearProjectiles();
+            VehicleController.Singleton.ClearVehicles();
             ChallengesController.ResetChallengeValues();
             RoundCleanController.Singleton.ResetRound();
 
@@ -123,16 +125,7 @@ namespace Stacker.Controllers
             yield return StartCoroutine(TunnelPhase());
             ChallengesController.CheckTunnelChallenges();
 
-            // In case anything updated roundHasEnded.
-            if (!roundHasEnded)
-            {
-                EndRound();
-                CheckRoundWinLossState();
-            }
-            else
-            {
-                CheckRoundWinLossState();
-            }
+            EndRound();
         }
 
         private void EndBuildPhase()
@@ -152,17 +145,8 @@ namespace Stacker.Controllers
             CameraController.Singleton.CanReadInput = false;
             
             roundHasEnded = true;
-        }
 
-        public void LoseRound()
-        {
-            StopCoroutine("RoundCycle");
-
-            UIPhaseController.Singleton.EndPhases();
-
-            CameraController.Singleton.CanReadInput = false;
-
-            roundHasEnded = true;
+            CheckRoundWinLossState();
         }
 
         /// <summary>

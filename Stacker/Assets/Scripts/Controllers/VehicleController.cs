@@ -51,6 +51,11 @@ namespace Stacker.Controllers
             vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, 10);
         }
 
+        public void ClearVehicles()
+        {
+            vehiclePool.DespawnAll();
+        }
+
         public void SetupVehicles(TunnelChallenge challenge)
         {
             if (challenge != null)

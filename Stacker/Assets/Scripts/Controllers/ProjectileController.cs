@@ -50,6 +50,11 @@ namespace Stacker.Controllers
             projectilePool = new GameObjectPool<Projectile>(projectileContainer, projectilePrefab, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES);
         }
 
+        public void ClearProjectiles()
+        {
+            projectilePool.DespawnAll();
+        }
+
         public void SetupProjectiles()
         {
             for (int i = 0; i < RoundController.Singleton.CurrentRound.MaxProjectiles; i++)

@@ -34,8 +34,8 @@ namespace Stacker.UI.Challenges
             challengeName.text        = roundChallenge.RoundChallengeType.ToString();
             challengeDescription.text = roundChallenge.Description;
 
-            challengeName.fontStyle        &= FontStyles.Strikethrough;
-            challengeDescription.fontStyle &= FontStyles.Strikethrough;
+            challengeName.fontStyle        &= ~FontStyles.Strikethrough; // Remove bit flag
+            challengeDescription.fontStyle &= ~FontStyles.Strikethrough; // -||-
 
             // Deactivate all star reward images beforehand:
             for (int i = 0; i < starRewardImages.Length; i++)

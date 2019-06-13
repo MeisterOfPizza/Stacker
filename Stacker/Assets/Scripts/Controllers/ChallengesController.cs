@@ -52,6 +52,8 @@ namespace Stacker.Controllers
 
         public static void CheckFortressChallenges()
         {
+            StructuralIntegrity = 1 - BlocksHitByProjectiles / (float)BuildController.PlacedBuildingBlockCopies;
+
             var fortressChallenges = RoundController.Singleton.CurrentRound.RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Fortress);
 
             foreach (var challenge in fortressChallenges)
@@ -64,8 +66,6 @@ namespace Stacker.Controllers
 
         public static void CheckTunnelChallenges()
         {
-            StructuralIntegrity = 1 - BlocksHitByProjectiles / (float)BuildController.PlacedBuildingBlockCopies;
-
             var tunnelChallenges = RoundController.Singleton.CurrentRound.RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel);
 
             foreach (var challenge in tunnelChallenges)

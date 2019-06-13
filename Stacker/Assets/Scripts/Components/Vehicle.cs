@@ -94,7 +94,7 @@ namespace Stacker.Components
 
                 ChallengesController.VehicleHitStructure = true;
 
-                RoundController.Singleton.LoseRound();
+                RoundController.Singleton.EndRound();
             }
         }
 

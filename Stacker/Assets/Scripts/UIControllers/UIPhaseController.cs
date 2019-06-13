@@ -93,7 +93,7 @@ namespace Stacker.UIControllers
 
         private void UpdatePhaseIndicator()
         {
-            if (currentPhase == Phase.Build)
+            if (currentPhase == Phase.Build || true)
             {
                 phaseIndicatorImage.fillAmount = Mathf.Lerp(phaseIndicatorImage.fillAmount, startPhaseProgress + (targetPhaseProgress - startPhaseProgress) * RoundController.Singleton.BuildPhaseProgress, Time.deltaTime * phaseIndicatorMoveSpeed);
             }
@@ -129,11 +129,11 @@ namespace Stacker.UIControllers
                 case Phase.Build:
                     return 0.5f;
                 case Phase.Fortress:
-                    return 0.75f;
+                    return 0.5f;
                 case Phase.Tunnel:
-                    return 1f;
+                    return 0.75f;
                 default:
-                    return 0f;
+                    return 1f;
             }
         }
 
