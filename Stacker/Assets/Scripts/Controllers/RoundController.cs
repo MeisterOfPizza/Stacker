@@ -45,11 +45,6 @@ namespace Stacker.Controllers
 
         #endregion
 
-        private void Start()
-        {
-            CreateNewRound();
-        }
-
         #region Round cycle
 
         /// <summary>
@@ -97,9 +92,12 @@ namespace Stacker.Controllers
             float time = currentRound.TimeRestraint;
 
             // Keep the round going as long as we're using a time restraint and time > 0 OR we're not using a time restraint (aka forever).
-            while (!currentRound.UseTimeRestraint || time > 0)
+            while (time > 0)
             {
-                time -= Time.deltaTime;
+                if (currentRound.UseTimeRestraint)
+                {
+                    time -= Time.deltaTime;
+                }
 
                 BuildPhaseProgress = 1 - time / currentRound.TimeRestraint;
 

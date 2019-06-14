@@ -33,6 +33,12 @@
             // Not all classes that inherit from this will use the awake methods.
         }
 
+        public override void LateStart()
+        {
+            // Do nothing here.
+            // Not all classes that inherit from this will use the start methods.
+        }
+
         #endregion
 
     }

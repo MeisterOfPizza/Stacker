@@ -51,6 +51,7 @@ Shader "Custom/FX2D/Pixel Burn"
 			Blend SrcAlpha OneMinusSrcAlpha
 			Fog { Mode Off }
 			Lighting Off
+			Cull Off
 
 			Pass
 			{

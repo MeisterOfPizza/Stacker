@@ -3,6 +3,7 @@ using Stacker.Rounds;
 using Stacker.UI.Challenges;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 #pragma warning disable 0649
 
@@ -14,9 +15,15 @@ namespace Stacker.UIControllers
 
         #region Editor
 
+        [SerializeField] private RectTransform challengesRectTransform;
         [SerializeField] private UIChallenge[] uiChallenges = new UIChallenge[3];
 
         #endregion
+
+        public override void LateStart()
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(challengesRectTransform);
+        }
 
         /// <summary>
         /// Initialize the three (or less) round challenges.
