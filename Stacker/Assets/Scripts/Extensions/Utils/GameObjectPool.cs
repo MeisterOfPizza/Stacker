@@ -169,6 +169,9 @@ namespace Stacker.Extensions.Components
             {
                 GameObject.Destroy(item.gameObject);
             }
+
+            unavailableGameObjects.Clear();
+            availableGameObjects.Clear();
         }
 
         #endregion
