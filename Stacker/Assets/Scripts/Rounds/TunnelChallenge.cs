@@ -7,8 +7,7 @@ namespace Stacker.Rounds
     class TunnelChallenge : RoundChallenge
     {
 
-        public int                           Vehicles       { get; private set; }
-        public TunnelChallengeVehiclePattern VehiclePattern { get; private set; }
+        public int Vehicles       { get; private set; }
 
         public override RoundChallengeType RoundChallengeType
         {
@@ -18,10 +17,9 @@ namespace Stacker.Rounds
             }
         }
 
-        public TunnelChallenge(int starsReward, string description, int vehicles, TunnelChallengeVehiclePattern vehiclePattern) : base(starsReward, description)
+        public TunnelChallenge(int starsReward, string description, int vehicles) : base(starsReward, description)
         {
-            this.Vehicles       = vehicles;
-            this.VehiclePattern = vehiclePattern;
+            this.Vehicles = vehicles;
         }
 
         public override bool CheckCompleted()

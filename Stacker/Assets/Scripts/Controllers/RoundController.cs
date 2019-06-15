@@ -52,16 +52,16 @@ namespace Stacker.Controllers
         /// </summary>
         public void CreateNewRound()
         {
+            BorderController.HideBorder();
+            RoundCleanController.Singleton.CleanRound();
+
             StopCoroutine("RoundCycle");
             StopCoroutine("ActionPhase");
             roundHasEnded = false;
 
             currentRound = new Round(roundTemplates[Random.Range(0, roundTemplates.Length)]);
-
-            ProjectileController.Singleton.ClearProjectiles();
-            VehicleController.Singleton.ClearVehicles();
+            
             ChallengesController.ResetChallengeValues();
-            RoundCleanController.Singleton.ResetRound();
 
             UIChallengesController.Singleton.InitializeUIChallenges(currentRound.RoundChallenges);
         }
@@ -71,6 +71,10 @@ namespace Stacker.Controllers
         /// </summary>
         public void BeginRound()
         {
+            ProjectileController.Singleton.ClearProjectiles();
+            VehicleController.Singleton.ClearVehicles();
+            RoundCleanController.Singleton.ResetRound();
+
             ChallengesController.ResetChallengeValues();
 
             ReadyChallengeControllers();
@@ -90,8 +94,6 @@ namespace Stacker.Controllers
         private void EndBuildPhase()
         {
             ChallengesController.CheckSkyscraperChallenges();
-
-            BorderController.HideBorder();
 
             BuildController.Singleton.EndBuildPhase();
 
@@ -162,9 +164,6 @@ namespace Stacker.Controllers
         /// </summary>
         private void CheckRoundWinLossState()
         {
-            // TODO: Reintroduce cleaning
-            //RoundCleanController.Singleton.CleanRound();
-
             // Count stars:
             int starsReceived = currentRound.RoundStarsReward();
 
@@ -201,7 +200,7 @@ namespace Stacker.Controllers
         private void ReadyChallengeControllers()
         {
             ProjectileController.Singleton.SetupProjectiles();
-            VehicleController.Singleton.SetupVehicles(currentRound.ProminentTunnelChallenge);
+            VehicleController.Singleton.SetupVehicles();
         }
 
         private IEnumerator FortressPhase()

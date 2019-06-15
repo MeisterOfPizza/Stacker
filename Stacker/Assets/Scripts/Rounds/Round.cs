@@ -17,8 +17,8 @@ namespace Stacker.Rounds
         public float TimeRestraint    { get; private set; }
         public bool  UseTimeRestraint { get; private set; }
         
-        public int             MaxProjectiles           { get; private set; }
-        public TunnelChallenge ProminentTunnelChallenge { get; private set; }
+        public int MaxProjectiles { get; private set; }
+        public int MaxVehicles    { get; private set; }
 
         public RoundChallenge[] RoundChallenges { get; private set; }
 
@@ -55,11 +55,11 @@ namespace Stacker.Rounds
 
         private void SetupChallengeValues()
         {
-            var fortressChallenges = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Fortress);
-            var tunnelChallenges   = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel);
+            var fortressChallenges = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Fortress).Cast<FortressChallenge>();
+            var tunnelChallenges   = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel).Cast<TunnelChallenge>();
 
-            MaxProjectiles = fortressChallenges.Count() > 0 ? fortressChallenges.Max(rc => ((FortressChallenge)rc).Projectiles) : 0;
-            ProminentTunnelChallenge = RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Tunnel).Cast<TunnelChallenge>().OrderBy(tc => tc.Vehicles).FirstOrDefault();
+            MaxProjectiles = fortressChallenges.Count() > 0 ? fortressChallenges.Max(rc => rc.Projectiles) : 0;
+            MaxVehicles    = tunnelChallenges.Count() > 0 ? tunnelChallenges.Max(rc => rc.Vehicles) : 0;
         }
 
         #region Helper methods

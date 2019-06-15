@@ -2,7 +2,7 @@
 using Stacker.Extensions.Components;
 using Stacker.Extensions.Utils;
 using Stacker.Rounds;
-using System;
+using Stacker.Templates.Rounds;
 using System.Collections;
 using UnityEngine;
 
@@ -48,7 +48,7 @@ namespace Stacker.Controllers
         public override void OnAwake()
         {
             //TEST: Change the number of max prefab instances:
-            vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, 5, Vector3.one);
+            vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, RoundChallengeTemplate.ROUND_CHALLENGE_TUNNEL_MAX_VEHICLES, Vector3.one);
         }
 
         public void ClearVehicles()
@@ -56,21 +56,14 @@ namespace Stacker.Controllers
             vehiclePool.DespawnAll();
         }
 
-        public void SetupVehicles(TunnelChallenge challenge)
+        public void SetupVehicles()
         {
-            if (challenge != null)
+            for (int i = 0; i < RoundController.Singleton.CurrentRound.MaxVehicles; i++)
             {
-                Tuple<Vector3, Quaternion>[] vehiclePosRot = GetVehiclePositions();
+                Vector3 spawnPos = GetVehiclePosition();
+                Quaternion direction = Quaternion.LookRotation(-spawnPos); // Look at middle (same as Vector3.zero - spawnPos).
 
-                vehiclePool.Anchor.rotation = Quaternion.identity; // Reset rotation.
-
-                for (int i = 0; i < RoundController.Singleton.CurrentRound.ProminentTunnelChallenge.Vehicles; i++)
-                {
-                    vehiclePool.Spawn(vehiclePosRot[i].Item1, vehiclePosRot[i].Item2).SetAsWarning();
-                }
-
-                int randomRot = 90 * UnityEngine.Random.Range(0, 4);
-                vehiclePool.Anchor.rotation = Quaternion.Euler(0, randomRot, 0); // Apply new random rotation.
+                vehiclePool.Spawn(spawnPos, direction).SetAsWarning();
             }
         }
 
@@ -87,67 +80,12 @@ namespace Stacker.Controllers
 
         #region Helper methods
 
-        private Tuple<Vector3, Quaternion>[] GetVehiclePositions()
+        private Vector3 GetVehiclePosition()
         {
-            float size = RoundController.Singleton.CurrentRound.BuildRadius + vehicleSpawnRadiusPadding;
+            float deg = Random.Range(0f, 360f);
+            float radius = RoundController.Singleton.CurrentRound.BuildRadius + vehicleSpawnRadiusPadding;
 
-            // We want to construct a vehicle pattern by returning Vector3s and Quaternions.
-            
-            // The grid will look like this:
-            // ----- Z+ ------                                         
-            // |             |    Cross   Tilted Cross  Highway  Oneway
-            // |             |      v        v   v       v         v   
-            // -X     mrrrrr +X  v     v                               
-            // |      r      |      v        v   v          v          
-            // |      r      |                                         
-            // ----- Z- ------                                         
-            // With m being the middle, r the radius and v the vehicle spawn.
-            // Each pattern can be rotated 360 deg with 90 deg intervals, however, this will happen AFTER the vehicles have been spawned.
-
-            switch (RoundController.Singleton.CurrentRound.ProminentTunnelChallenge.VehiclePattern)
-            {
-                case Templates.Rounds.TunnelChallengeVehiclePattern.Cross:
-                    return new Tuple<Vector3, Quaternion>[]
-                    {
-                        new Tuple<Vector3, Quaternion>(new Vector3(-size, 0), Quaternion.LookRotation(Vector3.right)),  // Left of m
-                        new Tuple<Vector3, Quaternion>(new Vector3(size, 0), Quaternion.LookRotation(Vector3.left)),    // Right of m
-                        new Tuple<Vector3, Quaternion>(new Vector3(0, 0, size), Quaternion.LookRotation(Vector3.down)), // Above m
-                        new Tuple<Vector3, Quaternion>(new Vector3(0, 0, -size), Quaternion.LookRotation(Vector3.up))   // Below m
-                    };
-                case Templates.Rounds.TunnelChallengeVehiclePattern.TiltedCross:
-                    return new Tuple<Vector3, Quaternion>[]
-                    {
-                        new Tuple<Vector3, Quaternion>(new Vector3(-size, 0, size), Quaternion.LookRotation(-new Vector3(-size, 0, size).normalized)),  // Top left of m
-                        new Tuple<Vector3, Quaternion>(new Vector3(size, 0, size), Quaternion.LookRotation(-new Vector3(size, 0, size).normalized)),    // Top right of m
-                        new Tuple<Vector3, Quaternion>(new Vector3(size, 0, -size), Quaternion.LookRotation(-new Vector3(size, 0, -size).normalized)),  // Bottom right of m
-                        new Tuple<Vector3, Quaternion>(new Vector3(-size, 0, -size), Quaternion.LookRotation(-new Vector3(-size, 0, -size).normalized)) // Bottom left of m
-                    };
-                case Templates.Rounds.TunnelChallengeVehiclePattern.Highway:
-
-                    Tuple<Vector3, Quaternion> topLeft     = new Tuple<Vector3, Quaternion>(new Vector3(-size, 0, size), Quaternion.LookRotation(-new Vector3(-size, 0, size).normalized));
-                    Tuple<Vector3, Quaternion> bottomRight = new Tuple<Vector3, Quaternion>(new Vector3(size, 0, -size), Quaternion.LookRotation(-new Vector3(size, 0, -size).normalized));
-
-                    return new Tuple<Vector3, Quaternion>[]
-                    {
-                        topLeft,     // Top left of m
-                        topLeft,     // Top left of m
-                        bottomRight, // Bottom right of m
-                        bottomRight  // Bottom right of m
-                    };
-                case Templates.Rounds.TunnelChallengeVehiclePattern.Oneway:
-
-                    Tuple<Vector3, Quaternion> above = new Tuple<Vector3, Quaternion>(new Vector3(0, 0, size), Quaternion.LookRotation(Vector3.down));
-
-                    return new Tuple<Vector3, Quaternion>[]
-                    {
-                        above,
-                        above,
-                        above,
-                        above
-                    };
-                default:
-                    return null;
-            }
+            return new Vector3(Mathf.Cos(deg * Mathf.Deg2Rad) * radius, 0, Mathf.Sin(deg * Mathf.Deg2Rad) * radius);
         }
 
         #endregion
