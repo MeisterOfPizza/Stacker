@@ -93,12 +93,12 @@ namespace Stacker.Controllers
 
             BorderController.HideBorder();
 
+            BuildController.Singleton.EndBuildPhase();
+
             // Check if the player even has placed blocks:
             // Otherwise, end the round prematurely.
             if (BuildController.PlacedBuildingBlockCopies > 0)
             {
-                BuildController.Singleton.EndBuildPhase();
-
                 StartCoroutine("ActionPhase");
             }
             else

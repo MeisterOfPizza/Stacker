@@ -17,45 +17,21 @@ MonoBehaviour:
       type: 2}
     quantity: 5
     canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
+  - buildingBlockTemplate: {fileID: 11400000, guid: 6433e1a30893f06449e9725949bbecfd,
       type: 2}
     quantity: 5
     canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
+  - buildingBlockTemplate: {fileID: 11400000, guid: 348cda483ca22fe4ca0f309c8c906223,
       type: 2}
     quantity: 5
     canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
-      type: 2}
-    quantity: 5
-    canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
-      type: 2}
-    quantity: 5
-    canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
-      type: 2}
-    quantity: 5
-    canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
-      type: 2}
-    quantity: 5
-    canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
-      type: 2}
-    quantity: 5
-    canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
-      type: 2}
-    quantity: 5
-    canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
+  - buildingBlockTemplate: {fileID: 11400000, guid: 188203a21f477dd4c90c6fcef51a2a3c,
       type: 2}
     quantity: 5
     canRotate: 1
   buildRadius: 2
-  timeRestraint: 3
-  useTimeRestraint: 0
+  timeRestraint: 5
+  useTimeRestraint: 1
   roundChallengePool:
   - type: 1
     starsReward: 1

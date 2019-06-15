@@ -51,7 +51,8 @@ namespace Stacker.UIControllers
             {
                 GameObject uiElement = Instantiate(uiBuildingBlockPrefab, uiBuildingBlockAnchor);
                 UIBuildingBlock uiBuildingBlock = uiElement.GetComponent<UIBuildingBlock>();
-                GameObject icon3D = Instantiate(buildingBlock.RoundBuildingBlockTemplate.Icon3DPrefab, ui3DOverlayBuildingBlockContainer);
+                GameObject icon3D = Instantiate(buildingBlock.RoundBuildingBlockTemplate.Template.Icon3DPrefab, ui3DOverlayBuildingBlockContainer);
+                icon3D.transform.localScale = buildingBlock.RoundBuildingBlockTemplate.Template.Scale * buildingBlock.RoundBuildingBlockTemplate.Template.Icon3DScale;
 
                 uiBuildingBlock.Initialize(buildingBlock, icon3D);
                 buildingBlock.SetUIElement(uiBuildingBlock);

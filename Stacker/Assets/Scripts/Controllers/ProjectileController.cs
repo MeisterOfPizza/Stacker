@@ -47,7 +47,7 @@ namespace Stacker.Controllers
 
         public override void OnAwake()
         {
-            projectilePool = new GameObjectPool<Projectile>(projectileContainer, projectilePrefab, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES);
+            projectilePool = new GameObjectPool<Projectile>(projectileContainer, projectilePrefab, RoundChallengeTemplate.ROUND_CHALLENGE_FORTRESS_MAX_PROJECTILES, Vector3.one);
         }
 
         public void ClearProjectiles()

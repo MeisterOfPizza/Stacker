@@ -6,6 +6,8 @@ using UnityEngine;
 namespace Stacker.Building
 {
 
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(Rigidbody))]
     class BuildingBlockCopy : MonoBehaviour
     {
 
