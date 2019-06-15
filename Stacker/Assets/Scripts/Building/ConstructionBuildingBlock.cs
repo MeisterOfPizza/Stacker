@@ -11,7 +11,8 @@ namespace Stacker.Building
 
         #region Editor
 
-        [SerializeField] private MeshFilter meshFilter;
+        [SerializeField] private MeshFilter   meshFilter;
+        [SerializeField] private MeshRenderer meshRenderer;
 
         [Space]
         [SerializeField] private float constructionBlockMoveSpeed   = 5f;
@@ -25,6 +26,12 @@ namespace Stacker.Building
         public Quaternion TargetRotation { get; set; }
 
         #endregion
+
+        private void Awake()
+        {
+            // Set flicker value to 1 to avoid flickering.
+            meshRenderer.material.SetFloat("_Flicker", 1f);
+        }
 
         public void Initialize(BuildingBlockTemplate buildingBlockTemplate)
         {

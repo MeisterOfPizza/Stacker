@@ -7963,6 +7963,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 720444821}
+  meshRenderer: {fileID: 720444820}
   constructionBlockMoveSpeed: 5
   constructionBlockRotateSpeed: 5
 --- !u!65 &720444824
