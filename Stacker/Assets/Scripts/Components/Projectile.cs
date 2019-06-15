@@ -130,8 +130,6 @@ namespace Stacker.Components
                 {
                     ChallengesController.BlocksHitByProjectiles++;
                 }
-
-                // TODO: Send msg to player that the projectile hit a structure (building block).
             }
 
             collisionDetected = true;

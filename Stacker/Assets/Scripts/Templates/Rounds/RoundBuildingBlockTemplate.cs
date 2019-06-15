@@ -36,6 +36,14 @@ namespace Stacker.Templates.Rounds
             }
         }
 
+        public GameObject Icon3DPrefab
+        {
+            get
+            {
+                return buildingBlockTemplate.Icon3DPrefab;
+            }
+        }
+
         public int Quantity
         {
             get

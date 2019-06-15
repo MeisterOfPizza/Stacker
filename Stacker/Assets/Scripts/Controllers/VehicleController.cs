@@ -48,7 +48,7 @@ namespace Stacker.Controllers
         public override void OnAwake()
         {
             //TEST: Change the number of max prefab instances:
-            vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, 10);
+            vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, 5);
         }
 
         public void ClearVehicles()
@@ -83,8 +83,6 @@ namespace Stacker.Controllers
             {
                 yield return new WaitForEndOfFrame();
             }
-
-            vehiclePool.DespawnAll();
         }
 
         #region Helper methods

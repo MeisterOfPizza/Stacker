@@ -29,6 +29,8 @@ namespace Stacker.UI.Extensions
             CreateRenderTexture(ScreenResizer.ScreenSize);
 
             rawImage.enabled = true;
+
+            ScreenResizer.AddListener(this);
         }
 
         #region Helper methods

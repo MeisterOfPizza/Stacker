@@ -128,13 +128,13 @@ namespace Stacker.Components
                 if (!hitStructure)
                 {
                     PlayCollisionEffect(collision);
+
+                    RoundController.Singleton.EndRound();
                 }
 
                 hitStructure = true;
 
                 ChallengesController.VehicleHitStructure = true;
-
-                RoundController.Singleton.EndRound();
             }
         }
 

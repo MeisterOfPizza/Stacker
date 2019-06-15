@@ -17,12 +17,24 @@ namespace Stacker.UI.Extensions
 
         private void LateUpdate()
         {
+            FollowTarget();
+        }
+
+        private void FollowTarget()
+        {
             if (target != null)
             {
-                Vector3 pos = CameraController.CanvasCamera.ScreenToWorldPoint(target.position);
+                Vector3 pos = CameraController.UI3DOverlayCamera.ScreenToWorldPoint(target.position);
                 pos.z = 0;
                 transform.position = pos;
             }
+        }
+
+        public void SetTarget(Transform target)
+        {
+            this.target = target;
+
+            FollowTarget();
         }
 
     }

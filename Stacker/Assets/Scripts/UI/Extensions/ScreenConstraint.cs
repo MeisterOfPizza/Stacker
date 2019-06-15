@@ -1,4 +1,4 @@
-﻿using Stacker.Controllers;
+﻿using Stacker.Extensions.Utils;
 using UnityEngine;
 
 namespace Stacker.UI.Extensions
@@ -6,18 +6,18 @@ namespace Stacker.UI.Extensions
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RectTransform))]
-    public class ScreenConstraint : MonoBehaviour
+    public class ScreenConstraint : MonoBehaviour, IScreenResizeListener
     {
 
         private RectTransform rectTransform;
-        private Vector2       screenSize; // TODO: Update when screen size is changed.
+        private Vector2       screenSize;
         private Vector2       xAxisConstraint;
         private Vector2       yAxisConstraint;
 
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
-            screenSize    = CameraController.MainCamera.pixelRect.size;
+            screenSize    = ScreenResizer.ScreenSize;
 
             UpdateConstraints();
         }
@@ -45,6 +45,17 @@ namespace Stacker.UI.Extensions
 
             rectTransform.position = new Vector3(x, y, rectTransform.position.z);
         }
+
+        #region IScreenResizeListener
+
+        public void ScreenResized(Vector2 size)
+        {
+            screenSize = size;
+
+            UpdateConstraints();
+        }
+
+        #endregion
 
     }
 

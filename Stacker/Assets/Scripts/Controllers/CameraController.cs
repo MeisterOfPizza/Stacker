@@ -13,7 +13,7 @@ namespace Stacker.Controllers
         [Header("References")]
         [SerializeField] private Transform cameraContainer;
         [SerializeField] private Camera    mainCamera;
-        [SerializeField] private Camera    canvasCamera;
+        [SerializeField] private Camera    ui3DOverlayCamera;
 
         [Header("Settings")]
         [SerializeField] private bool canReadInput = false;
@@ -56,11 +56,11 @@ namespace Stacker.Controllers
             }
         }
 
-        public static Camera CanvasCamera
+        public static Camera UI3DOverlayCamera
         {
             get
             {
-                return Singleton.canvasCamera;
+                return Singleton.ui3DOverlayCamera;
             }
         }
 

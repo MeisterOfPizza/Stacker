@@ -24,6 +24,11 @@ namespace Stacker.UI.Building
 
         private BuildingBlock buildingBlock;
 
+        /// <summary>
+        /// A GameObject in UI 3D overlay space.
+        /// </summary>
+        private GameObject icon3D;
+
         #endregion
 
         #region Public properties
@@ -38,9 +43,12 @@ namespace Stacker.UI.Building
 
         #endregion
 
-        public void Initialize(BuildingBlock buildingBlock)
+        public void Initialize(BuildingBlock buildingBlock, GameObject icon3D)
         {
             this.buildingBlock = buildingBlock;
+            this.icon3D        = icon3D;
+
+            icon3D.GetComponent<Canvas3DFollow2D>().SetTarget(draggableRect.transform);
 
             draggableRect.DetachedParent = UIBuildController.Singleton.UIBuildMenuAnchor;
 

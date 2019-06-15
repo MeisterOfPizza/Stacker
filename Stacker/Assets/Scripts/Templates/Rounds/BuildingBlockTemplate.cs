@@ -13,6 +13,7 @@ namespace Stacker.Templates.Rounds
 
         [SerializeField] private GameObject prefab;
         [SerializeField] private Mesh       mesh;
+        [SerializeField] private GameObject icon3DPrefab;
 
         #endregion
 
@@ -31,6 +32,14 @@ namespace Stacker.Templates.Rounds
             get
             {
                 return mesh;
+            }
+        }
+
+        public GameObject Icon3DPrefab
+        {
+            get
+            {
+                return icon3DPrefab;
             }
         }
 
