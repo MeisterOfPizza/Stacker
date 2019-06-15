@@ -47,17 +47,17 @@ namespace Stacker.Extensions.Components
 
         #region Constructors
 
-        public GameObjectPool(Transform anchor, GameObject prefab, int maxPrefabInstances)
+        public GameObjectPool(Transform anchor, GameObject prefab, int maxPrefabInstances, Vector3 scale)
         {
             this.anchor = anchor;
 
             availableGameObjects   = new List<T>(maxPrefabInstances + 5); // Give a little extra buffer space so that it doesn't have to resize instantly.
             unavailableGameObjects = new List<T>(maxPrefabInstances + 5); // -||-
 
-            CreatePrefabPool(new GameObject[] { prefab }, maxPrefabInstances);
+            CreatePrefabPool(new GameObject[] { prefab }, maxPrefabInstances, scale);
         }
 
-        public GameObjectPool(Transform anchor, GameObject[] prefabs, int maxPrefabInstances)
+        public GameObjectPool(Transform anchor, GameObject[] prefabs, int maxPrefabInstances, Vector3 scale)
         {
             this.anchor = anchor;
 
@@ -66,14 +66,14 @@ namespace Stacker.Extensions.Components
             availableGameObjects   = new List<T>(poolSize + 5); // Give a little extra buffer space so that it doesn't have to resize instantly.
             unavailableGameObjects = new List<T>(poolSize + 5); // -||-
 
-            CreatePrefabPool(prefabs, maxPrefabInstances);
+            CreatePrefabPool(prefabs, maxPrefabInstances, scale);
         }
 
         #endregion
 
         #region Setup
 
-        private void CreatePrefabPool(GameObject[] prefabs, int maxPrefabInstances)
+        private void CreatePrefabPool(GameObject[] prefabs, int maxPrefabInstances, Vector3 scale)
         {
             for (int i = 0; i < prefabs.Length; i++)
             {
@@ -82,7 +82,9 @@ namespace Stacker.Extensions.Components
                     availableGameObjects.Add(GameObject.Instantiate(prefabs[i], anchor).GetComponent<T>());
 
                     // Deactivate the newly created GameObject:
-                    availableGameObjects[availableGameObjects.Count - 1].gameObject.SetActive(false);
+                    GameObject go = availableGameObjects[availableGameObjects.Count - 1].gameObject;
+                    go.SetActive(false);
+                    go.transform.localScale = scale;
                 }
             }
         }

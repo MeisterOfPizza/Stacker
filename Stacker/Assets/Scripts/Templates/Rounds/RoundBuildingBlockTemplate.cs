@@ -20,27 +20,11 @@ namespace Stacker.Templates.Rounds
 
         #region Getters
 
-        public GameObject Prefab
+        public BuildingBlockTemplate Template
         {
             get
             {
-                return buildingBlockTemplate.Prefab;
-            }
-        }
-
-        public Mesh Mesh
-        {
-            get
-            {
-                return buildingBlockTemplate.Mesh;
-            }
-        }
-
-        public GameObject Icon3DPrefab
-        {
-            get
-            {
-                return buildingBlockTemplate.Icon3DPrefab;
+                return buildingBlockTemplate;
             }
         }
 

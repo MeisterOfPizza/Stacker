@@ -35,7 +35,7 @@ namespace Stacker.Building
 
         private void SetupBuildingBlockCopyPool()
         {
-            BuildingBlockCopyPool = new GameObjectPool<BuildingBlockCopy>(BuildController.BuildContainer, RoundBuildingBlockTemplate.Prefab, RoundBuildingBlockTemplate.Quantity);
+            BuildingBlockCopyPool = new GameObjectPool<BuildingBlockCopy>(BuildController.BuildContainer, RoundBuildingBlockTemplate.Template.Prefab, RoundBuildingBlockTemplate.Quantity, RoundBuildingBlockTemplate.Template.Scale);
 
             foreach (var buildingBlock in BuildingBlockCopyPool.AvailableGameObjects)
             {

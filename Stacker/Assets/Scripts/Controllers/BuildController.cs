@@ -157,7 +157,7 @@ namespace Stacker.Controllers
                 DeselectCopy();
 
                 constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
-                constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Mesh);
+                constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Template);
 
                 uiBuildingBlockQuickMenu.Initialize(buildingBlock, true);
                 uiBuildingBlockQuickMenu.IsActive = true;
@@ -236,7 +236,7 @@ namespace Stacker.Controllers
                 selectedBuildingBlock.Select();
 
                 constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
-                constructionBuildingBlock.Initialize(buildingBlockCopy.BuildingBlock.RoundBuildingBlockTemplate.Mesh);
+                constructionBuildingBlock.Initialize(buildingBlockCopy.BuildingBlock.RoundBuildingBlockTemplate.Template);
 
                 uiBuildingBlockQuickMenu.Initialize(buildingBlockCopy, false);
                 uiBuildingBlockQuickMenu.IsActive = true;

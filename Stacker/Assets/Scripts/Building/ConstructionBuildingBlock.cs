@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Stacker.Templates.Rounds;
+using UnityEngine;
 
 #pragma warning disable 0649
 
@@ -25,9 +26,10 @@ namespace Stacker.Building
 
         #endregion
 
-        public void Initialize(Mesh mesh)
+        public void Initialize(BuildingBlockTemplate buildingBlockTemplate)
         {
-            meshFilter.mesh = mesh;
+            transform.localScale = buildingBlockTemplate.Scale;
+            meshFilter.mesh      = buildingBlockTemplate.Mesh;
 
             transform.rotation = Quaternion.identity;
 

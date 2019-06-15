@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86b83bced2d85f24db96813d3d057ed4, type: 3}
+  m_Name: Slope
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8526123595909360795, guid: d75cf91f30e32e94bb00bffbb944236c, type: 3}
+  mesh: {fileID: 6316691400635574700, guid: 7e50beee7fcd97446aa1767048aac5ec, type: 3}
+  icon3DPrefab: {fileID: 8526123595909360795, guid: 557f4edff083d3d4ebf586733e51b0b5,
+    type: 3}
+  scale: {x: 1, y: 1, z: 1}
+  icon3DScale: 0.5

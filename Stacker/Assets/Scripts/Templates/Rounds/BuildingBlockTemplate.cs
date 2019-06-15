@@ -14,6 +14,8 @@ namespace Stacker.Templates.Rounds
         [SerializeField] private GameObject prefab;
         [SerializeField] private Mesh       mesh;
         [SerializeField] private GameObject icon3DPrefab;
+        [SerializeField] private Vector3    scale       = Vector3.one;
+        [SerializeField] private float      icon3DScale = 1f;
 
         #endregion
 
@@ -40,6 +42,22 @@ namespace Stacker.Templates.Rounds
             get
             {
                 return icon3DPrefab;
+            }
+        }
+
+        public Vector3 Scale
+        {
+            get
+            {
+                return scale;
+            }
+        }
+
+        public float Icon3DScale
+        {
+            get
+            {
+                return icon3DScale;
             }
         }
 
