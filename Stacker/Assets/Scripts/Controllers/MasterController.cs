@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Stacker.Extensions.Utils;
+using System.Collections;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -20,6 +21,8 @@ namespace Stacker.Controllers
 
         public override void OnAwake()
         {
+            UpdateScreenResolution();
+
             foreach (MonoController mc in preAwokenControllers)
             {
                 mc.Awake();
@@ -49,6 +52,15 @@ namespace Stacker.Controllers
                 mc.LateStart();
             }
         }
+
+        #region Helper methods
+
+        private void UpdateScreenResolution()
+        {
+            ScreenResizer.UpdateScreenSize(ScreenResizer.ScreenSize);
+        }
+
+        #endregion
 
     }
 
