@@ -14,6 +14,7 @@ namespace Stacker.Controllers
 
         public abstract void Awake();
         public abstract void OnAwake();
+        public abstract void LateStart();
 
     }
 

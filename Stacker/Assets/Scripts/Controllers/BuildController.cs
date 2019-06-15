@@ -110,6 +110,8 @@ namespace Stacker.Controllers
 
             CancelPreviewCopy();
             DeselectCopy();
+
+            UIBuildController.Singleton.StopBuildPhaseUI();
         }
 
         #endregion

@@ -15,9 +15,15 @@ namespace Stacker.UIControllers
 
         #region Editor
 
+        [Header("References")]
+        [SerializeField] private Animator animator;
+
         [Header("Anchors")]
         [SerializeField] private RectTransform uiBuildMenuAnchor;
         [SerializeField] private RectTransform uiBuildingBlockAnchor;
+
+        [Header("Containers")]
+        [SerializeField] private Transform ui3DOverlayBuildingBlockContainer;
 
         [Header("Prefabs")]
         [SerializeField] private GameObject uiBuildingBlockPrefab;
@@ -39,19 +45,24 @@ namespace Stacker.UIControllers
         public void BeginBuildPhaseUI(IList<BuildingBlock> buildingBlocks)
         {
             uiBuildingBlockAnchor.Clear();
+            ui3DOverlayBuildingBlockContainer.Clear();
 
             foreach (var buildingBlock in buildingBlocks)
             {
                 GameObject uiElement = Instantiate(uiBuildingBlockPrefab, uiBuildingBlockAnchor);
                 UIBuildingBlock uiBuildingBlock = uiElement.GetComponent<UIBuildingBlock>();
-                uiBuildingBlock.Initialize(buildingBlock);
+                GameObject icon3D = Instantiate(buildingBlock.RoundBuildingBlockTemplate.Icon3DPrefab, ui3DOverlayBuildingBlockContainer);
+
+                uiBuildingBlock.Initialize(buildingBlock, icon3D);
                 buildingBlock.SetUIElement(uiBuildingBlock);
             }
+
+            animator.SetTrigger("Reveal");
         }
 
         public void StopBuildPhaseUI()
         {
-            // TODO: Play some animations.
+            animator.SetTrigger("Hide");
         }
 
     }

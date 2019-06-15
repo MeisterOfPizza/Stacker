@@ -21,6 +21,11 @@ namespace Stacker.Controllers
             TotalStars += stars;
         }
 
+        public static void ResetStars()
+        {
+            TotalStars = 0;
+        }
+
     }
 
 }

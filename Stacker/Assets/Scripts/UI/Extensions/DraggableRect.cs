@@ -63,7 +63,7 @@ namespace Stacker.UI.Extensions
 
         public void OnDrag(PointerEventData eventData)
         {
-            rectTransform.anchoredPosition = parent.InverseTransformPoint(eventData.position);
+            rectTransform.position = eventData.position;
         }
 
         public void OnEndDrag(PointerEventData eventData)

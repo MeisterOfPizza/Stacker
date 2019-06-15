@@ -45,11 +45,6 @@ namespace Stacker.Controllers
 
         #endregion
 
-        private void Start()
-        {
-            CreateNewRound();
-        }
-
         #region Round cycle
 
         /// <summary>
@@ -92,14 +87,37 @@ namespace Stacker.Controllers
             BuildController.Singleton.BeginBuildPhase(currentRound.Template.RoundBuildingBlockTemplates);
         }
 
+        private void EndBuildPhase()
+        {
+            ChallengesController.CheckSkyscraperChallenges();
+
+            BorderController.HideBorder();
+
+            // Check if the player even has placed blocks:
+            // Otherwise, end the round prematurely.
+            if (BuildController.PlacedBuildingBlockCopies > 0)
+            {
+                BuildController.Singleton.EndBuildPhase();
+
+                StartCoroutine("ActionPhase");
+            }
+            else
+            {
+                EndRound();
+            }
+        }
+
         private IEnumerator RoundCycle()
         {
             float time = currentRound.TimeRestraint;
 
             // Keep the round going as long as we're using a time restraint and time > 0 OR we're not using a time restraint (aka forever).
-            while (!currentRound.UseTimeRestraint || time > 0)
+            while (time > 0)
             {
-                time -= Time.deltaTime;
+                if (currentRound.UseTimeRestraint)
+                {
+                    time -= Time.deltaTime;
+                }
 
                 BuildPhaseProgress = 1 - time / currentRound.TimeRestraint;
 
@@ -110,8 +128,6 @@ namespace Stacker.Controllers
             if (!roundHasEnded)
             {
                 EndBuildPhase();
-
-                StartCoroutine("ActionPhase");
             }
         }
 
@@ -124,16 +140,8 @@ namespace Stacker.Controllers
             UIPhaseController.Singleton.NextPhase(); // Set the current UI phase to tunnel.
             yield return StartCoroutine(TunnelPhase());
             ChallengesController.CheckTunnelChallenges();
-
+            
             EndRound();
-        }
-
-        private void EndBuildPhase()
-        {
-            ChallengesController.CheckSkyscraperChallenges();
-
-            BorderController.HideBorder();
-            BuildController.Singleton.EndBuildPhase();
         }
 
         public void EndRound()
@@ -178,6 +186,8 @@ namespace Stacker.Controllers
                 roundsPassedWithoutLoss = 0;
 
                 UIRoundController.Singleton.LostRoundWindow();
+
+                GameController.ResetStars();
             }
 
             UIRoundController.Singleton.UpdateStarCount();

@@ -50,8 +50,6 @@ namespace Stacker.UIControllers
         /// </summary>
         public void NewGame()
         {
-            // TODO: Reset score, clear UI.
-
             RoundController.Singleton.CreateNewRound();
 
             roundReadyWindow.SetActive(true);
