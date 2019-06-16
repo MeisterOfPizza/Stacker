@@ -17,7 +17,6 @@ namespace Stacker.Building
         [SerializeField] private MeshRenderer meshRenderer;
 
         [Header("Selection")]
-        [SerializeField] private Material _defaultMaterial;
         [SerializeField] private Material _selectedMaterial;
 
         #endregion
@@ -27,6 +26,8 @@ namespace Stacker.Building
         private BuildingBlock buildingBlock;
 
         private BuildingBlockState state = BuildingBlockState.Inactive;
+
+        private Material[] defaultMaterials;
 
         #endregion
 
@@ -69,6 +70,11 @@ namespace Stacker.Building
 
         #endregion
 
+        private void Awake()
+        {
+            defaultMaterials = meshRenderer.materials;
+        }
+
         public void Initialize(BuildingBlock buildingBlock)
         {
             this.buildingBlock = buildingBlock;
@@ -96,7 +102,14 @@ namespace Stacker.Building
             {
                 state = BuildingBlockState.Selected;
 
-                meshRenderer.material = _selectedMaterial;
+                Material[] materials = meshRenderer.materials;
+
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    materials[i] = _selectedMaterial;
+                }
+
+                meshRenderer.materials = materials;
             }
         }
 
@@ -106,7 +119,7 @@ namespace Stacker.Building
             {
                 state = BuildingBlockState.Active;
 
-                meshRenderer.material = _defaultMaterial;
+                meshRenderer.materials = defaultMaterials;
             }
         }
 

@@ -3,7 +3,10 @@ guid: 7297071ca6d7d564b8d94d0845cccf33
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - meshFilter: {instanceID: 0}
+  - meshRenderer: {instanceID: 0}
+  - _hologramMaterial: {fileID: 2100000, guid: c6ab5c51e96890e44b380d8c257363a2, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

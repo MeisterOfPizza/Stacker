@@ -18,6 +18,9 @@ namespace Stacker.Building
         [SerializeField] private float constructionBlockMoveSpeed   = 5f;
         [SerializeField] private float constructionBlockRotateSpeed = 5f;
 
+        [Header("Predefined editor values")]
+        [SerializeField] private Material _hologramMaterial;
+
         #endregion
 
         #region Public properties
@@ -27,21 +30,29 @@ namespace Stacker.Building
 
         #endregion
 
-        private void Awake()
-        {
-            // Set flicker value to 1 to avoid flickering.
-            meshRenderer.material.SetFloat("_Flicker", 1f);
-        }
-
         public void Initialize(BuildingBlockTemplate buildingBlockTemplate)
         {
             transform.localScale = buildingBlockTemplate.Scale;
             meshFilter.mesh      = buildingBlockTemplate.Mesh;
 
+            SetupMaterials();
+
             transform.rotation = Quaternion.identity;
 
             TargetPosition = transform.position;
             TargetRotation = Quaternion.identity;
+        }
+
+        private void SetupMaterials()
+        {
+            Material[] materials = new Material[meshFilter.mesh.subMeshCount];
+
+            for (int i = 0; i < materials.Length; i++)
+            {
+                materials[i] = _hologramMaterial;
+            }
+
+            meshRenderer.materials = materials;
         }
 
         private void FixedUpdate()

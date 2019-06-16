@@ -21,17 +21,13 @@ MonoBehaviour:
       type: 2}
     quantity: 5
     canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: 348cda483ca22fe4ca0f309c8c906223,
-      type: 2}
-    quantity: 5
-    canRotate: 1
   - buildingBlockTemplate: {fileID: 11400000, guid: 188203a21f477dd4c90c6fcef51a2a3c,
       type: 2}
     quantity: 5
     canRotate: 1
   buildRadius: 2
   timeRestraint: 5
-  useTimeRestraint: 1
+  useTimeRestraint: 0
   roundChallengePool:
   - type: 1
     starsReward: 1
@@ -39,18 +35,15 @@ MonoBehaviour:
     projectiles: 0
     structuralIntegrity: 0
     vehicles: 0
-    vehiclePattern: 0
   - type: 2
     starsReward: 3
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 0
-    vehiclePattern: 0
   - type: 4
     starsReward: 2
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 2
-    vehiclePattern: 0

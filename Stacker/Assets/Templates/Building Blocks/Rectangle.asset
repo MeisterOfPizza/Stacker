@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b83bced2d85f24db96813d3d057ed4, type: 3}
   m_Name: Rectangle
   m_EditorClassIdentifier: 
-  prefab: {fileID: 43335289048785936, guid: fce6767a33efcda43950027b5097995e, type: 3}
-  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  icon3DPrefab: {fileID: 43335289048785936, guid: f6f4f97c593de1e4daeafc200eee5ee8,
+  prefab: {fileID: 43335289048785936, guid: 98b9925f521013944879ae1cf0e7b083, type: 3}
+  mesh: {fileID: -958928262147269591, guid: 876a65c07c058a945b4bde190258c14c, type: 3}
+  icon3DPrefab: {fileID: 43335289048785936, guid: 537a5c2709a84934b93941890694725e,
     type: 3}
-  scale: {x: 1, y: 2, z: 1}
+  scale: {x: 1, y: 1, z: 1}
   icon3DScale: 0.5
