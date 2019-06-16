@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cube
   m_EditorClassIdentifier: 
   prefab: {fileID: 43335289048785936, guid: fce6767a33efcda43950027b5097995e, type: 3}
-  mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  mesh: {fileID: -6747435334189783377, guid: a11c5abf228194d4583f145b4574f782, type: 3}
   icon3DPrefab: {fileID: 43335289048785936, guid: f6f4f97c593de1e4daeafc200eee5ee8,
     type: 3}
   scale: {x: 1, y: 1, z: 1}

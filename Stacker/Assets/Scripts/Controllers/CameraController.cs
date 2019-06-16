@@ -28,6 +28,9 @@ namespace Stacker.Controllers
         [SerializeField, Range(0, 100)] private int     zoomLevels       = 10;
         [SerializeField, Range(0, 100)] private int     defaultZoomLevel = 2;
 
+        [Header("Misc")]
+        [SerializeField] private LayerMask mainCameraEventMask;
+
         #endregion
 
         #region Private variables
@@ -86,6 +89,9 @@ namespace Stacker.Controllers
             this.deltaZoom          = maxZoomPosition - minZoomPosition;
             this.currentZoomLevel   = defaultZoomLevel;
             this.targetZoomPosition = GetZoomLevelPosition(currentZoomLevel);
+
+            this.mainCamera.eventMask = mainCameraEventMask;
+            this.ui3DOverlayCamera.eventMask = 0;
         }
 
         private void Update()
