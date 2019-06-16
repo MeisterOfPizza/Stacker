@@ -27,6 +27,11 @@ namespace Stacker.Rounds
             if (!IsCompleted)
             {
                 IsCompleted = !ChallengesController.VehicleHitStructure;
+
+                if (IsCompleted)
+                {
+                    ChallengesController.PlayChallengeCompleteSoundEffect();
+                }
             }
 
             return IsCompleted;

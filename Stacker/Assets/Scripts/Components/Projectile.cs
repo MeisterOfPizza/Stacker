@@ -27,6 +27,14 @@ namespace Stacker.Components
         [Header("Values")]
         [SerializeField] private float fireSpeed = 100f;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource soundEffectsSource;
+        [SerializeField] private AudioSource projectileLaunchSource;
+
+        [Space]
+        [SerializeField] private AudioClip[] projectileCollisionSoundEffects;
+        [SerializeField] private AudioClip[] projectileLaunchSoundEffects;
+
         [Header("Warning material")]
         [SerializeField] private Material _warningMaterial;
 
@@ -84,6 +92,8 @@ namespace Stacker.Components
             collider.enabled     = true;
             ChangeToDefaultMaterials();
 
+            PlayLaunchSoundEffect();
+
             Vector3 target = new Vector3(-transform.position.x, transform.position.y, -transform.position.z);
             float distanceToTarget = float.MaxValue;
 
@@ -117,6 +127,8 @@ namespace Stacker.Components
         {
             if (!collisionDetected)
             {
+                StopLaunchSoundEffect();
+                PlayCollisionSoundEffect();
                 PlayCollisionEffect(collision);
                 spin.Stop();
                 trailParticleSystem.Stop();
@@ -163,6 +175,25 @@ namespace Stacker.Components
         private void ChangeToDefaultMaterials()
         {
             meshRenderer.materials = defaultMaterials;
+        }
+
+        #endregion
+
+        #region Audio
+
+        private void PlayLaunchSoundEffect()
+        {
+            projectileLaunchSource.PlayOneShot(projectileLaunchSoundEffects[UnityEngine.Random.Range(0, projectileLaunchSoundEffects.Length)], AudioController.EffectsVolume);
+        }
+
+        private void StopLaunchSoundEffect()
+        {
+            projectileLaunchSource.Stop();
+        }
+
+        private void PlayCollisionSoundEffect()
+        {
+            soundEffectsSource.PlayOneShot(projectileCollisionSoundEffects[UnityEngine.Random.Range(0, projectileCollisionSoundEffects.Length)], AudioController.EffectsVolume);
         }
 
         #endregion

@@ -37,6 +37,10 @@ namespace Stacker.Components
         [Header("Values")]
         [SerializeField] private float moveSpeed = 5;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource soundEffectsSource;
+        [SerializeField] private AudioClip[] vehicleCollisionSoundEffects;
+
         [Header("Warning material")]
         [SerializeField] private Material _warningMaterial;
 
@@ -121,16 +125,14 @@ namespace Stacker.Components
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer))
+            if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer) && !hitStructure)
             {
                 StopWheelDustEffect();
 
-                if (!hitStructure)
-                {
-                    PlayCollisionEffect(collision);
+                PlayCollisionEffect(collision);
+                PlayCollisionSoundEffect();
 
-                    RoundController.Singleton.EndRound();
-                }
+                RoundController.Singleton.EndRound();
 
                 hitStructure = true;
 
@@ -196,6 +198,15 @@ namespace Stacker.Components
             {
                 meshRenderers[i].materials = defaultMaterials[i];
             }
+        }
+
+        #endregion
+
+        #region Audio
+
+        private void PlayCollisionSoundEffect()
+        {
+            soundEffectsSource.PlayOneShot(vehicleCollisionSoundEffects[UnityEngine.Random.Range(0, vehicleCollisionSoundEffects.Length)], AudioController.EffectsVolume);
         }
 
         #endregion
