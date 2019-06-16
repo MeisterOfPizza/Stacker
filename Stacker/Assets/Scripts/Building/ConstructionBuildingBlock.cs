@@ -13,6 +13,7 @@ namespace Stacker.Building
 
         [SerializeField] private MeshFilter   meshFilter;
         [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private MeshCollider meshCollider;
 
         [Space]
         [SerializeField] private float constructionBlockMoveSpeed   = 5f;
@@ -24,6 +25,14 @@ namespace Stacker.Building
         #endregion
 
         #region Public properties
+        
+        public Vector3 Position
+        {
+            get
+            {
+                return transform.position;
+            }
+        }
 
         public Vector3    TargetPosition { get; set; }
         public Quaternion TargetRotation { get; set; }
@@ -32,8 +41,9 @@ namespace Stacker.Building
 
         public void Initialize(BuildingBlockTemplate buildingBlockTemplate)
         {
-            transform.localScale = buildingBlockTemplate.Scale;
-            meshFilter.mesh      = buildingBlockTemplate.Mesh;
+            transform.localScale    = buildingBlockTemplate.Scale;
+            meshFilter.mesh         = buildingBlockTemplate.Mesh;
+            meshCollider.sharedMesh = buildingBlockTemplate.Mesh;
 
             SetupMaterials();
 
