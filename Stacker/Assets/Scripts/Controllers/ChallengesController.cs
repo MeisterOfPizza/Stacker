@@ -1,6 +1,7 @@
 ﻿using Stacker.Templates.Rounds;
 using Stacker.UIControllers;
 using System.Linq;
+using UnityEngine;
 
 namespace Stacker.Controllers
 {
@@ -8,8 +9,16 @@ namespace Stacker.Controllers
     class ChallengesController : Controller<ChallengesController>
     {
 
+        #region Editor
+
+        [Header("Audio")]
+        [SerializeField] private AudioSource challengesSoundEffectsSource;
+        [SerializeField] private AudioClip   challengeCompleteSoundEffect;
+
+        #endregion
+
         #region Public static properties
-        
+
         public static bool  VehicleHitStructure    { get; set; }
         public static float BuildHeight            { get; set; }
         public static int   ProjectilesFired       { get; set; }
@@ -22,20 +31,20 @@ namespace Stacker.Controllers
 
         #endregion
 
-        public static void ResetChallengeValues()
-        {
-            VehicleHitStructure    = false;
-            BuildHeight            = 0;
-            ProjectilesFired       = 0;
-            BlocksHitByProjectiles = 0;
-        }
-
         private void FixedUpdate()
         {
             if (BuildController.CanBuild)
             {
                 BuildHeight = BuildController.Singleton.CalculateStackHeight();
             }
+        }
+
+        public static void ResetChallengeValues()
+        {
+            VehicleHitStructure    = false;
+            BuildHeight            = 0;
+            ProjectilesFired       = 0;
+            BlocksHitByProjectiles = 0;
         }
 
         public static void CheckSkyscraperChallenges()
@@ -75,6 +84,15 @@ namespace Stacker.Controllers
 
             UIChallengesController.Singleton.UpdateUIChallenges();
         }
+
+        #region Audio
+
+        public static void PlayChallengeCompleteSoundEffect()
+        {
+            Singleton.challengesSoundEffectsSource.PlayOneShot(Singleton.challengeCompleteSoundEffect, 0.25f * AudioController.UIVolume);
+        }
+
+        #endregion
 
     }
 

@@ -29,6 +29,11 @@ namespace Stacker.Rounds
             if (!IsCompleted)
             {
                 IsCompleted = ChallengesController.ProjectilesFired >= Projectiles && StructuralIntegrity <= ChallengesController.StructuralIntegrity;
+
+                if (IsCompleted)
+                {
+                    ChallengesController.PlayChallengeCompleteSoundEffect();
+                }
             }
 
             return IsCompleted;

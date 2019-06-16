@@ -27,6 +27,11 @@ namespace Stacker.Rounds
             if (!IsCompleted)
             {
                 IsCompleted = ChallengesController.BuildHeight >= BuildHeight;
+
+                if (IsCompleted)
+                {
+                    ChallengesController.PlayChallengeCompleteSoundEffect();
+                }
             }
 
             return IsCompleted;
