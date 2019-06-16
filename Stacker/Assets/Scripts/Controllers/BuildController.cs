@@ -257,7 +257,7 @@ namespace Stacker.Controllers
 
         public void PlaceCopy()
         {
-            selectedBuildingBlock.PlaceBuildingBlock(constructionBuildingBlock.TargetPosition, constructionBuildingBlock.TargetRotation);
+            selectedBuildingBlock.PlaceBuildingBlock(constructionBuildingBlock.Position, constructionBuildingBlock.TargetRotation);
             DeselectCopy();
         }
 
