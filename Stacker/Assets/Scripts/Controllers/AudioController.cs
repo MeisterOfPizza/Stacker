@@ -8,9 +8,9 @@ namespace Stacker.Controllers
 
         #region Public variables
 
-        public float musicVolume   = 1f;
-        public float effectsVolume = 1f;
-        public float uiVolume      = 1f;
+        [HideInInspector] public float musicVolume   = 1f;
+        [HideInInspector] public float effectsVolume = 1f;
+        [HideInInspector] public float miscVolume    = 1f;
 
         #endregion
 
@@ -42,16 +42,16 @@ namespace Stacker.Controllers
             }
         }
 
-        public static float UIVolume
+        public static float MiscVolume
         {
             get
             {
-                return Singleton.uiVolume;
+                return Singleton.miscVolume;
             }
 
             set
             {
-                Singleton.uiVolume = Mathf.Clamp01(value);
+                Singleton.miscVolume = Mathf.Clamp01(value);
             }
         }
 

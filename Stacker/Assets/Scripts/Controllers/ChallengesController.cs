@@ -89,7 +89,7 @@ namespace Stacker.Controllers
 
         public static void PlayChallengeCompleteSoundEffect()
         {
-            Singleton.challengesSoundEffectsSource.PlayOneShot(Singleton.challengeCompleteSoundEffect, 0.25f * AudioController.UIVolume);
+            Singleton.challengesSoundEffectsSource.PlayOneShot(Singleton.challengeCompleteSoundEffect, 0.25f * AudioController.MiscVolume);
         }
 
         #endregion
