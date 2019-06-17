@@ -1,4 +1,5 @@
 ﻿using Stacker.Rounds;
+using Stacker.UIControllers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,8 @@ namespace Stacker.UI.Challenges
         [SerializeField] private TMP_Text challengeDescription;
 
         [Space]
-        [SerializeField] private Image[] starRewardImages = new Image[3];
+        [SerializeField] private RectTransform starsSpawnReference;
+        [SerializeField] private Image[]       starRewardImages = new Image[3];
 
         #endregion
 
@@ -25,11 +27,14 @@ namespace Stacker.UI.Challenges
 
         private RoundChallenge roundChallenge;
 
+        private bool hasBeenCompleted;
+
         #endregion
 
         public void Initialize(RoundChallenge roundChallenge)
         {
-            this.roundChallenge = roundChallenge;
+            this.roundChallenge   = roundChallenge;
+            this.hasBeenCompleted = false;
 
             challengeName.text        = roundChallenge.RoundChallengeType.ToString();
             challengeDescription.text = roundChallenge.Description;
@@ -55,10 +60,14 @@ namespace Stacker.UI.Challenges
         /// </summary>
         public void UpdateUIChallenge()
         {
-            if (roundChallenge.IsCompleted)
+            if (roundChallenge.IsCompleted && !hasBeenCompleted)
             {
                 challengeName.fontStyle        |= FontStyles.Strikethrough;
                 challengeDescription.fontStyle |= FontStyles.Strikethrough;
+
+                UIChallengesController.Singleton.SpawnStars(starsSpawnReference.position, roundChallenge.StarsReward);
+
+                hasBeenCompleted = true;
             }
         }
 

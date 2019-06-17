@@ -42,7 +42,7 @@ namespace Stacker.Controllers
 
                 yield return new WaitForEndOfFrame();
             }
-
+            
             StartCoroutine(SongCycle());
         }
 
