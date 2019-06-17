@@ -2,6 +2,8 @@
 using TMPro;
 using UnityEngine;
 
+#pragma warning disable 0649
+
 namespace Stacker.UIControllers
 {
 

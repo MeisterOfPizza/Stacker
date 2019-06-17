@@ -74,6 +74,16 @@ namespace Stacker.UIControllers
                 uiChallenges[i].gameObject.SetActive(true);
                 uiChallenges[i].Initialize(roundChallenges[i]);
             }
+
+            Invoke("FixUIChallengesLayout", 0.25f);
+        }
+
+        /// <summary>
+        /// Fix a small bug with the TMP_Pro and Unity layout system.
+        /// </summary>
+        private void FixUIChallengesLayout()
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(challengesRectTransform);
         }
 
         public void UpdateUIChallenges()
