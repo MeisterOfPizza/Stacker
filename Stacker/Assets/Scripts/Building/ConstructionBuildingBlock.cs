@@ -39,6 +39,11 @@ namespace Stacker.Building
 
         #endregion
 
+        private void Awake()
+        {
+            _hologramMaterial.SetFloat("_Flicker", 1f); // Disable hologram flicker.
+        }
+
         public void Initialize(BuildingBlockTemplate buildingBlockTemplate)
         {
             transform.localScale    = buildingBlockTemplate.Scale;
