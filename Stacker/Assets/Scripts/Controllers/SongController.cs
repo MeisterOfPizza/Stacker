@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+#pragma warning disable 0649
+
 namespace Stacker.Controllers
 {
 

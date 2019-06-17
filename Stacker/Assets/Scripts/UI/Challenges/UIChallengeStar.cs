@@ -4,6 +4,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+#pragma warning disable 0649
+
 namespace Stacker.UI.Challenges
 {
 
