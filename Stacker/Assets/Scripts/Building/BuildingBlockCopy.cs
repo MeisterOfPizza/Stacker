@@ -73,6 +73,8 @@ namespace Stacker.Building
         private void Awake()
         {
             defaultMaterials = meshRenderer.materials;
+
+            _selectedMaterial.SetFloat("_Flicker", 1f); // Disable hologram flicker.
         }
 
         public void Initialize(BuildingBlock buildingBlock)
