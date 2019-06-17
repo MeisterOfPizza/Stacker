@@ -32,18 +32,19 @@ namespace Stacker.Controllers
 
         private IEnumerator SongCycle()
         {
-            currentSong = songs[Random.Range(0, songs.Length)];
-            source.clip = currentSong;
-            source.PlayDelayed(playDelay);
-
-            while (source.isPlaying)
+            while (true)
             {
+                if (!source.isPlaying)
+                {
+                    currentSong = songs[Random.Range(0, songs.Length)];
+                    source.clip = currentSong;
+                    source.PlayDelayed(playDelay);
+                }
+
                 source.volume = AudioController.MusicVolume;
 
                 yield return new WaitForEndOfFrame();
             }
-            
-            StartCoroutine(SongCycle());
         }
 
     }
