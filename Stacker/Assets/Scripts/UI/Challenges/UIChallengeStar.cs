@@ -43,7 +43,7 @@ namespace Stacker.UI.Challenges
 
             while (distance > 1f)
             {
-                transform.position = Vector3.Lerp(transform.position, UIChallengesController.UIChallengeStarTarget.position, FLY_SPEED * Time.deltaTime);
+                transform.position = Vector2.Lerp(transform.position, UIChallengesController.UIChallengeStarTarget.position, FLY_SPEED * Time.deltaTime);
                 distance           = Vector2.Distance(transform.position, UIChallengesController.UIChallengeStarTarget.position);
 
                 yield return new WaitForEndOfFrame();
