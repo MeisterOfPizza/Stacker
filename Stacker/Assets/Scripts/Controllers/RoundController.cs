@@ -167,12 +167,6 @@ namespace Stacker.Controllers
             // Count stars:
             int starsReceived = currentRound.RoundStarsReward();
 
-            // Don't give any stars unless the player has placed at least one block.
-            if (BuildController.PlacedBuildingBlockCopies > 0)
-            {
-                GameController.GivePlayerStars(starsReceived);
-            }
-
             // The round was lost because the player did not gain any stars:
             if (starsReceived > 0 && BuildController.PlacedBuildingBlockCopies > 0)
             {

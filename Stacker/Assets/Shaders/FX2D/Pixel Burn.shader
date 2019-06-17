@@ -43,7 +43,7 @@ Shader "Custom/FX2D/Pixel Burn"
 			Tags
 			{
 				"RenderType" = "Transparent"
-				"Queue" = "Transparent"
+				"Queue" = "Transparent+50"
 				"DisableBatching" = "True"
 				"IgnoreProjector" = "True"
 			}

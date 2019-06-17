@@ -1,4 +1,5 @@
 ﻿using Stacker.Controllers;
+using Stacker.Extensions.Components;
 using Stacker.Rounds;
 using Stacker.UI.Challenges;
 using System.Linq;
@@ -15,10 +16,39 @@ namespace Stacker.UIControllers
 
         #region Editor
 
+        [Header("UI Challenges")]
         [SerializeField] private RectTransform challengesRectTransform;
         [SerializeField] private UIChallenge[] uiChallenges = new UIChallenge[3];
 
+        [Header("UI Challenge Stars")]
+        [SerializeField] private RectTransform uiChallengeStarAnchor;
+        [SerializeField] private RectTransform uiChallengeStarTarget;
+        [SerializeField] private GameObject    uiChallengeStarPrefab;
+
         #endregion
+
+        #region Private variables
+
+        private GameObjectPool<UIChallengeStar> challengeStarPool;
+
+        #endregion
+
+        #region Public properties
+
+        public static RectTransform UIChallengeStarTarget
+        {
+            get
+            {
+                return Singleton.uiChallengeStarTarget;
+            }
+        }
+
+        #endregion
+
+        public override void OnAwake()
+        {
+            challengeStarPool = new GameObjectPool<UIChallengeStar>(uiChallengeStarAnchor, uiChallengeStarPrefab, 9, Vector3.one);
+        }
 
         public override void LateStart()
         {
@@ -52,6 +82,19 @@ namespace Stacker.UIControllers
             {
                 uiChallenge.UpdateUIChallenge();
             }
+        }
+
+        public void SpawnStars(Vector3 position, int amount)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                challengeStarPool.Spawn(position, Quaternion.identity).StartPath();
+            }
+        }
+
+        public void DespawnStar(UIChallengeStar star)
+        {
+            challengeStarPool.Despawn(star);
         }
 
     }
