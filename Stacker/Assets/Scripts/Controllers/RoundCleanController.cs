@@ -33,6 +33,12 @@ namespace Stacker.Controllers
         /// </summary>
         private bool[] rigidbodyIsKinematicValues;
 
+        /// <summary>
+        /// Stores the values of the <see cref="Rigidbody.collisionDetectionMode"/> enum from
+        /// each <see cref="Rigidbody"/> found on <see cref="roundContainer"/>.
+        /// </summary>
+        private CollisionDetectionMode[] collisionDetectionModes;
+
         #endregion
 
         /// <summary>
@@ -42,9 +48,13 @@ namespace Stacker.Controllers
         {
             rigidbodies = roundContainer.GetComponentsInChildren<Rigidbody>(true);
             rigidbodyIsKinematicValues = new bool[rigidbodies.Length];
+            collisionDetectionModes    = new CollisionDetectionMode[rigidbodies.Length];
 
             for (int i = 0; i < rigidbodies.Length; i++)
             {
+                collisionDetectionModes[i] = rigidbodies[i].collisionDetectionMode;
+                rigidbodies[i].collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+
                 rigidbodyIsKinematicValues[i] = rigidbodies[i].isKinematic;
                 rigidbodies[i].isKinematic = true;
             }
@@ -67,7 +77,8 @@ namespace Stacker.Controllers
             {
                 for (int i = 0; i < rigidbodies.Length; i++)
                 {
-                    rigidbodies[i].isKinematic = rigidbodyIsKinematicValues[i]; // Set the boolean value to what it was set to BEFORE isKinematic was set to false.
+                    rigidbodies[i].isKinematic            = rigidbodyIsKinematicValues[i]; // Set the boolean value to what it was set to BEFORE isKinematic was set to false.
+                    rigidbodies[i].collisionDetectionMode = collisionDetectionModes[i];
                 }
             }
         }

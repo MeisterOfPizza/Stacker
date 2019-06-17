@@ -115,6 +115,8 @@ namespace Stacker.Components
             // If we did not hit a structure, then we want to continue the chain event.
             if (!hitStructure)
             {
+                StopWheelDustEffect(); // Stop the wheel dust effect because the vehicle has reached its destination.
+
                 doneCallback();
             }
         }
