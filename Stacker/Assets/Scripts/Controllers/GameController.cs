@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
 namespace Stacker.Controllers
 {
@@ -10,11 +6,24 @@ namespace Stacker.Controllers
     class GameController : Controller<GameController>
     {
 
+        #region Editor
+
+        [SerializeField] private GameObject quitButton;
+
+        #endregion
+
         #region Static properties
 
         public static int TotalStars { get; private set; }
 
         #endregion
+
+        public override void OnAwake()
+        {
+#if UNITY_IOS || UNITY_ANDROIOD
+            quitButton.SetActive(false);
+#endif
+        }
 
         public static void GivePlayerStars(int stars)
         {
@@ -24,6 +33,12 @@ namespace Stacker.Controllers
         public static void ResetStars()
         {
             TotalStars = 0;
+        }
+
+        public void QuitGame()
+        {
+            PlayerPrefs.Save();
+            Application.Quit();
         }
 
     }
