@@ -92,6 +92,8 @@ namespace Stacker.Building
         private void OnDisable()
         {
             state = BuildingBlockState.Inactive;
+
+            ChangeToDefaultMaterials();
         }
 
         #endregion
@@ -104,14 +106,7 @@ namespace Stacker.Building
             {
                 state = BuildingBlockState.Selected;
 
-                Material[] materials = meshRenderer.materials;
-
-                for (int i = 0; i < materials.Length; i++)
-                {
-                    materials[i] = _selectedMaterial;
-                }
-
-                meshRenderer.materials = materials;
+                ChangeToHologramMaterials();
             }
         }
 
@@ -121,7 +116,7 @@ namespace Stacker.Building
             {
                 state = BuildingBlockState.Active;
 
-                meshRenderer.materials = defaultMaterials;
+                ChangeToDefaultMaterials();
             }
         }
 
@@ -132,6 +127,27 @@ namespace Stacker.Building
         public void PlaceBuildingBlock(Vector3 position, Quaternion rotation)
         {
             transform.SetPositionAndRotation(position, rotation);
+        }
+
+        #endregion
+
+        #region FX
+
+        private void ChangeToDefaultMaterials()
+        {
+            meshRenderer.materials = defaultMaterials;
+        }
+
+        private void ChangeToHologramMaterials()
+        {
+            Material[] materials = meshRenderer.materials;
+
+            for (int i = 0; i < materials.Length; i++)
+            {
+                materials[i] = _selectedMaterial;
+            }
+
+            meshRenderer.materials = materials;
         }
 
         #endregion
