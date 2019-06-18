@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Normal 1
   m_EditorClassIdentifier: 
   roundBuildingBlockTemplates:
-  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
+  - buildingBlockTemplate: {fileID: 11400000, guid: 3cbf05f6345c86a418472ada13cd03c8,
       type: 2}
     quantity: 2
     canRotate: 1
