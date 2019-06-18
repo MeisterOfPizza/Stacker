@@ -47,7 +47,6 @@ namespace Stacker.Controllers
 
         public override void OnAwake()
         {
-            //TEST: Change the number of max prefab instances:
             vehiclePool = new GameObjectPool<Vehicle>(vehicleContainer, vehiclePrefabs, RoundChallengeTemplate.ROUND_CHALLENGE_TUNNEL_MAX_VEHICLES, Vector3.one);
         }
 
