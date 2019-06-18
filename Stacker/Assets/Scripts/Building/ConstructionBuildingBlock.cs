@@ -52,6 +52,7 @@ namespace Stacker.Building
 
             SetupMaterials();
 
+            transform.position = new Vector3(0, 5, 0);
             transform.rotation = Quaternion.identity;
 
             TargetPosition = transform.position;
