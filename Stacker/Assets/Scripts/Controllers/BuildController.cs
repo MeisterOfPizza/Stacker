@@ -43,6 +43,7 @@ namespace Stacker.Controllers
 
         private List<BuildingBlockCopy> placedBuildingBlockCopies = new List<BuildingBlockCopy>(100);
 
+        private bool hasSelectedBlock;
         private bool canBuild;
 
         #endregion
@@ -156,6 +157,8 @@ namespace Stacker.Controllers
             {
                 DeselectCopy();
 
+                hasSelectedBlock = true;
+
                 constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
                 constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Template);
 
@@ -169,6 +172,8 @@ namespace Stacker.Controllers
         /// </summary>
         public void CancelPreviewCopy()
         {
+            hasSelectedBlock = false;
+
             constructionBuildingBlock.SetConstructionBuildingBlockActive(false);
             uiBuildingBlockQuickMenu.IsActive = false;
         }
@@ -228,9 +233,11 @@ namespace Stacker.Controllers
         /// </summary>
         public void SelectCopy(BuildingBlockCopy buildingBlockCopy)
         {
-            if (canBuild)
+            if (canBuild && !hasSelectedBlock)
             {
                 DeselectCopy();
+
+                hasSelectedBlock = true;
 
                 selectedBuildingBlock = buildingBlockCopy;
                 selectedBuildingBlock.Select();
@@ -250,6 +257,8 @@ namespace Stacker.Controllers
                 selectedBuildingBlock.Deselect();
                 selectedBuildingBlock = null;
             }
+
+            hasSelectedBlock = false;
 
             constructionBuildingBlock.SetConstructionBuildingBlockActive(false);
             uiBuildingBlockQuickMenu.IsActive = false;
