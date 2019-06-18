@@ -18376,7 +18376,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundTemplates:
+  - {fileID: 11400000, guid: 68bc4b617bdc9004b96d7301e7e5151a, type: 2}
+  - {fileID: 11400000, guid: b1bf055e721de8f498d272bbbd8a7ad3, type: 2}
   - {fileID: 11400000, guid: 7fdc933b9d02f6f43b4d2bc891fcd049, type: 2}
+  - {fileID: 11400000, guid: d2ef0e2dc7242f141a6f01e143958363, type: 2}
+  - {fileID: 11400000, guid: dd18756d1c4fd1f48a391a07e1917978, type: 2}
+  - {fileID: 11400000, guid: 1f4b405ae2895b84f9d4b0dec6afd17d, type: 2}
 --- !u!114 &1587339358
 MonoBehaviour:
   m_ObjectHideFlags: 0
