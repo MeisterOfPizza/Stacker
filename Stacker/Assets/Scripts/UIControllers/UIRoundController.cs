@@ -15,6 +15,7 @@ namespace Stacker.UIControllers
         [Header("References")]
         [SerializeField] private TMP_Text currentRoundText;
         [SerializeField] private TMP_Text starCountText;
+        [SerializeField] private TMP_Text highscoreStarCountText;
 
         [Header("Windows")]
         [SerializeField] private GameObject roundWonWindow;
@@ -23,9 +24,19 @@ namespace Stacker.UIControllers
 
         #endregion
 
+        public override void OnAwake()
+        {
+            UpdateHighscoreCount();
+        }
+
         public void UpdateStarCount()
         {
             starCountText.text = GameController.TotalStars.ToString();
+        }
+
+        public void UpdateHighscoreCount()
+        {
+            highscoreStarCountText.text = GameController.Highscore.ToString();
         }
 
         public void UpdateCurrentRound(int round)
