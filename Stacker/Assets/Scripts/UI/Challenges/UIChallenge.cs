@@ -60,7 +60,7 @@ namespace Stacker.UI.Challenges
         /// </summary>
         public void UpdateUIChallenge()
         {
-            if (roundChallenge.IsCompleted && !hasBeenCompleted)
+            if (roundChallenge != null && roundChallenge.IsCompleted && !hasBeenCompleted)
             {
                 challengeName.fontStyle        |= FontStyles.Strikethrough;
                 challengeDescription.fontStyle |= FontStyles.Strikethrough;

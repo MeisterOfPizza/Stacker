@@ -21,7 +21,7 @@ MonoBehaviour:
       type: 2}
     quantity: 4
     canRotate: 1
-  - buildingBlockTemplate: {fileID: 11400000, guid: 188203a21f477dd4c90c6fcef51a2a3c,
+  - buildingBlockTemplate: {fileID: 11400000, guid: 64a73ed98c9f098408eeae23c792d9d6,
       type: 2}
     quantity: 2
     canRotate: 1

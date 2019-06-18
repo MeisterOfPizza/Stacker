@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86b83bced2d85f24db96813d3d057ed4, type: 3}
+  m_Name: Cone
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 5296687045446634239, guid: e42a11a15f8f11f48bbffed8532b359a, type: 3}
+  mesh: {fileID: 3985618128039552290, guid: 06f4a0e5f29b7d54fa1baf64389bfb01, type: 3}
+  icon3DPrefab: {fileID: 5083003720051741453, guid: b66e4d154f5869a48a43ade279ef5182,
+    type: 3}
+  scale: {x: 1, y: 1, z: 1}
+  icon3DScale: 0.5

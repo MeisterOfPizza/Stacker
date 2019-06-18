@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86b83bced2d85f24db96813d3d057ed4, type: 3}
+  m_Name: Cylinder
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4235365371353282982, guid: 0f9d59fe795615944af863869ecd205e, type: 3}
+  mesh: {fileID: 2960964876667561987, guid: 79f2ffa7b1c9a0e44866c4e5d192f385, type: 3}
+  icon3DPrefab: {fileID: 5247745486946547159, guid: 227a473751e138641b8143389927c2a9,
+    type: 3}
+  scale: {x: 1, y: 1, z: 1}
+  icon3DScale: 0.5
