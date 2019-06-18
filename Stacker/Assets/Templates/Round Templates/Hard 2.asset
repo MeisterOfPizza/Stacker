@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d24f7d654637fe448a40d8f6054552c2, type: 3}
-  m_Name: Test 1
+  m_Name: Hard 2
   m_EditorClassIdentifier: 
   roundBuildingBlockTemplates:
   - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
       type: 2}
-    quantity: 5
+    quantity: 1
     canRotate: 1
   - buildingBlockTemplate: {fileID: 11400000, guid: 6433e1a30893f06449e9725949bbecfd,
       type: 2}
-    quantity: 5
+    quantity: 2
     canRotate: 1
   - buildingBlockTemplate: {fileID: 11400000, guid: 188203a21f477dd4c90c6fcef51a2a3c,
       type: 2}
-    quantity: 5
+    quantity: 1
     canRotate: 1
-  buildRadius: 2
+  buildRadius: 2.5
   timeRestraint: 5
   useTimeRestraint: 1
   roundChallengePool:
@@ -46,4 +46,16 @@ MonoBehaviour:
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
+    vehicles: 2
+  - type: 1
+    starsReward: 1
+    buildHeight: 1
+    projectiles: 2
+    structuralIntegrity: 0.3
+    vehicles: 2
+  - type: 2
+    starsReward: 1
+    buildHeight: 2
+    projectiles: 2
+    structuralIntegrity: 0.8
     vehicles: 2

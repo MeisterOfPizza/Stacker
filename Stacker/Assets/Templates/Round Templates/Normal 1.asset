@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24f7d654637fe448a40d8f6054552c2, type: 3}
+  m_Name: Normal 1
+  m_EditorClassIdentifier: 
+  roundBuildingBlockTemplates:
+  - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
+      type: 2}
+    quantity: 2
+    canRotate: 1
+  - buildingBlockTemplate: {fileID: 11400000, guid: 6433e1a30893f06449e9725949bbecfd,
+      type: 2}
+    quantity: 3
+    canRotate: 1
+  buildRadius: 5
+  timeRestraint: 10
+  useTimeRestraint: 1
+  roundChallengePool:
+  - type: 1
+    starsReward: 1
+    buildHeight: 1
+    projectiles: 0
+    structuralIntegrity: 0
+    vehicles: 0
+  - type: 2
+    starsReward: 2
+    buildHeight: 2
+    projectiles: 1
+    structuralIntegrity: 0.25
+    vehicles: 0
+  - type: 4
+    starsReward: 2
+    buildHeight: 2
+    projectiles: 2
+    structuralIntegrity: 0.3
+    vehicles: 1
+  - type: 1
+    starsReward: 2
+    buildHeight: 1.5
+    projectiles: 2
+    structuralIntegrity: 0.3
+    vehicles: 2
+  - type: 2
+    starsReward: 3
+    buildHeight: 2
+    projectiles: 3
+    structuralIntegrity: 0.5
+    vehicles: 2
