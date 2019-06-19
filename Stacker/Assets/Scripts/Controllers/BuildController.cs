@@ -24,10 +24,8 @@ namespace Stacker.Controllers
         [SerializeField] private Transform buildContainer;
 
         [Space]
-        [SerializeField] private Transform                 constructionBuildingBlockContainer;
+        [SerializeField] private GameObject                constructionBuildingBlockContainer;
         [SerializeField] private ConstructionBuildingBlock constructionBuildingBlock;
-        [SerializeField] private LineRenderer              constructionBuildingBlockLandLine;
-        [SerializeField] private SpriteRenderer            constructionBuildingBlockLandPoint;
 
         [Header("Building")]
         [SerializeField] private LayerMask buildLayerMask;
@@ -37,18 +35,17 @@ namespace Stacker.Controllers
 
         #region Private variables
 
-        private List<BuildingBlock> buildingBlocks = new List<BuildingBlock>(25);
-
-        private BuildingBlockCopy selectedBuildingBlock;
-
+        private List<BuildingBlock>     buildingBlocks            = new List<BuildingBlock>(25);
         private List<BuildingBlockCopy> placedBuildingBlockCopies = new List<BuildingBlockCopy>(100);
-
+        
+        private BuildingBlockCopy selectedBuildingBlockCopy;
+        
         private bool hasSelectedBlock;
         private bool canBuild;
 
         #endregion
 
-        #region Static properties
+        #region Public static properties
 
         public static Transform BuildContainer
         {
@@ -74,6 +71,22 @@ namespace Stacker.Controllers
             }
         }
 
+        public static LayerMask BuildLayerMask
+        {
+            get
+            {
+                return Singleton.buildLayerMask;
+            }
+        }
+
+        public static float ConstructionBuildHeight
+        {
+            get
+            {
+                return Singleton.constructionBuildHeight;
+            }
+        }
+
         #endregion
 
         #region MonoBehaviour methods
@@ -84,6 +97,11 @@ namespace Stacker.Controllers
             {
                 ChasePointer();
                 BuildHeightController.CalculateCurrentBuildHeight();
+
+                if (hasSelectedBlock)
+                {
+                    ListenForBuildHotkeys();
+                }
             }
         }
 
@@ -119,28 +137,65 @@ namespace Stacker.Controllers
 
         #region Building helpers
 
+        private Ray GetPointerRay()
+        {
+#if UNITY_STANDALONE
+            return CameraController.MainCamera.ScreenPointToRay(Input.mousePosition);
+#elif UNITY_IOS || UNITY_ANDROID
+            if (Input.touchCount > 0)
+            {
+                return CameraController.MainCamera.ScreenPointToRay(Input.GetTouch(0).position);
+            }
+            else
+            {
+                return new Ray(CameraController.MainCamera.transform.position, CameraController.MainCamera.transform.forward);
+            }
+#endif
+        }
+
         private void ChasePointer()
         {
             int uiElementsUnderMouse = int.MaxValue;
             bool follow = false;
-            Ray cameraRay;
-            
+
 #if UNITY_STANDALONE
-            cameraRay = CameraController.MainCamera.ScreenPointToRay(Input.mousePosition);
             uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition, uiBuildingBlockQuickMenuTag).Count;
             follow = Input.GetMouseButton(0);
 #elif UNITY_IOS || UNITY_ANDROID
-            if (Input.touchCount > 0)
-            {
-                cameraRay = CameraController.MainCamera.ScreenPointToRay(Input.GetTouch(0).position);
-                uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition, uiBuildingBlockQuickMenuTag).Count;
-                follow = Input.touchCount > 0;
-            }
+            uiElementsUnderMouse = UtilExtensions.UIRaycastResults(Input.mousePosition, uiBuildingBlockQuickMenuTag).Count;
+            follow = Input.touchCount > 0;
 #endif
 
             if (follow && uiElementsUnderMouse == 0)
             {
-                MoveConstructionBuildingBlock(cameraRay);
+                //MoveConstructionBuildingBlock(GetPointerRay());
+            }
+        }
+
+        /// <summary>
+        /// Listen for any hotkey presses during this frame that will aid the player with building.
+        /// </summary>
+        private void ListenForBuildHotkeys()
+        {
+            if (Input.GetKeyDown(KeybindingController.Standalone_Build_Place_KeyCode))
+            {
+                uiBuildingBlockQuickMenu.PlaceCopy();
+            }
+            else if (Input.GetKeyDown(KeybindingController.Standalone_Build_Cancel_KeyCode))
+            {
+                uiBuildingBlockQuickMenu.CancelCopy();
+            }
+            else if (Input.GetKeyDown(KeybindingController.Standalone_Build_RotateX))
+            {
+                uiBuildingBlockQuickMenu.RotateX();
+            }
+            else if (Input.GetKeyDown(KeybindingController.Standalone_Build_RotateY))
+            {
+                uiBuildingBlockQuickMenu.RotateY();
+            }
+            else if (Input.GetKeyDown(KeybindingController.Standalone_Build_RotateZ))
+            {
+                uiBuildingBlockQuickMenu.RotateZ();
             }
         }
 
@@ -156,11 +211,13 @@ namespace Stacker.Controllers
             if (canBuild)
             {
                 DeselectCopy();
-
+                
                 hasSelectedBlock = true;
 
-                constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
+                constructionBuildingBlockContainer.SetActive(true);
                 constructionBuildingBlock.Initialize(buildingBlock.RoundBuildingBlockTemplate.Template);
+
+                MoveConstructionBuildingBlock(GetPointerRay(), true); // Set the block where it needs to be before moving on to the next frame.
 
                 uiBuildingBlockQuickMenu.Initialize(buildingBlock, true);
                 uiBuildingBlockQuickMenu.IsActive = true;
@@ -174,7 +231,7 @@ namespace Stacker.Controllers
         {
             hasSelectedBlock = false;
 
-            constructionBuildingBlock.SetConstructionBuildingBlockActive(false);
+            constructionBuildingBlockContainer.SetActive(false);
             uiBuildingBlockQuickMenu.IsActive = false;
         }
 
@@ -191,7 +248,7 @@ namespace Stacker.Controllers
 
             BuildingBlockCopy copy = buildingBlock.AddCopy();
 
-            selectedBuildingBlock = copy;
+            selectedBuildingBlockCopy = copy;
             placedBuildingBlockCopies.Add(copy);
 
             PlaceCopy();
@@ -202,8 +259,8 @@ namespace Stacker.Controllers
         /// </summary>
         public void RemoveCopy()
         {
-            placedBuildingBlockCopies.Remove(selectedBuildingBlock);
-            selectedBuildingBlock.BuildingBlock.RemoveCopy(selectedBuildingBlock);
+            placedBuildingBlockCopies.Remove(selectedBuildingBlockCopy);
+            selectedBuildingBlockCopy.BuildingBlock.RemoveCopy(selectedBuildingBlockCopy);
 
             DeselectCopy();
         }
@@ -239,11 +296,13 @@ namespace Stacker.Controllers
 
                 hasSelectedBlock = true;
 
-                selectedBuildingBlock = buildingBlockCopy;
-                selectedBuildingBlock.Select();
+                selectedBuildingBlockCopy = buildingBlockCopy;
+                selectedBuildingBlockCopy.Select();
 
-                constructionBuildingBlock.SetConstructionBuildingBlockActive(true);
+                constructionBuildingBlockContainer.SetActive(true);
                 constructionBuildingBlock.Initialize(buildingBlockCopy.BuildingBlock.RoundBuildingBlockTemplate.Template);
+
+                MoveConstructionBuildingBlock(GetPointerRay(), true); // Set the block where it needs to be before moving on to the next frame.
 
                 uiBuildingBlockQuickMenu.Initialize(buildingBlockCopy, false);
                 uiBuildingBlockQuickMenu.IsActive = true;
@@ -252,21 +311,21 @@ namespace Stacker.Controllers
 
         public void DeselectCopy()
         {
-            if (selectedBuildingBlock != null)
+            if (selectedBuildingBlockCopy != null)
             {
-                selectedBuildingBlock.Deselect();
-                selectedBuildingBlock = null;
+                selectedBuildingBlockCopy.Deselect();
+                selectedBuildingBlockCopy = null;
             }
 
             hasSelectedBlock = false;
 
-            constructionBuildingBlock.SetConstructionBuildingBlockActive(false);
+            constructionBuildingBlockContainer.SetActive(false);
             uiBuildingBlockQuickMenu.IsActive = false;
         }
 
         public void PlaceCopy()
         {
-            selectedBuildingBlock.PlaceBuildingBlock(constructionBuildingBlock.Position, constructionBuildingBlock.TargetRotation);
+            selectedBuildingBlockCopy.PlaceBuildingBlock(constructionBuildingBlock.Position, constructionBuildingBlock.TargetRotation);
             DeselectCopy();
         }
 
@@ -274,7 +333,7 @@ namespace Stacker.Controllers
 
         #region Construction building block
 
-        public void MoveConstructionBuildingBlock(Ray cameraRay)
+        public void MoveConstructionBuildingBlock(Ray cameraRay, bool teleport = false)
         {
             Physics.Raycast(cameraRay, out RaycastHit cameraGroundHit, 100, buildLayerMask, QueryTriggerInteraction.Ignore);
 
@@ -290,14 +349,10 @@ namespace Stacker.Controllers
 
             constructionBuildingBlock.TargetPosition = worldPosition;
 
-            // Cast a ray down to determine where the block would land if the player dropped it:
-            Ray groundRay = new Ray(worldPosition, Vector3.down);
-            Physics.Raycast(groundRay, out RaycastHit groundHit, buildHeight * 2, buildLayerMask, QueryTriggerInteraction.Ignore);
-
-            // Update the land line and land point sprite:
-            constructionBuildingBlockLandLine.SetPosition(0, worldPosition);
-            constructionBuildingBlockLandLine.SetPosition(1, groundHit.point);
-            constructionBuildingBlockLandPoint.transform.position = groundHit.point + Vector3.up * 0.025f;
+            if (teleport)
+            {
+                constructionBuildingBlock.Teleport(worldPosition);
+            }
         }
 
         #endregion
