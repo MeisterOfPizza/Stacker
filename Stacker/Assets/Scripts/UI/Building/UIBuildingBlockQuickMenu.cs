@@ -53,6 +53,8 @@ namespace Stacker.UI.Building
             this.currentBuildingBlockCopy = buildingBlockCopy;
             this.isPreview                = isPreview;
 
+            FollowConstructionBlock();
+
             btnRemoveCopy.gameObject.SetActive(!isPreview);
 
             btnRotateX.enabled = buildingBlockCopy.CanRotate;
@@ -65,6 +67,8 @@ namespace Stacker.UI.Building
             this.currentBuildingBlock = buildingBlock;
             this.isPreview            = isPreview;
 
+            FollowConstructionBlock();
+
             btnRemoveCopy.gameObject.SetActive(!isPreview);
 
             btnRotateX.enabled = buildingBlock.RoundBuildingBlockTemplate.CanRotate;
@@ -76,8 +80,13 @@ namespace Stacker.UI.Building
         {
             if (isActive)
             {
-                transform.position = CameraController.MainCamera.WorldToScreenPoint(constructionBuildingBlock.transform.position); 
+                FollowConstructionBlock();
             }
+        }
+        
+        public void FollowConstructionBlock()
+        {
+            transform.position = CameraController.MainCamera.WorldToScreenPoint(constructionBuildingBlock.transform.position);
         }
 
         #region Click events

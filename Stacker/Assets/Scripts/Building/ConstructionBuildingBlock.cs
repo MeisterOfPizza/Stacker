@@ -1,4 +1,6 @@
-﻿using Stacker.Templates.Rounds;
+﻿using Stacker.Controllers;
+using Stacker.Extensions.Utils;
+using Stacker.Templates.Rounds;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -16,7 +18,11 @@ namespace Stacker.Building
         [SerializeField] private MeshCollider meshCollider;
 
         [Space]
-        [SerializeField] private float constructionBlockMoveSpeed   = 5f;
+        [SerializeField] private LineRenderer   landLine;
+        [SerializeField] private SpriteRenderer landPoint;
+
+        [Space]
+        [SerializeField] private float constructionBlockMoveSpeed   = 10f;
         [SerializeField] private float constructionBlockRotateSpeed = 5f;
 
         [Header("Predefined editor values")]
@@ -75,11 +81,27 @@ namespace Stacker.Building
         {
             transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.fixedDeltaTime * constructionBlockMoveSpeed);
             transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, Time.fixedDeltaTime * constructionBlockRotateSpeed);
+            
+            UpdateFX();
         }
 
-        public void SetConstructionBuildingBlockActive(bool active)
+        private void UpdateFX()
         {
-            transform.parent.gameObject.SetActive(active);
+            // Cast a ray down to determine where the block would land if the player dropped it:
+            Ray groundRay = new Ray(transform.position, Vector3.down);
+            Physics.Raycast(groundRay, out RaycastHit groundHit, BuildController.ConstructionBuildHeight * 2, BuildController.BuildLayerMask, QueryTriggerInteraction.Ignore);
+
+            // Update the land line and land point sprite:
+            landLine.SetPosition(0, transform.position);
+            landLine.SetPosition(1, groundHit.point);
+            landPoint.transform.position = groundHit.point + Vector3.up * 0.025f;
+        }
+
+        public void Teleport(Vector3 position)
+        {
+            transform.position = position;
+
+            UpdateFX();
         }
 
     }

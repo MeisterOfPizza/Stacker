@@ -121,14 +121,7 @@ namespace Stacker.Controllers
             float direction = 0;
 
 #if UNITY_STANDALONE
-            if (Input.GetKey(KeyCode.Q))
-            {
-                direction = 1;
-            }
-            else if (Input.GetKey(KeyCode.E))
-            {
-                direction = -1;
-            }
+            direction = Input.GetAxis(KeybindingController.Standalone_Camera_Rotate_Axis);
             //TODO: Fix camera rotation on phone devices.
 #elif UNITY_IOS || UNITY_ANDROID
 #endif
@@ -150,11 +143,13 @@ namespace Stacker.Controllers
             int zoomChange = 0;
 
 #if UNITY_STANDALONE
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            float zoomValue = Input.GetAxis(KeybindingController.Standalone_Camera_Zoom_Axis);
+
+            if (zoomValue > 0)
             {
                 zoomChange = -1;
             }
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            else if (zoomValue < 0)
             {
                 zoomChange = 1;
             }
