@@ -18438,6 +18438,8 @@ MonoBehaviour:
   source: {fileID: 1743665628}
   songs:
   - {fileID: 8300000, guid: 2076dc6551de2cb4c988a05f36474d4f, type: 3}
+  - {fileID: 8300000, guid: 2b92983cd59b16941a7affe131182193, type: 3}
+  - {fileID: 8300000, guid: c2f6224e85cddf14fa20e19f84baaaef, type: 3}
   playDelay: 2.5
 --- !u!114 &1587339361
 MonoBehaviour:

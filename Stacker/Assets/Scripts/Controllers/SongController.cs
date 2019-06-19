@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -38,7 +40,7 @@ namespace Stacker.Controllers
             {
                 if (!source.isPlaying)
                 {
-                    currentSong = songs[Random.Range(0, songs.Length)];
+                    currentSong = GetNextSong();
                     source.clip = currentSong;
                     source.PlayDelayed(playDelay);
                 }
@@ -47,6 +49,13 @@ namespace Stacker.Controllers
 
                 yield return new WaitForEndOfFrame();
             }
+        }
+
+        private AudioClip GetNextSong()
+        {
+            List<AudioClip> audioClips = songs.ToList();
+            audioClips.Remove(currentSong);
+            return audioClips[Random.Range(0, audioClips.Count)];
         }
 
     }
