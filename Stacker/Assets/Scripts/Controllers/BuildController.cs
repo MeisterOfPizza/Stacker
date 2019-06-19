@@ -168,7 +168,7 @@ namespace Stacker.Controllers
 
             if (follow && uiElementsUnderMouse == 0)
             {
-                //MoveConstructionBuildingBlock(GetPointerRay());
+                MoveConstructionBuildingBlock(GetPointerRay());
             }
         }
 

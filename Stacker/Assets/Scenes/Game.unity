@@ -18567,8 +18567,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera_Rotate: Rotate
   camera_Zoom: Mouse ScrollWheel
-  build_Place: Jump
-  build_Cancel: Cancel
+  build_Place: 32
+  build_Cancel: 27
+  build_RotateX: 97
+  build_RotateY: 115
+  build_RotateZ: 100
 --- !u!1 &1589045502
 GameObject:
   m_ObjectHideFlags: 0
