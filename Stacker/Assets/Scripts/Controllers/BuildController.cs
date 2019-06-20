@@ -79,14 +79,6 @@ namespace Stacker.Controllers
             }
         }
 
-        public static float ConstructionBuildHeight
-        {
-            get
-            {
-                return Singleton.constructionBuildHeight;
-            }
-        }
-
         #endregion
 
         #region MonoBehaviour methods

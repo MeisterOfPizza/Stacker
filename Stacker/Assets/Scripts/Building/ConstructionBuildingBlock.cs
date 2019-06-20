@@ -89,7 +89,7 @@ namespace Stacker.Building
         {
             // Cast a ray down to determine where the block would land if the player dropped it:
             Ray groundRay = new Ray(transform.position, Vector3.down);
-            Physics.Raycast(groundRay, out RaycastHit groundHit, BuildController.ConstructionBuildHeight * 2, BuildController.BuildLayerMask, QueryTriggerInteraction.Ignore);
+            Physics.Raycast(groundRay, out RaycastHit groundHit, 100f, BuildController.BuildLayerMask, QueryTriggerInteraction.Ignore);
 
             // Update the land line and land point sprite:
             landLine.SetPosition(0, transform.position);
