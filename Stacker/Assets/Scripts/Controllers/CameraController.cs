@@ -25,8 +25,13 @@ namespace Stacker.Controllers
         [SerializeField]                private float   zoomSpeed        = 5f;
         [SerializeField]                private Vector3 minZoomPosition  = new Vector3(5, 5, 5);
         [SerializeField]                private Vector3 maxZoomPosition  = new Vector3(25, 25, 25);
-        [SerializeField, Range(0, 100)] private int     zoomLevels       = 10;
-        [SerializeField, Range(0, 100)] private int     defaultZoomLevel = 2;
+        [SerializeField, Range(0, 100)] private int     zoomStates       = 10;
+        [SerializeField, Range(0, 100)] private int     defaultZoom      = 2;
+
+        [Header("Leveling settings")]
+        [SerializeField]                 private Transform levelAnchor;
+        [SerializeField]                 private float     levelingSpeed = 5f;
+        [SerializeField, Range(0f, 25f)] private float     maxLevel      = 10f;
 
         [Header("Misc")]
         [SerializeField] private LayerMask mainCameraEventMask;
@@ -35,9 +40,11 @@ namespace Stacker.Controllers
 
         #region Private variables
 
-        private int     currentZoomLevel;
+        private int     currentZoom;
         private Vector3 targetZoomPosition;
         private Vector3 deltaZoom;
+
+        private float currentLevel;
 
         #endregion
 
@@ -46,6 +53,7 @@ namespace Stacker.Controllers
         public bool CanReadInput { get; set; } = true;
         public bool CanRotate    { get; set; } = true;
         public bool CanZoom      { get; set; } = true;
+        public bool CanLevel     { get; set; } = true;
 
         #endregion
 
@@ -87,8 +95,10 @@ namespace Stacker.Controllers
             this.CanReadInput = canReadInput;
 
             this.deltaZoom          = maxZoomPosition - minZoomPosition;
-            this.currentZoomLevel   = defaultZoomLevel;
-            this.targetZoomPosition = GetZoomLevelPosition(currentZoomLevel);
+            this.currentZoom        = defaultZoom;
+            this.targetZoomPosition = GetZoomLevelPosition(currentZoom);
+            
+            this.levelAnchor.localPosition = new Vector3(this.levelAnchor.localPosition.x, currentLevel, this.levelAnchor.localPosition.z);
 
             this.mainCamera.eventMask = mainCameraEventMask;
             this.ui3DOverlayCamera.eventMask = 0;
@@ -102,10 +112,19 @@ namespace Stacker.Controllers
                 {
                     InputRotate();
                 }
+
                 if (CanZoom)
                 {
                     InputZoom();
                 }
+
+                if (CanLevel)
+                {
+                    InputLevel();
+                }
+
+                // Look at the world middle:
+                mainCamera.transform.LookAt(Vector3.zero);
             }
         }
 
@@ -157,11 +176,11 @@ namespace Stacker.Controllers
 #elif UNITY_IOS || UNITY_ANDROIOD
 #endif
 
-            currentZoomLevel = Mathf.Clamp(currentZoomLevel + zoomChange, 0, zoomLevels);
+            currentZoom = Mathf.Clamp(currentZoom + zoomChange, 0, zoomStates);
 
             if (zoomChange != 0)
             {
-                targetZoomPosition = GetZoomLevelPosition(currentZoomLevel);
+                targetZoomPosition = GetZoomLevelPosition(currentZoom);
             }
 
             ZoomCamera();
@@ -174,10 +193,41 @@ namespace Stacker.Controllers
 
         private Vector3 GetZoomLevelPosition(int zoomLevel)
         {
-            return minZoomPosition + deltaZoom * (zoomLevel / (float)zoomLevels);
+            return minZoomPosition + deltaZoom * (zoomLevel / (float)zoomStates);
         }
 
-#endregion
+        #endregion
+
+        #region Leveling
+
+        /// <summary>
+        /// Level the camera as to move it closer or further to the ground (not the same as zoom).
+        /// This only changes the Y-axis.
+        /// </summary>
+        private void InputLevel()
+        {
+            float levelDelta = 0;
+
+#if UNITY_STANDALONE
+            levelDelta = Input.GetAxis(KeybindingController.Standalone_Camera_Level_Axis);
+            //TODO: Fix camera leveling on phone devices.
+#elif UNITY_IOS || UNITY_ANDROID
+#endif
+
+            LevelCamera(levelDelta);
+        }
+        
+        private void LevelCamera(float levelDelta)
+        {
+            currentLevel = Mathf.Clamp(currentLevel + levelDelta, 0f, maxLevel);
+
+            float y = levelAnchor.localPosition.y;
+            y = Mathf.Lerp(y, currentLevel, Time.deltaTime * levelingSpeed);
+
+            levelAnchor.localPosition = new Vector3(levelAnchor.localPosition.x, y, levelAnchor.localPosition.z);
+        }
+
+        #endregion
 
     }
 
