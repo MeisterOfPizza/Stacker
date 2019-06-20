@@ -11,6 +11,7 @@ namespace Stacker.Controllers
         [Header("Standalone Axes")]
         [SerializeField] private string camera_Rotate = "Rotate";
         [SerializeField] private string camera_Zoom   = "Mouse ScrollWheel";
+        [SerializeField] private string camera_Level  = "Level";
 
         [Header("Standalone Keys")]
         [SerializeField] private KeyCode build_Place   = KeyCode.Space;
@@ -38,6 +39,14 @@ namespace Stacker.Controllers
             get
             {
                 return Singleton.camera_Zoom;
+            }
+        }
+
+        public static string Standalone_Camera_Level_Axis
+        {
+            get
+            {
+                return Singleton.camera_Level;
             }
         }
 
