@@ -18438,9 +18438,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 1743665628}
   songs:
-  - {fileID: 8300000, guid: 2076dc6551de2cb4c988a05f36474d4f, type: 3}
-  - {fileID: 8300000, guid: 2b92983cd59b16941a7affe131182193, type: 3}
-  - {fileID: 8300000, guid: c2f6224e85cddf14fa20e19f84baaaef, type: 3}
+  - {fileID: 8300000, guid: 6ed081b1bfebfe74884b3a6a4d605c0c, type: 3}
+  - {fileID: 8300000, guid: 7a069d50ac1a00c47ad4655b177cfe2f, type: 3}
+  - {fileID: 8300000, guid: 00c899c39b5a01f49a8e119311caacc1, type: 3}
   playDelay: 2.5
 --- !u!114 &1587339361
 MonoBehaviour:
