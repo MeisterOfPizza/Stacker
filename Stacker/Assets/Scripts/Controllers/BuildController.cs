@@ -28,8 +28,8 @@ namespace Stacker.Controllers
         [SerializeField] private ConstructionBuildingBlock constructionBuildingBlock;
 
         [Header("Building")]
-        [SerializeField] private LayerMask buildLayerMask;
-        [SerializeField] private float     constructionBuildHeight = 5f;
+        [SerializeField, Tooltip("What layers can building blocks be placed on?")] private LayerMask buildLayerMask;
+        [SerializeField, Tooltip("How high up should the construction block be?")] private float     constructionBuildHeight = 5f;
 
         #endregion
 
@@ -71,6 +71,9 @@ namespace Stacker.Controllers
             }
         }
 
+        /// <summary>
+        /// What layers can building blocks be placed on?
+        /// </summary>
         public static LayerMask BuildLayerMask
         {
             get
