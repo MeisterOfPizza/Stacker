@@ -50,6 +50,7 @@ namespace Stacker.Components
 
         private Material[][] defaultMaterials;
 
+        private bool collisionDetected;
         private bool hitStructure;
 
         #endregion
@@ -101,10 +102,11 @@ namespace Stacker.Components
             Vector3 target = -transform.position; // Invert the position to find the target to drive to.
             float distanceToTravel = transform.position.magnitude + 0.01f; // Distance to middle with small extra distance added to remove any risk at floating-point value issues.
             float currentDistance = 0;
+
+            collisionDetected = false;
+            hitStructure      = false;
             
-            hitStructure = false;
-            
-            while (currentDistance < distanceToTravel && !hitStructure)
+            while (currentDistance < distanceToTravel && !hitStructure && !collisionDetected)
             {
                 rigidbody.velocity = transform.forward * moveSpeed;
                 currentDistance = transform.position.magnitude;
@@ -127,18 +129,25 @@ namespace Stacker.Components
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer) && !hitStructure)
+            if (!UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.GroundLayerMask, collision.gameObject.layer)) // If the collision is with NOT the ground, then execute:
             {
-                StopWheelDustEffect();
+                if (!collisionDetected) // Check if we've already collided.
+                {
+                    PlayCollisionSoundEffect();
+                    PlayCollisionEffect(collision);
+                    StopWheelDustEffect();
 
-                PlayCollisionEffect(collision);
-                PlayCollisionSoundEffect();
+                    collisionDetected = true;
+                }
 
-                RoundController.Singleton.EndRound();
+                if (UtilExtensions.IsLayerInLayerMask(VehicleController.Singleton.StructureLayerMask, collision.gameObject.layer) && !hitStructure)
+                {
+                    RoundController.Singleton.EndRound();
 
-                hitStructure = true;
+                    hitStructure = true;
 
-                ChallengesController.VehicleHitStructure = true;
+                    ChallengesController.VehicleHitStructure = true;
+                }
             }
         }
 
