@@ -9,15 +9,21 @@ namespace Stacker.Templates.Rounds
     class RoundTemplate : ScriptableObject
     {
 
+        #region Public constants
+
+        public const float MAX_BUILD_RADIUS = 5f;
+
+        #endregion
+
         #region Editor
 
         [Header("Building")]
         [SerializeField] private RoundBuildingBlockTemplate[] roundBuildingBlockTemplates;
 
         [Space]
-        [SerializeField, Range(1f, 10f)] private float buildRadius      = 2f;
-        [SerializeField]                 private float timeRestraint    = 15f;
-        [SerializeField]                 private bool  useTimeRestraint = true;
+        [SerializeField, Range(1f, MAX_BUILD_RADIUS)] private float buildRadius      = 2.5f;
+        [SerializeField]                              private float timeRestraint    = 15f;
+        [SerializeField]                              private bool  useTimeRestraint = true;
 
         [Header("Challenges")]
         [SerializeField] private RoundChallengeTemplate[] roundChallengePool;
