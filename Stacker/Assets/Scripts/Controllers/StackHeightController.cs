@@ -42,9 +42,9 @@ namespace Stacker.Controllers
         }
 
         /// <summary>
-        /// Calculates the height of the stack (all building blocks) and returns the point at which the stack is the tallest.
+        /// Calculates the height of the stack (all building blocks) and returns the stack height.
         /// </summary>
-        public static Vector3 CalculateStackHeight()
+        public static float CalculateStackHeight()
         {
             Vector3 center = new Vector3(0, START_ALTITUDE, 0);
             Vector3 size = new Vector3(RoundController.Singleton.CurrentRound.BuildRadius, CHECK_HEIGHT, RoundController.Singleton.CurrentRound.BuildRadius);
@@ -53,22 +53,23 @@ namespace Stacker.Controllers
 
             if (hits.Length > 0)
             {
-                int index = hits.Length - 1;
+                float tallest = 0;
+                int index = 0;
 
-                while (index >= 0)
+                while (index < hits.Length)
                 {
-                    if (hits[index].collider.GetComponent<BuildingBlockCopy>().IsGrounded)
+                    if (hits[index].collider.GetComponent<BuildingBlockCopy>().IsGrounded && hits[index].point.y > tallest)
                     {
-                        return hits[index].point;
+                        tallest = hits[index].point.y;
                     }
-                    else
-                    {
-                        index--;
-                    }
+
+                    index++;
                 }
+
+                return tallest;
             }
 
-            return Vector3.zero;
+            return 0;
         }
 
     }

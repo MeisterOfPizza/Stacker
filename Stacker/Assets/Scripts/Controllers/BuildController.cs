@@ -116,7 +116,7 @@ namespace Stacker.Controllers
             }
 
             UIBuildController.Singleton.BeginBuildPhaseUI(buildingBlocks);
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(true);
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, true);
         }
 
         public void EndBuildPhase()
@@ -127,7 +127,7 @@ namespace Stacker.Controllers
             DeselectCopy();
 
             UIBuildController.Singleton.StopBuildPhaseUI();
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(false);
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
         }
 
         #endregion

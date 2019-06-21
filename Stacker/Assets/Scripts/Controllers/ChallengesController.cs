@@ -43,7 +43,7 @@ namespace Stacker.Controllers
 
         public static void CheckSkyscraperChallenges()
         {
-            StackHeight = StackHeightController.CalculateStackHeight().y;
+            StackHeight = StackHeightController.CalculateStackHeight();
 
             var skyscraperChallenges = RoundController.Singleton.CurrentRound.RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Skyscraper);
 

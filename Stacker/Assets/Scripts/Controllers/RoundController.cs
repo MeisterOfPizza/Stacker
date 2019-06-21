@@ -151,6 +151,7 @@ namespace Stacker.Controllers
             StopCoroutine("RoundCycle");
 
             UIPhaseController.Singleton.EndPhases();
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(false, false);
 
             CameraController.Singleton.CanReadInput = false;
             
@@ -183,7 +184,7 @@ namespace Stacker.Controllers
                 GameController.ResetStars();
             }
 
-            UIRoundController.Singleton.UpdateStarCount();
+            UIRoundController.Singleton.UpdateStarCount(false);
             UIRoundController.Singleton.UpdateCurrentRound(roundsPassedWithoutLoss);
         }
 

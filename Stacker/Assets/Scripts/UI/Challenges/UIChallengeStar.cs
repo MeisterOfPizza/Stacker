@@ -52,7 +52,7 @@ namespace Stacker.UI.Challenges
             }
 
             GameController.GivePlayerStars(1);
-            UIRoundController.Singleton.UpdateStarCount();
+            UIRoundController.Singleton.UpdateStarCount(true);
             UIChallengesController.Singleton.DespawnStar(this);
         }
 

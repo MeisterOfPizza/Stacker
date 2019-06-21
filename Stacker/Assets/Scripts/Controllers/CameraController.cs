@@ -102,6 +102,9 @@ namespace Stacker.Controllers
 
             this.mainCamera.eventMask = mainCameraEventMask;
             this.ui3DOverlayCamera.eventMask = 0;
+
+            // Look at the world middle:
+            mainCamera.transform.LookAt(Vector3.zero);
         }
 
         private void Update()
