@@ -29,7 +29,7 @@ namespace Stacker.Controllers
 
         [Header("Building")]
         [SerializeField, Tooltip("What layers can building blocks be placed on?")] private LayerMask buildLayerMask;
-        [SerializeField, Tooltip("How high up should the construction block be?")] private float     constructionBuildHeight = 5f;
+        [SerializeField, Tooltip("How high up should the construction block be?")] private float     constructionBuildAltitude = 5f;
 
         #endregion
 
@@ -91,7 +91,7 @@ namespace Stacker.Controllers
             if (canBuild)
             {
                 ChasePointer();
-                BuildHeightController.CalculateCurrentBuildHeight();
+                StackHeightController.CalculateCurrentBuildAltitude();
 
                 if (hasSelectedBlock)
                 {
@@ -106,7 +106,7 @@ namespace Stacker.Controllers
 
         public void BeginBuildPhase(RoundBuildingBlockTemplate[] roundBuildingBlockTemplates)
         {
-            this.canBuild = true;
+            canBuild = true;
 
             buildingBlocks.Clear();
 
@@ -116,6 +116,7 @@ namespace Stacker.Controllers
             }
 
             UIBuildController.Singleton.BeginBuildPhaseUI(buildingBlocks);
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, true);
         }
 
         public void EndBuildPhase()
@@ -126,6 +127,7 @@ namespace Stacker.Controllers
             DeselectCopy();
 
             UIBuildController.Singleton.StopBuildPhaseUI();
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
         }
 
         #endregion
@@ -164,6 +166,10 @@ namespace Stacker.Controllers
             if (follow && uiElementsUnderMouse == 0)
             {
                 MoveConstructionBuildingBlock(GetPointerRay());
+            }
+            else
+            {
+                UpdateConstructionBuildingBlockAltitude();
             }
         }
 
@@ -332,11 +338,11 @@ namespace Stacker.Controllers
         {
             Physics.Raycast(cameraRay, out RaycastHit cameraGroundHit, 100, buildLayerMask, QueryTriggerInteraction.Ignore);
 
-            float buildHeight = BuildHeightController.CurrentBuildHeight + constructionBuildHeight;
+            float buildAltitude = StackHeightController.CurrentBuildAltitude + constructionBuildAltitude;
 
             // Create the world position where the construction building block should be and
             // set the y coordinate to the construction build height to avoid hitting anything:
-            Vector3 worldPosition = new Vector3(cameraGroundHit.point.x, buildHeight, cameraGroundHit.point.z);
+            Vector3 worldPosition = new Vector3(cameraGroundHit.point.x, buildAltitude, cameraGroundHit.point.z);
 
             // Trap the world position inside the build area:
             float buildRadius = RoundController.Singleton.CurrentRound.BuildRadius;
@@ -350,26 +356,18 @@ namespace Stacker.Controllers
             }
         }
 
-        #endregion
-
-        #region Helper methods
-
         /// <summary>
-        /// Calculates the height of the stack (all building blocks).
+        /// Update the altitude (Y-axis) of the construction building block to avoid hitting anything.
         /// </summary>
-        public float CalculateStackHeight()
+        public void UpdateConstructionBuildingBlockAltitude()
         {
-            float highest = 0f;
+            float buildAltitude = StackHeightController.CurrentBuildAltitude + constructionBuildAltitude;
 
-            foreach (BuildingBlockCopy copy in placedBuildingBlockCopies)
-            {
-                if (copy.transform.position.y > highest)
-                {
-                    highest = copy.transform.position.y;
-                }
-            }
+            // Create the world position where the construction building block should be and
+            // set the y coordinate to the construction build height to avoid hitting anything:
+            Vector3 worldPosition = new Vector3(constructionBuildingBlock.TargetPosition.x, buildAltitude, constructionBuildingBlock.TargetPosition.z);
 
-            return highest;
+            constructionBuildingBlock.TargetPosition = worldPosition;
         }
 
         #endregion

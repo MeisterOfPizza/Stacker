@@ -10,11 +10,18 @@ namespace Stacker.UIControllers
     class UIRoundController : Controller<UIRoundController>
     {
 
+        #region Private constants
+
+        private string STAR_INFO_GAINED_STARS_ANIMATION_NAME = "Pulse";
+
+        #endregion
+
         #region Editor
 
         [Header("References")]
         [SerializeField] private TMP_Text currentRoundText;
         [SerializeField] private TMP_Text starCountText;
+        [SerializeField] private Animator starInfoAnimator;
         [SerializeField] private TMP_Text highscoreStarCountText;
 
         [Header("Windows")]
@@ -29,9 +36,14 @@ namespace Stacker.UIControllers
             UpdateHighscoreCount();
         }
 
-        public void UpdateStarCount()
+        public void UpdateStarCount(bool playAnimation)
         {
             starCountText.text = GameController.TotalStars.ToString();
+
+            if (playAnimation)
+            {
+                starInfoAnimator.Play(STAR_INFO_GAINED_STARS_ANIMATION_NAME);
+            }
         }
 
         public void UpdateHighscoreCount()

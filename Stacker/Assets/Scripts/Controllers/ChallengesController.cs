@@ -22,7 +22,7 @@ namespace Stacker.Controllers
         #region Public static properties
 
         public static bool  VehicleHitStructure    { get; set; }
-        public static float BuildHeight            { get; set; }
+        public static float StackHeight            { get; set; }
         public static int   ProjectilesFired       { get; set; }
         public static int   BlocksHitByProjectiles { get; set; }
 
@@ -33,24 +33,18 @@ namespace Stacker.Controllers
 
         #endregion
 
-        private void FixedUpdate()
-        {
-            if (BuildController.CanBuild)
-            {
-                BuildHeight = BuildController.Singleton.CalculateStackHeight();
-            }
-        }
-
         public static void ResetChallengeValues()
         {
             VehicleHitStructure    = false;
-            BuildHeight            = 0;
+            StackHeight            = 0;
             ProjectilesFired       = 0;
             BlocksHitByProjectiles = 0;
         }
 
         public static void CheckSkyscraperChallenges()
         {
+            StackHeight = StackHeightController.CalculateStackHeight();
+
             var skyscraperChallenges = RoundController.Singleton.CurrentRound.RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Skyscraper);
 
             foreach (var challenge in skyscraperChallenges)
