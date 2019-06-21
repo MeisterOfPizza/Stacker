@@ -24,6 +24,7 @@ namespace Stacker.Controllers
 
         [Header("Misc")]
         [SerializeField] private LayerMask structureLayerMask;
+        [SerializeField] private LayerMask groundLayerMask;
 
         #endregion
 
@@ -40,6 +41,14 @@ namespace Stacker.Controllers
             get
             {
                 return structureLayerMask;
+            }
+        }
+
+        public LayerMask GroundLayerMask
+        {
+            get
+            {
+                return groundLayerMask;
             }
         }
 

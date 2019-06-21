@@ -21933,6 +21933,9 @@ MonoBehaviour:
   structureLayerMask:
     serializedVersion: 2
     m_Bits: 33554432
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 16777216
 --- !u!114 &1587339359
 MonoBehaviour:
   m_ObjectHideFlags: 0
