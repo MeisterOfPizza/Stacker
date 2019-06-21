@@ -26,7 +26,7 @@ namespace Stacker.Rounds
         {
             if (!IsCompleted)
             {
-                IsCompleted = ChallengesController.BuildHeight >= BuildHeight;
+                IsCompleted = ChallengesController.StackHeight >= BuildHeight;
 
                 if (IsCompleted)
                 {
