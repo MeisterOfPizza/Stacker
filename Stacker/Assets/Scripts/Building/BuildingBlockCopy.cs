@@ -1,4 +1,5 @@
 ﻿using Stacker.Controllers;
+using Stacker.Extensions.Utils;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -29,6 +30,8 @@ namespace Stacker.Building
 
         private Material[] defaultMaterials;
 
+        private bool isGrounded;
+
         #endregion
 
         #region Public properties
@@ -54,6 +57,14 @@ namespace Stacker.Building
             get
             {
                 return buildingBlock.RoundBuildingBlockTemplate.CanRotate;
+            }
+        }
+
+        public bool IsGrounded
+        {
+            get
+            {
+                return isGrounded;
             }
         }
 
@@ -131,6 +142,34 @@ namespace Stacker.Building
 
         #endregion
 
+        #region Physics
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (UtilExtensions.IsLayerInLayerMask(BuildController.BuildLayerMask, collision.gameObject.layer))
+            {
+                isGrounded = true;
+            }
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            if (!isGrounded && UtilExtensions.IsLayerInLayerMask(BuildController.BuildLayerMask, collision.gameObject.layer))
+            {
+                isGrounded = true;
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (UtilExtensions.IsLayerInLayerMask(BuildController.BuildLayerMask, collision.gameObject.layer))
+            {
+                isGrounded = false;
+            }
+        }
+
+        #endregion
+
         #region FX
 
         private void ChangeToDefaultMaterials()
@@ -156,7 +195,10 @@ namespace Stacker.Building
 
         private void OnMouseDown()
         {
-            BuildController.Singleton.SelectCopy(this);
+            if (isGrounded) // Prevent the player from selecting this block if it's not grounded.
+            {
+                BuildController.Singleton.SelectCopy(this);
+            }
         }
 
         #endregion
