@@ -21,7 +21,7 @@ MonoBehaviour:
       type: 2}
     quantity: 3
     canRotate: 1
-  buildRadius: 5
+  buildRadius: 4
   timeRestraint: 10
   useTimeRestraint: 1
   roundChallengePool:
