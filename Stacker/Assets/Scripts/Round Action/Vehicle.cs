@@ -7,7 +7,7 @@ using UnityEngine;
 #pragma warning disable 0108
 #pragma warning disable 0649
 
-namespace Stacker.Components
+namespace Stacker.RoundAction
 {
 
     [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody), typeof(Collider))]

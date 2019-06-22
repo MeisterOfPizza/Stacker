@@ -55,7 +55,7 @@ namespace Stacker.Controllers
             BorderController.HideBorder();
             RoundCleanController.Singleton.CleanRound();
 
-            StopCoroutine("RoundCycle");
+            StopCoroutine("BuildCycle");
             StopCoroutine("ActionPhase");
             roundHasEnded = false;
 
@@ -77,9 +77,11 @@ namespace Stacker.Controllers
 
             ChallengesController.ResetChallengeValues();
 
-            ReadyChallengeControllers();
-            BeginBuildPhase();
-            StartCoroutine("RoundCycle");
+            ReadyActionControllers();
+
+            RoundSurpriseController.Singleton.ResetRoundSurprise();
+
+            StartCoroutine("BuildCycle");
         }
 
         private void BeginBuildPhase()
@@ -109,8 +111,12 @@ namespace Stacker.Controllers
             }
         }
 
-        private IEnumerator RoundCycle()
+        private IEnumerator BuildCycle()
         {
+            yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitBeforeBuildPhase());
+
+            BeginBuildPhase();
+
             float time = currentRound.TimeRestraint;
 
             // Keep the round going as long as we're using a time restraint and time > 0 OR we're not using a time restraint (aka forever).
@@ -129,6 +135,8 @@ namespace Stacker.Controllers
             // In case anything updated roundHasEnded between frames because of framelag.
             if (!roundHasEnded)
             {
+                yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitAfterBuildPhase());
+
                 EndBuildPhase();
             }
         }
@@ -148,7 +156,7 @@ namespace Stacker.Controllers
 
         public void EndRound()
         {
-            StopCoroutine("RoundCycle");
+            StopCoroutine("BuildCycle");
 
             UIPhaseController.Singleton.EndPhases();
             UIStackHeightController.Singleton.ActivateUIHeightMeter(false, false);
@@ -192,7 +200,7 @@ namespace Stacker.Controllers
 
         #region Challenge helpers
 
-        private void ReadyChallengeControllers()
+        private void ReadyActionControllers()
         {
             ProjectileController.Singleton.SetupProjectiles();
             VehicleController.Singleton.SetupVehicles();

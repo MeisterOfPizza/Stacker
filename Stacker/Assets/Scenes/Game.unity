@@ -13651,6 +13651,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787387403}
   m_Mesh: {fileID: 1328005879412337812, guid: e4a012bbf2959b94f87587309aaa7fd9, type: 3}
+--- !u!1 &808637173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 808637174}
+  m_Layer: 0
+  m_Name: Round Surprise Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &808637174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808637173}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1008640991}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &812288261
 GameObject:
   m_ObjectHideFlags: 0
@@ -15281,6 +15311,7 @@ Transform:
   - {fileID: 420530843}
   - {fileID: 1262196393}
   - {fileID: 1365075307}
+  - {fileID: 808637174}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -22103,6 +22134,7 @@ GameObject:
   - component: {fileID: 1587339366}
   - component: {fileID: 1587339367}
   - component: {fileID: 1587339368}
+  - component: {fileID: 1587339369}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -22360,6 +22392,21 @@ MonoBehaviour:
   build_RotateX: 97
   build_RotateY: 115
   build_RotateZ: 100
+--- !u!114 &1587339369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587339354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2935e4ec36d7c4687b6ab7e9f84e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roundSurpriseContainer: {fileID: 808637174}
+  roundSurpriseTemplates:
+  - {fileID: 11400000, guid: 9a57b453313761a40951e2bcfb6c930f, type: 2}
 --- !u!1 &1589045502
 GameObject:
   m_ObjectHideFlags: 0
@@ -24035,7 +24082,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1594884119
+    m_Bits: 2131755031
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
