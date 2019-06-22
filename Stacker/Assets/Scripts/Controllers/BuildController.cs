@@ -63,7 +63,15 @@ namespace Stacker.Controllers
             }
         }
 
-        public static int PlacedBuildingBlockCopies
+        public static List<BuildingBlockCopy> PlacedBuildingBlockCopies
+        {
+            get
+            {
+                return Singleton.placedBuildingBlockCopies;
+            }
+        }
+
+        public static int NumberOfPlacedBuildingBlockCopies
         {
             get
             {

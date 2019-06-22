@@ -101,7 +101,7 @@ namespace Stacker.Controllers
 
             // Check if the player even has placed blocks:
             // Otherwise, end the round prematurely.
-            if (BuildController.PlacedBuildingBlockCopies > 0)
+            if (BuildController.NumberOfPlacedBuildingBlockCopies > 0)
             {
                 StartCoroutine("ActionPhase");
             }
@@ -135,7 +135,10 @@ namespace Stacker.Controllers
             // In case anything updated roundHasEnded between frames because of framelag.
             if (!roundHasEnded)
             {
-                yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitAfterBuildPhase());
+                if (BuildController.NumberOfPlacedBuildingBlockCopies > 0)
+                {
+                    yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitAfterBuildPhase());
+                }
 
                 EndBuildPhase();
             }
@@ -177,7 +180,7 @@ namespace Stacker.Controllers
             int starsReceived = currentRound.RoundStarsReward();
 
             // The round was lost because the player did not gain any stars:
-            if (starsReceived > 0 && BuildController.PlacedBuildingBlockCopies > 0)
+            if (starsReceived > 0 && BuildController.NumberOfPlacedBuildingBlockCopies > 0)
             {
                 roundsPassedWithoutLoss++;
 
