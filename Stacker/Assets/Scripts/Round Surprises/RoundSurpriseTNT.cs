@@ -146,6 +146,8 @@ namespace Stacker.RoundSurprises
 
         private IEnumerator DissolveOut()
         {
+            collider.enabled = false;
+
             // Go from dissolve amount 0 to 1.
             float dissolveAmount = 0f;
             isDissolving = true;
@@ -170,7 +172,6 @@ namespace Stacker.RoundSurprises
             isDissolving = false;
 
             tntCrate.SetActive(false);
-            collider.enabled = false;
         }
 
         private IEnumerator LightFuse()

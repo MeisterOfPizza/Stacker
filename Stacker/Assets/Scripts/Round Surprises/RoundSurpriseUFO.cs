@@ -13,32 +13,45 @@ namespace Stacker.RoundSurprises
 
         #region Private constants
 
-        private const string UFO_BEGIN_FLIGHT_TRIGGER_NAME   = "Begin Flight";
-        private const string UFO_BEGIN_FLIGHT_ANIMATION_NAME = "Begin Flight";
-        private const string UFO_HOVER_BOOL_NAME             = "Hover";
-        private const string UFO_HOVER_ANIMATION_NAME        = "Hover";
+        private const string FLY_TO_PLAYER_TRIGGER_NAME   = "Fly To Player";
+        private const string FLY_FROM_PLAYER_TRIGGER_NAME = "Fly From Player";
 
         #endregion
 
         #region Editor
 
         [Header("References")]
-        [SerializeField] private GameObject ufo;
-        [SerializeField] private Animator   animator;
-        [SerializeField] private Transform  beamTransform;
+        [SerializeField] private Animator     animator;
+        [SerializeField] private Transform    ufoTransform;
+        [SerializeField] private Transform    beamTransform;
+        [SerializeField] private MeshRenderer beamMeshRenderer;
 
         [Header("UFO Values")]
-        [SerializeField] private float flySpeed          = 10f;
-        [SerializeField] private float rotateSpeed       = 5f;
         [SerializeField] private float stackHeightOffset = 4f;
-        [SerializeField] private float spawnRadius       = 100f;
         [SerializeField] private float escapeWaitTime    = 3f;
+
+        #endregion
+
+        #region Hidden public variables
+
+        [HideInInspector] public bool isReadyForBeam;
 
         #endregion
 
         #region Private variables
 
         private BuildingBlockCopy preselectedBuildingBlock;
+
+        private float currentFlyAltitude;
+
+        #endregion
+
+        #region MonoBehaviour methods
+
+        private void Awake()
+        {
+            transform.SetParent(RoundSurpriseController.Singleton.UFOOffset);
+        }
 
         #endregion
 
@@ -48,75 +61,97 @@ namespace Stacker.RoundSurprises
         {
             preselectedBuildingBlock = BuildController.PlacedBuildingBlockCopies[Random.Range(0, BuildController.NumberOfPlacedBuildingBlockCopies)];
 
-            transform.position = GetPointOnSpawnCircle();
-            ufo.SetActive(true);
+            currentFlyAltitude = CalculateFlyAltitude();
+            ufoTransform.position  = new Vector3(ufoTransform.position.x, currentFlyAltitude, ufoTransform.position.z);
+            beamTransform.position = new Vector3(beamTransform.position.x, currentFlyAltitude, beamTransform.position.z);
+
+            RoundSurpriseController.Singleton.UFOOffset.position = new Vector3(preselectedBuildingBlock.transform.position.x, 0, preselectedBuildingBlock.transform.position.z);
         }
 
         public override IEnumerator StartRoundSurprise()
         {
-            yield return StartCoroutine("FlyToTarget", GetBuildingBlockPosition(preselectedBuildingBlock)); // Fly to the build area.
+            animator.SetTrigger(FLY_TO_PLAYER_TRIGGER_NAME); // Fly to the build area.
+
+            yield return new WaitUntil(() => isReadyForBeam); // Wait until the hover state is in. (isReadyForBeam is set to true in that animation clip)
+
             yield return StartCoroutine(BeamUpBuildingBlock()); // Pick up block.
 
-            StartCoroutine("FlyToTarget", GetPointOnSpawnCircle()); // Fly away, but do not wait.
+            animator.SetTrigger(FLY_FROM_PLAYER_TRIGGER_NAME); // Fly away, but do not wait.
+
             yield return new WaitForSeconds(escapeWaitTime); // Instead, wait x amount of seconds before returning.
         }
 
         public override void RemoveRoundSurprise()
         {
-            ufo.SetActive(false);
+
         }
 
         #endregion
 
-        #region Controlling
+        #region Coroutines
 
-        private IEnumerator FlyToTarget(Vector3 target)
+        private IEnumerator BeamUpBuildingBlock()
         {
-            animator.SetTrigger(UFO_BEGIN_FLIGHT_TRIGGER_NAME);
+            beamTransform.gameObject.SetActive(true);
 
-            yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(1).IsName(UFO_BEGIN_FLIGHT_ANIMATION_NAME));
+            // Setup beam shader values:
+            beamTransform.localScale = new Vector3(beamTransform.localScale.x, CalculateBeamScale(currentFlyAltitude), beamTransform.localScale.z);
+            beamMeshRenderer.material.SetFloat("_EdgeThickness", CalculateBeamEdgeThickness(currentFlyAltitude));
 
-            float distance = Vector3.Distance(transform.position, target);
+            // Show beam and play the shader effect:
+            float beamVerticalCutout = 1f;
 
-            while (distance > 0.1f)
+            while (beamVerticalCutout > 0f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, target, flySpeed * Time.deltaTime);
-                distance = Vector3.Distance(transform.position, target);
+                beamVerticalCutout -= Time.deltaTime;
 
-                Vector3 direction  = target - transform.position;
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), rotateSpeed * Time.deltaTime);
+                beamMeshRenderer.material.SetFloat("_VerticalCutout", beamVerticalCutout);
 
                 yield return new WaitForEndOfFrame();
             }
 
-            animator.SetBool(UFO_HOVER_BOOL_NAME, true);
-        }
-        
-        private IEnumerator BeamUpBuildingBlock()
-        {
-            animator.SetBool(UFO_HOVER_ANIMATION_NAME, true);
+            // Beam up building block:
+            preselectedBuildingBlock.BeamBuildingBlock();
 
-            yield return new WaitForSeconds(3f);
+            while (preselectedBuildingBlock.transform.position.y < currentFlyAltitude - 0.1f)
+            {
+                preselectedBuildingBlock.transform.position = Vector3.MoveTowards(preselectedBuildingBlock.transform.position, ufoTransform.position, 5f * Time.deltaTime);
 
-            animator.SetBool(UFO_HOVER_ANIMATION_NAME, false);
+                yield return new WaitForEndOfFrame();
+            }
 
-            yield return new WaitWhile(() => animator.GetCurrentAnimatorStateInfo(1).IsName(UFO_HOVER_ANIMATION_NAME));
+            preselectedBuildingBlock.gameObject.SetActive(false);
+
+            // Remove beam:
+            while (beamVerticalCutout < 1f)
+            {
+                beamVerticalCutout += Time.deltaTime;
+
+                beamMeshRenderer.material.SetFloat("_VerticalCutout", beamVerticalCutout);
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            beamTransform.gameObject.SetActive(false);
         }
 
         #endregion
 
         #region Helpers
 
-        private Vector3 GetBuildingBlockPosition(BuildingBlockCopy buildingBlockCopy)
+        private float CalculateBeamScale(float altitude)
         {
-            return new Vector3(buildingBlockCopy.transform.position.x, StackHeightController.CurrentBuildAltitude + stackHeightOffset, buildingBlockCopy.transform.position.z);
+            return altitude / 4f;
         }
 
-        private Vector3 GetPointOnSpawnCircle()
+        private float CalculateBeamEdgeThickness(float altitude)
         {
-            float angle = Random.Range(0f, 360f);
+            return altitude > 0 ? 0.4f / altitude : 0f;
+        }
 
-            return new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad) * spawnRadius, StackHeightController.CurrentBuildAltitude + stackHeightOffset, Mathf.Sin(angle * Mathf.Deg2Rad) * spawnRadius);
+        private float CalculateFlyAltitude()
+        {
+            return StackHeightController.CurrentBuildAltitude + stackHeightOffset;
         }
 
         #endregion

@@ -135,7 +135,6 @@ namespace Stacker.Controllers
             DeselectCopy();
 
             UIBuildController.Singleton.StopBuildPhaseUI();
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
         }
 
         #endregion

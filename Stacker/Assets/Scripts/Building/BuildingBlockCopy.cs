@@ -15,7 +15,9 @@ namespace Stacker.Building
         #region Editor
 
         [Header("References")]
-        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private     MeshRenderer meshRenderer;
+        [SerializeField] private     Collider[]   colliders;
+        [SerializeField] private new Rigidbody    rigidbody;
 
         [Header("Selection")]
         [SerializeField] private Material _selectedMaterial;
@@ -81,19 +83,33 @@ namespace Stacker.Building
 
         #endregion
 
+        public void Initialize(BuildingBlock buildingBlock)
+        {
+            this.buildingBlock = buildingBlock;
+        }
+
+        public void BeamBuildingBlock()
+        {
+            BuildController.PlacedBuildingBlockCopies.Remove(this);
+
+            rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            rigidbody.useGravity             = false;
+            rigidbody.isKinematic            = true;
+
+            foreach (var collider in colliders)
+            {
+                collider.enabled = false;
+            }
+        }
+
+        #region MonoBehaviour methods
+
         private void Awake()
         {
             defaultMaterials = meshRenderer.materials;
 
             _selectedMaterial.SetFloat("_Flicker", 1f); // Disable hologram flicker.
         }
-
-        public void Initialize(BuildingBlock buildingBlock)
-        {
-            this.buildingBlock = buildingBlock;
-        }
-
-        #region MonoBehaviour methods
 
         private void OnEnable()
         {

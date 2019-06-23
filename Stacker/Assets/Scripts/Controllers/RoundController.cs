@@ -95,9 +95,8 @@ namespace Stacker.Controllers
 
         private void EndBuildPhase()
         {
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
             ChallengesController.CheckSkyscraperChallenges();
-
-            BuildController.Singleton.EndBuildPhase();
 
             // Check if the player even has placed blocks:
             // Otherwise, end the round prematurely.
@@ -135,6 +134,8 @@ namespace Stacker.Controllers
             // In case anything updated roundHasEnded between frames because of framelag.
             if (!roundHasEnded)
             {
+                BuildController.Singleton.EndBuildPhase(); // Disable the ability to place blocks.
+
                 if (BuildController.NumberOfPlacedBuildingBlockCopies > 0)
                 {
                     yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitAfterBuildPhase());

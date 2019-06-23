@@ -128,6 +128,8 @@ Shader "Custom/FX2D/Pixel Burn"
 					float tex_on = step(_TexCutoff, brightness);
 					float glow_on = step(_GlowCutoff, brightness);
 
+					clip(max(tex_on, glow_on) - 0.01); // Remove pixels that will not be visible.
+
 					return (tex2D(_MainTex, i.uv) * tex_on + glow_on * (1 - tex_on)) * _GlowColor * i.color;
 				}
 

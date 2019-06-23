@@ -16,6 +16,9 @@ namespace Stacker.Controllers
         [Header("References")]
         [SerializeField] private Transform roundSurpriseContainer;
 
+        [Space]
+        [SerializeField] private Transform ufoOffset;
+
         [Header("Prefabs")]
         [SerializeField] private RoundSurpriseTemplate[] roundSurpriseTemplates;
 
@@ -27,6 +30,18 @@ namespace Stacker.Controllers
 
         private RoundSurprise chosenRoundSurpriseTemplate;
         private bool          hasRoundSurpriseThisRound;
+
+        #endregion
+
+        #region Public properties
+
+        public Transform UFOOffset
+        {
+            get
+            {
+                return ufoOffset;
+            }
+        }
 
         #endregion
 
@@ -87,7 +102,7 @@ namespace Stacker.Controllers
 
         private void ChoseRandomRoundSurprise()
         {
-            if (Random.value >= 0.5f || true)
+            if (Random.value >= 0.5f)
             {
                 hasRoundSurpriseThisRound = true;
 

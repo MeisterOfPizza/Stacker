@@ -124,4 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 5889946087771389475}
+  colliders:
+  - {fileID: 5296687045446634234}
+  rigidbody: {fileID: 5296687045446634237}
   _selectedMaterial: {fileID: 2100000, guid: f92dd1c845b58514fa1613e341b74398, type: 2}
