@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 #pragma warning disable 0649
+#pragma warning disable 0109
 
 namespace Stacker.RoundSurprises
 {

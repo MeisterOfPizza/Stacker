@@ -114,7 +114,7 @@ namespace Stacker.RoundSurprises
             beamMeshRenderer.material.SetFloat("_EdgeThickness", CalculateBeamEdgeThickness(currentFlyAltitude));
 
             // Play beam sound effect:
-            beamAudioSource.PlayOneShot(beamSoundEffects[Random.Range(0, beamSoundEffects.Length)], AudioController.EffectsVolume * 0.1f);
+            beamAudioSource.PlayOneShot(beamSoundEffects[Random.Range(0, beamSoundEffects.Length)], AudioController.EffectsVolume * 0.25f);
 
             // Show beam and play the shader effect:
             float beamVerticalCutout = 1f;
@@ -164,7 +164,7 @@ namespace Stacker.RoundSurprises
                 if (!ufoAudioSource.isPlaying && ufoAudioSource.gameObject.activeInHierarchy)
                 {
                     ufoAudioSource.clip   = ufoFlyingSoundEffects[Random.Range(0, ufoFlyingSoundEffects.Length)];
-                    ufoAudioSource.volume = AudioController.EffectsVolume * 0.025f;
+                    ufoAudioSource.volume = AudioController.EffectsVolume * 0.1f;
                     ufoAudioSource.Play();
                 }
 

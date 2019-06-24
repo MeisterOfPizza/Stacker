@@ -3,6 +3,7 @@ using Stacker.Extensions.Utils;
 using UnityEngine;
 
 #pragma warning disable 0649
+#pragma warning disable 0109
 
 namespace Stacker.Building
 {

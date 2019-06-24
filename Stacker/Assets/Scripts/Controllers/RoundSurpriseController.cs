@@ -16,11 +16,18 @@ namespace Stacker.Controllers
         [Header("References")]
         [SerializeField] private Transform roundSurpriseContainer;
 
+        [Header("UI References")]
+        [SerializeField] private Animator uiRoundSurpriseTextAnimator;
+
         [Space]
         [SerializeField] private Transform ufoOffset;
 
         [Header("Prefabs")]
         [SerializeField] private RoundSurpriseTemplate[] roundSurpriseTemplates;
+
+        [Header("Audio")]
+        [SerializeField] private AudioSource roundSurpriseAudioSource;
+        [SerializeField] private AudioClip   roundSurpriseSoundEffect;
 
         #endregion
 
@@ -102,11 +109,14 @@ namespace Stacker.Controllers
 
         private void ChoseRandomRoundSurprise()
         {
-            if (Random.value >= 0.5f || true) //TEST: Remove test
+            if (Random.value >= 0.75f)
             {
                 hasRoundSurpriseThisRound = true;
 
                 chosenRoundSurpriseTemplate = roundSurprises[Random.Range(0, roundSurprises.Length)];
+
+                uiRoundSurpriseTextAnimator.Play("Popup");
+                roundSurpriseAudioSource.PlayOneShot(roundSurpriseSoundEffect, AudioController.MiscVolume * 0.5f);
             }
             else
             {
