@@ -30,6 +30,14 @@ namespace Stacker.RoundSurprises
         [SerializeField] private float stackHeightOffset = 4f;
         [SerializeField] private float escapeWaitTime    = 3f;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource ufoAudioSource;
+        [SerializeField] private AudioSource beamAudioSource;
+
+        [Space]
+        [SerializeField] private AudioClip[] ufoFlyingSoundEffects;
+        [SerializeField] private AudioClip[] beamSoundEffects;
+
         #endregion
 
         #region Hidden public variables
@@ -43,6 +51,8 @@ namespace Stacker.RoundSurprises
         private BuildingBlockCopy preselectedBuildingBlock;
 
         private float currentFlyAltitude;
+
+        private bool isFlying;
 
         #endregion
 
@@ -71,19 +81,24 @@ namespace Stacker.RoundSurprises
         public override IEnumerator StartRoundSurprise()
         {
             animator.SetTrigger(FLY_TO_PLAYER_TRIGGER_NAME); // Fly to the build area.
+            isFlying = true;
+            StartCoroutine(LoopUfoFlyingSoundEffects());
 
             yield return new WaitUntil(() => isReadyForBeam); // Wait until the hover state is in. (isReadyForBeam is set to true in that animation clip)
 
+            isFlying = false;
             yield return StartCoroutine(BeamUpBuildingBlock()); // Pick up block.
 
             animator.SetTrigger(FLY_FROM_PLAYER_TRIGGER_NAME); // Fly away, but do not wait.
+            isFlying = true;
+            StartCoroutine(LoopUfoFlyingSoundEffects());
 
             yield return new WaitForSeconds(escapeWaitTime); // Instead, wait x amount of seconds before returning.
         }
 
         public override void RemoveRoundSurprise()
         {
-
+            isFlying = false;
         }
 
         #endregion
@@ -97,6 +112,9 @@ namespace Stacker.RoundSurprises
             // Setup beam shader values:
             beamTransform.localScale = new Vector3(beamTransform.localScale.x, CalculateBeamScale(currentFlyAltitude), beamTransform.localScale.z);
             beamMeshRenderer.material.SetFloat("_EdgeThickness", CalculateBeamEdgeThickness(currentFlyAltitude));
+
+            // Play beam sound effect:
+            beamAudioSource.PlayOneShot(beamSoundEffects[Random.Range(0, beamSoundEffects.Length)], AudioController.EffectsVolume * 0.1f);
 
             // Show beam and play the shader effect:
             float beamVerticalCutout = 1f;
@@ -133,6 +151,25 @@ namespace Stacker.RoundSurprises
             }
 
             beamTransform.gameObject.SetActive(false);
+        }
+
+        #endregion
+
+        #region Audio
+
+        private IEnumerator LoopUfoFlyingSoundEffects()
+        {
+            while (isFlying)
+            {
+                if (!ufoAudioSource.isPlaying && ufoAudioSource.gameObject.activeInHierarchy)
+                {
+                    ufoAudioSource.clip   = ufoFlyingSoundEffects[Random.Range(0, ufoFlyingSoundEffects.Length)];
+                    ufoAudioSource.volume = AudioController.EffectsVolume * 0.025f;
+                    ufoAudioSource.Play();
+                }
+
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         #endregion

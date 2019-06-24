@@ -224,9 +224,8 @@ MonoBehaviour:
   explosionSoundEffects:
   - {fileID: 8300000, guid: 29c71233bf72d244a9ca1702a4ac9c32, type: 3}
   - {fileID: 8300000, guid: 6adfb0d9cfce06246957fb0ebaddf639, type: 3}
-  fuseLitHissingSoundEffects:
-  - {fileID: 8300000, guid: 8adb00f8d58d13748a70b368aee5a49d, type: 3}
-  - {fileID: 8300000, guid: ee7e997ceb383514fb8abfe6587c0a42, type: 3}
+  fuseLitHissingSoundEffect: {fileID: 8300000, guid: eb064bb879f6a2e4b8d57f1aff183451,
+    type: 3}
 --- !u!65 &6682298130299510010
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -249,7 +248,8 @@ AudioSource:
   m_GameObject: {fileID: 2030724652765926407}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7319030092687659036, guid: 317c90e2d282963418dc4ec032adf0e8,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

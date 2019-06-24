@@ -40,6 +40,7 @@ namespace Stacker.RoundAction
         [Header("Audio")]
         [SerializeField] private AudioSource soundEffectsSource;
         [SerializeField] private AudioClip[] vehicleCollisionSoundEffects;
+        [SerializeField] private AudioClip[] vehicleEngineSoundEffects;
 
         [Header("Warning material")]
         [SerializeField] private Material _warningMaterial;
@@ -99,6 +100,9 @@ namespace Stacker.RoundAction
             PlayWheelDustEffect();
             animator.Play(VEHICLE_ANIMATION_RUN);
 
+            // Play sound effects:
+            PlayEngineSoundEffect();
+
             Vector3 target = -transform.position; // Invert the position to find the target to drive to.
             float distanceToTravel = transform.position.magnitude + 0.01f; // Distance to middle with small extra distance added to remove any risk at floating-point value issues.
             float currentDistance = 0;
@@ -117,6 +121,7 @@ namespace Stacker.RoundAction
             // If we did not hit a structure, then we want to continue the chain event.
             if (!hitStructure)
             {
+                soundEffectsSource.Stop(); // Stop the engine sound effect.
                 StopWheelDustEffect(); // Stop the wheel dust effect because the vehicle has reached its destination.
 
                 doneCallback();
@@ -217,7 +222,17 @@ namespace Stacker.RoundAction
 
         private void PlayCollisionSoundEffect()
         {
+            soundEffectsSource.Stop();
+            soundEffectsSource.loop = false;
             soundEffectsSource.PlayOneShot(vehicleCollisionSoundEffects[UnityEngine.Random.Range(0, vehicleCollisionSoundEffects.Length)], AudioController.EffectsVolume);
+        }
+
+        private void PlayEngineSoundEffect()
+        {
+            soundEffectsSource.loop = true;
+            soundEffectsSource.volume = AudioController.EffectsVolume;
+            soundEffectsSource.clip = vehicleEngineSoundEffects[UnityEngine.Random.Range(0, vehicleEngineSoundEffects.Length)];
+            soundEffectsSource.Play();
         }
 
         #endregion

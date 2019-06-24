@@ -33,7 +33,7 @@ namespace Stacker.RoundSurprises
 
         [Header("Audio")]
         [SerializeField] private AudioClip[] explosionSoundEffects;
-        [SerializeField] private AudioClip[] fuseLitHissingSoundEffects;
+        [SerializeField] private AudioClip   fuseLitHissingSoundEffect;
 
         #endregion
 
@@ -178,11 +178,19 @@ namespace Stacker.RoundSurprises
         {
             float countdown = explosionCountdown;
             fuseLitEffect.Play(true);
-            soundEffectsSource.PlayOneShot(fuseLitHissingSoundEffects[Random.Range(0, fuseLitHissingSoundEffects.Length)], AudioController.EffectsVolume);
+            soundEffectsSource.PlayOneShot(fuseLitHissingSoundEffect, AudioController.EffectsVolume * 0.25f);
+            float soundEffectCooldown = GetLightFuseSoundEffectCooldown(countdown);
 
             while (countdown > 0 && !isDissolving)
             {
-                countdown -= Time.deltaTime;
+                countdown           -= Time.deltaTime;
+                soundEffectCooldown -= Time.deltaTime;
+
+                if (soundEffectCooldown <= 0f)
+                {
+                    soundEffectsSource.PlayOneShot(fuseLitHissingSoundEffect, AudioController.EffectsVolume * 0.25f);
+                    soundEffectCooldown = GetLightFuseSoundEffectCooldown(countdown);
+                }
 
                 yield return new WaitForEndOfFrame();
             }
@@ -200,6 +208,8 @@ namespace Stacker.RoundSurprises
                 tntCrate.SetActive(false);
             }
         }
+
+        private float GetLightFuseSoundEffectCooldown(float countdown) => countdown * 0.2f;
 
         #endregion
 

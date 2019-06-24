@@ -102,7 +102,7 @@ namespace Stacker.Controllers
 
         private void ChoseRandomRoundSurprise()
         {
-            if (Random.value >= 0.5f)
+            if (Random.value >= 0.5f || true) //TEST: Remove test
             {
                 hasRoundSurpriseThisRound = true;
 
