@@ -57,7 +57,7 @@ namespace Stacker.Controllers
 
         public static void CheckFortressChallenges()
         {
-            StructuralIntegrity = 1 - BlocksHitByProjectiles / (float)BuildController.PlacedBuildingBlockCopies;
+            StructuralIntegrity = 1 - BlocksHitByProjectiles / (float)BuildController.NumberOfPlacedBuildingBlockCopies;
 
             var fortressChallenges = RoundController.Singleton.CurrentRound.RoundChallenges.Where(rc => rc.RoundChallengeType == RoundChallengeType.Fortress);
 

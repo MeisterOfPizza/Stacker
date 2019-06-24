@@ -51,7 +51,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 43335289048785936}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -123,4 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 43335289048785939}
+  colliders:
+  - {fileID: 43335289048785938}
+  rigidbody: {fileID: -3283190064941280506}
   _selectedMaterial: {fileID: 2100000, guid: f92dd1c845b58514fa1613e341b74398, type: 2}

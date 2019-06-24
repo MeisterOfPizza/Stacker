@@ -55,7 +55,7 @@ namespace Stacker.Controllers
             BorderController.HideBorder();
             RoundCleanController.Singleton.CleanRound();
 
-            StopCoroutine("RoundCycle");
+            StopCoroutine("BuildCycle");
             StopCoroutine("ActionPhase");
             roundHasEnded = false;
 
@@ -77,9 +77,11 @@ namespace Stacker.Controllers
 
             ChallengesController.ResetChallengeValues();
 
-            ReadyChallengeControllers();
-            BeginBuildPhase();
-            StartCoroutine("RoundCycle");
+            ReadyActionControllers();
+
+            RoundSurpriseController.Singleton.ResetRoundSurprise();
+
+            StartCoroutine("BuildCycle");
         }
 
         private void BeginBuildPhase()
@@ -93,13 +95,12 @@ namespace Stacker.Controllers
 
         private void EndBuildPhase()
         {
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
             ChallengesController.CheckSkyscraperChallenges();
-
-            BuildController.Singleton.EndBuildPhase();
 
             // Check if the player even has placed blocks:
             // Otherwise, end the round prematurely.
-            if (BuildController.PlacedBuildingBlockCopies > 0)
+            if (BuildController.NumberOfPlacedBuildingBlockCopies > 0)
             {
                 StartCoroutine("ActionPhase");
             }
@@ -109,8 +110,12 @@ namespace Stacker.Controllers
             }
         }
 
-        private IEnumerator RoundCycle()
+        private IEnumerator BuildCycle()
         {
+            yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitBeforeBuildPhase());
+
+            BeginBuildPhase();
+
             float time = currentRound.TimeRestraint;
 
             // Keep the round going as long as we're using a time restraint and time > 0 OR we're not using a time restraint (aka forever).
@@ -129,6 +134,13 @@ namespace Stacker.Controllers
             // In case anything updated roundHasEnded between frames because of framelag.
             if (!roundHasEnded)
             {
+                BuildController.Singleton.EndBuildPhase(); // Disable the ability to place blocks.
+
+                if (BuildController.NumberOfPlacedBuildingBlockCopies > 0)
+                {
+                    yield return StartCoroutine(RoundSurpriseController.Singleton.AwaitAfterBuildPhase());
+                }
+
                 EndBuildPhase();
             }
         }
@@ -148,7 +160,7 @@ namespace Stacker.Controllers
 
         public void EndRound()
         {
-            StopCoroutine("RoundCycle");
+            StopCoroutine("BuildCycle");
 
             UIPhaseController.Singleton.EndPhases();
             UIStackHeightController.Singleton.ActivateUIHeightMeter(false, false);
@@ -169,7 +181,7 @@ namespace Stacker.Controllers
             int starsReceived = currentRound.RoundStarsReward();
 
             // The round was lost because the player did not gain any stars:
-            if (starsReceived > 0 && BuildController.PlacedBuildingBlockCopies > 0)
+            if (starsReceived > 0 && BuildController.NumberOfPlacedBuildingBlockCopies > 0)
             {
                 roundsPassedWithoutLoss++;
 
@@ -192,7 +204,7 @@ namespace Stacker.Controllers
 
         #region Challenge helpers
 
-        private void ReadyChallengeControllers()
+        private void ReadyActionControllers()
         {
             ProjectileController.Singleton.SetupProjectiles();
             VehicleController.Singleton.SetupVehicles();

@@ -31,6 +31,10 @@ namespace Stacker.Controllers
         [SerializeField, Tooltip("What layers can building blocks be placed on?")] private LayerMask buildLayerMask;
         [SerializeField, Tooltip("How high up should the construction block be?")] private float     constructionBuildAltitude = 5f;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource buildAudioSource;
+        [SerializeField] private AudioClip   buildingBlockPlacedSoundEffect;
+
         #endregion
 
         #region Private variables
@@ -63,7 +67,15 @@ namespace Stacker.Controllers
             }
         }
 
-        public static int PlacedBuildingBlockCopies
+        public static List<BuildingBlockCopy> PlacedBuildingBlockCopies
+        {
+            get
+            {
+                return Singleton.placedBuildingBlockCopies;
+            }
+        }
+
+        public static int NumberOfPlacedBuildingBlockCopies
         {
             get
             {
@@ -127,7 +139,6 @@ namespace Stacker.Controllers
             DeselectCopy();
 
             UIBuildController.Singleton.StopBuildPhaseUI();
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
         }
 
         #endregion
@@ -328,6 +339,8 @@ namespace Stacker.Controllers
         {
             selectedBuildingBlockCopy.PlaceBuildingBlock(constructionBuildingBlock.Position, constructionBuildingBlock.TargetRotation);
             DeselectCopy();
+
+            buildAudioSource.PlayOneShot(buildingBlockPlacedSoundEffect, AudioController.MiscVolume);
         }
 
         #endregion
