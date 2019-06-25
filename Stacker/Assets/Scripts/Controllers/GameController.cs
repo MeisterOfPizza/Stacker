@@ -1,6 +1,8 @@
 ﻿using Stacker.UIControllers;
 using UnityEngine;
 
+#pragma warning disable 0649
+
 namespace Stacker.Controllers
 {
 
@@ -15,7 +17,15 @@ namespace Stacker.Controllers
 
         #region Editor
 
+        [Header("References")]
         [SerializeField] private GameObject quitButton;
+
+        [Header("UI References")]
+        [SerializeField] private Animator newHighscoreTextPopupAnimator;
+
+        [Header("Audio")]
+        [SerializeField] private AudioSource newHighscoreAudioSource;
+        [SerializeField] private AudioClip   newHighscoreSoundEffect;
 
         #endregion
 
@@ -35,7 +45,7 @@ namespace Stacker.Controllers
 
         public override void OnAwake()
         {
-#if UNITY_IOS || UNITY_ANDROIOD
+#if UNITY_IOS || UNITY_ANDROID
             quitButton.SetActive(false);
 #endif
         }
@@ -50,6 +60,10 @@ namespace Stacker.Controllers
                 PlayerPrefs.Save();
 
                 UIRoundController.Singleton.UpdateHighscoreCount();
+
+                Singleton.newHighscoreTextPopupAnimator.Play("Popup");
+
+                Singleton.newHighscoreAudioSource.PlayOneShot(Singleton.newHighscoreSoundEffect, AudioController.MiscVolume * 0.5f);
             }
         }
 

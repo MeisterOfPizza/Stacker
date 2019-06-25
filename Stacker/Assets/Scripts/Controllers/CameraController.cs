@@ -176,7 +176,7 @@ namespace Stacker.Controllers
                 zoomChange = 1;
             }
             //TODO: Fix camera zoom on phone devices.
-#elif UNITY_IOS || UNITY_ANDROIOD
+#elif UNITY_IOS || UNITY_ANDROID
 #endif
 
             currentZoom = Mathf.Clamp(currentZoom + zoomChange, 0, zoomStates);

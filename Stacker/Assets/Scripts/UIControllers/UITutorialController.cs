@@ -19,11 +19,11 @@ namespace Stacker.UIControllers
         public override void OnAwake()
         {
 #if UNITY_STANDALONE
-            tutorialText.text += "\n\\u2022<indent=30px>Rotate the camera with Q and E, and zoom in and out with the scroll wheel.</indent>";
+            tutorialText.text += "\n\\u2022<indent=30px>Rotate the camera with Q and E, and zoom in and out with the scroll wheel. Level the camera with Z and X.</indent>";
             // Whenever adding unicode text to the TMP_Text, all unicode references gets reset, therefore, we need to manually replace all "fake" unicode character with the "real" ones.
             tutorialText.text = tutorialText.text.Replace("\\u2022", "\u2022");
 #elif UNITY_IOS || UNITY_ANDROIOD
-            tutorialText.text += "\n\\u2022<indent=30px>Rotate the camera by swiping left or right, and zoom in and out by dragging the screen with two fingers.</indent>";
+            tutorialText.text += "\n\\u2022<indent=30px>Rotate the camera by swiping left or right, and zoom in and out by dragging the screen with two fingers. Level the camera with the buttons in the bottom right of the screen.</indent>";
             // Whenever adding unicode text to the TMP_Text, all unicode references gets reset, therefore, we need to manually replace all "fake" unicode character with the "real" ones.
             tutorialText.text = tutorialText.text.Replace("\\u2022", "\u2022");
 #endif
