@@ -18,10 +18,9 @@ namespace Stacker.UIControllers
         #endregion
 
         #region Editor
-
-        [SerializeField] private GameObject stackHeightMeterContainer;
-        [SerializeField] private TMP_Text   stackHeightMeterText;
-        [SerializeField] private Animator   stackHeightMeterTextAnimator;
+        
+        [SerializeField] private TMP_Text stackHeightMeterText;
+        [SerializeField] private Animator stackHeightMeterTextAnimator;
 
         #endregion
 
@@ -48,9 +47,8 @@ namespace Stacker.UIControllers
 
         #region Helpers
 
-        public void ActivateUIHeightMeter(bool activate, bool updateStackHeightText)
+        public void ActivateUIHeightMeter(bool updateStackHeightText)
         {
-            this.stackHeightMeterContainer.SetActive(activate);
             this.updateStackHeightText = updateStackHeightText;
         }
 

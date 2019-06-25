@@ -112,7 +112,10 @@ namespace Stacker.RoundAction
                 distanceToTarget = Vector3.Distance(transform.position, target);
 
                 // Make the projectile look in the direction of the target. This to make effects look better.
-                transform.rotation = Quaternion.LookRotation(rigidbody.velocity.normalized);
+                if (rigidbody.velocity.sqrMagnitude != 0)
+                {
+                    transform.rotation = Quaternion.LookRotation(rigidbody.velocity.normalized);
+                }
 
                 yield return new WaitForEndOfFrame();
             }

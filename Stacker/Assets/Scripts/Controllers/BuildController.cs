@@ -128,7 +128,7 @@ namespace Stacker.Controllers
             }
 
             UIBuildController.Singleton.BeginBuildPhaseUI(buildingBlocks);
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, true);
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(true);
         }
 
         public void EndBuildPhase()

@@ -95,7 +95,7 @@ namespace Stacker.Controllers
 
         private void EndBuildPhase()
         {
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(true, false);
+            UIStackHeightController.Singleton.ActivateUIHeightMeter(false);
             ChallengesController.CheckSkyscraperChallenges();
 
             // Check if the player even has placed blocks:
@@ -163,7 +163,6 @@ namespace Stacker.Controllers
             StopCoroutine("BuildCycle");
 
             UIPhaseController.Singleton.EndPhases();
-            UIStackHeightController.Singleton.ActivateUIHeightMeter(false, false);
 
             CameraController.Singleton.CanReadInput = false;
             
