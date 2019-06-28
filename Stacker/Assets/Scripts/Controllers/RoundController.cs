@@ -17,6 +17,10 @@ namespace Stacker.Controllers
 
         [SerializeField] private RoundTemplate[] roundTemplates;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource buildPhaseTickAudioSource;
+        [SerializeField] private AudioClip   buildPhaseTickSoundEffect;
+
         #endregion
 
         #region Private variables
@@ -118,6 +122,7 @@ namespace Stacker.Controllers
             BeginBuildPhase();
 
             float time = currentRound.TimeRestraint;
+            float soundEffectCooldown = GetBuildPhaseTickSoundEffectCooldown(time, currentRound.TimeRestraint);
 
             // Keep the round going as long as we're using a time restraint and time > 0 OR we're not using a time restraint (aka forever).
             while (time > 0)
@@ -125,6 +130,13 @@ namespace Stacker.Controllers
                 if (currentRound.UseTimeRestraint)
                 {
                     time -= Time.deltaTime;
+                    soundEffectCooldown -= Time.deltaTime;
+
+                    if (soundEffectCooldown <= 0f)
+                    {
+                        buildPhaseTickAudioSource.PlayOneShot(buildPhaseTickSoundEffect, AudioController.MiscVolume * 0.1f);
+                        soundEffectCooldown = GetBuildPhaseTickSoundEffectCooldown(time, currentRound.TimeRestraint);
+                    }
                 }
 
                 BuildPhaseProgress = 1 - time / currentRound.TimeRestraint;
@@ -237,6 +249,12 @@ namespace Stacker.Controllers
                 return roundTemplates[Random.Range(0, roundTemplates.Length)];
             }
         }
+
+        #endregion
+
+        #region Helper methods
+        
+        private float GetBuildPhaseTickSoundEffectCooldown(float t, float phaseTime) => Mathf.Pow(t / phaseTime, 0.6f);
 
         #endregion
 
