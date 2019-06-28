@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 #pragma warning disable 0649
+#pragma warning disable 0414
 
 namespace Stacker.Controllers
 {
@@ -19,19 +20,17 @@ namespace Stacker.Controllers
         [SerializeField] private bool canReadInput = false;
 
         [Header("Rotate settings")]
-        [SerializeField] private float cameraRotateSpeed = 5f;
+        [SerializeField]                private Transform rotateAnchor;
+        [SerializeField]                private float     cameraRotateSpeed = 5f;
+        [SerializeField, Range(0, 90f)] private float     minAngleX         = 20f;
+        [SerializeField, Range(0, 90f)] private float     maxAngleX         = 80f;
 
         [Header("Zoom settings")]
-        [SerializeField]                private float   zoomSpeed        = 5f;
-        [SerializeField]                private Vector3 minZoomPosition  = new Vector3(5, 5, 5);
-        [SerializeField]                private Vector3 maxZoomPosition  = new Vector3(25, 25, 25);
-        [SerializeField, Range(0, 100)] private int     zoomStates       = 10;
-        [SerializeField, Range(0, 100)] private int     defaultZoom      = 2;
-
-        [Header("Leveling settings")]
-        [SerializeField]                 private Transform levelAnchor;
-        [SerializeField]                 private float     levelingSpeed = 5f;
-        [SerializeField, Range(0f, 25f)] private float     maxLevel      = 10f;
+        [SerializeField]                private float     zoomSpeed        = 5f;
+        [SerializeField]                private Vector3   minZoomPosition  = new Vector3(5, 5, 5);
+        [SerializeField]                private Vector3   maxZoomPosition  = new Vector3(25, 25, 25);
+        [SerializeField, Range(0, 100)] private int       zoomStates       = 10;
+        [SerializeField, Range(0, 100)] private int       defaultZoom      = 2;
 
         [Header("Misc")]
         [SerializeField] private LayerMask mainCameraEventMask;
@@ -44,7 +43,8 @@ namespace Stacker.Controllers
         private Vector3 targetZoomPosition;
         private Vector3 deltaZoom;
 
-        private float currentLevel;
+        private float angleX = 45f;
+        private float angleY = 45f;
 
         #endregion
 
@@ -53,7 +53,6 @@ namespace Stacker.Controllers
         public bool CanReadInput { get; set; } = true;
         public bool CanRotate    { get; set; } = true;
         public bool CanZoom      { get; set; } = true;
-        public bool CanLevel     { get; set; } = true;
 
         #endregion
 
@@ -97,63 +96,54 @@ namespace Stacker.Controllers
             this.deltaZoom          = maxZoomPosition - minZoomPosition;
             this.currentZoom        = defaultZoom;
             this.targetZoomPosition = GetZoomLevelPosition(currentZoom);
-            
-            this.levelAnchor.localPosition = new Vector3(this.levelAnchor.localPosition.x, currentLevel, this.levelAnchor.localPosition.z);
+
+            this.angleX = rotateAnchor.rotation.eulerAngles.x;
+            this.angleY = rotateAnchor.rotation.eulerAngles.y;
 
             this.mainCamera.eventMask = mainCameraEventMask;
             this.ui3DOverlayCamera.eventMask = 0;
-
-            // Look at the world middle:
-            mainCamera.transform.LookAt(Vector3.zero);
         }
 
         private void Update()
         {
             if (CanReadInput)
             {
-                if (CanRotate)
-                {
-                    InputRotate();
-                }
-
                 if (CanZoom)
                 {
                     InputZoom();
                 }
 
-                if (CanLevel)
+                if (CanRotate)
                 {
-                    InputLevel();
+                    InputRotate();
                 }
-
-                // Look at the world middle:
-                mainCamera.transform.LookAt(Vector3.zero);
             }
         }
 
         #endregion
 
-        #region Rotating the camera
+        #region Rotating
 
-        /// <summary>
-        /// Search for input to rotate by.
-        /// </summary>
         private void InputRotate()
         {
-            float direction = 0;
+            Vector2 deltaAxes = Vector2.zero;
 
 #if UNITY_STANDALONE
-            direction = Input.GetAxis(KeybindingController.Standalone_Camera_Rotate_Axis);
-            //TODO: Fix camera rotation on phone devices.
+            if (Input.GetMouseButton(1))
+            {
+                deltaAxes = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            }
 #elif UNITY_IOS || UNITY_ANDROID
+            if (Input.touchCount > 0)
+            {
+                deltaAxes = new Vector2(Input.touches[0].deltaPosition.x, Input.touches[0].deltaPosition.y);
+            }
 #endif
 
-            RotateCamera(direction);
-        }
-
-        private void RotateCamera(float direction)
-        {
-            cameraContainer.RotateAround(Vector3.zero, Vector3.up, direction * cameraRotateSpeed * 100 * Time.deltaTime);
+            angleX = Mathf.Clamp(angleX + deltaAxes.y * cameraRotateSpeed * -1, 20f, 80f);
+            angleY += deltaAxes.x * cameraRotateSpeed;
+            
+            rotateAnchor.rotation = Quaternion.Euler(angleX, angleY, 0);
         }
 
         #endregion
@@ -197,37 +187,6 @@ namespace Stacker.Controllers
         private Vector3 GetZoomLevelPosition(int zoomLevel)
         {
             return minZoomPosition + deltaZoom * (zoomLevel / (float)zoomStates);
-        }
-
-        #endregion
-
-        #region Leveling
-
-        /// <summary>
-        /// Level the camera as to move it closer or further to the ground (not the same as zoom).
-        /// This only changes the Y-axis.
-        /// </summary>
-        private void InputLevel()
-        {
-            float levelDelta = 0;
-
-#if UNITY_STANDALONE
-            levelDelta = Input.GetAxis(KeybindingController.Standalone_Camera_Level_Axis);
-            //TODO: Fix camera leveling on phone devices.
-#elif UNITY_IOS || UNITY_ANDROID
-#endif
-
-            LevelCamera(levelDelta);
-        }
-        
-        private void LevelCamera(float levelDelta)
-        {
-            currentLevel = Mathf.Clamp(currentLevel + levelDelta, 0f, maxLevel);
-
-            float y = levelAnchor.localPosition.y;
-            y = Mathf.Lerp(y, currentLevel, Time.deltaTime * levelingSpeed);
-
-            levelAnchor.localPosition = new Vector3(levelAnchor.localPosition.x, y, levelAnchor.localPosition.z);
         }
 
         #endregion
