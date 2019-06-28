@@ -17,7 +17,7 @@ namespace Stacker.Rounds
             }
         }
 
-        public TunnelChallenge(int starsReward, string description, int vehicles) : base(starsReward, description)
+        public TunnelChallenge(string name, int starsReward, string description, int vehicles) : base(name, starsReward, description)
         {
             this.Vehicles = vehicles;
         }

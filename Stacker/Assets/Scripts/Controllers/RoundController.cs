@@ -2,6 +2,7 @@
 using Stacker.Templates.Rounds;
 using Stacker.UIControllers;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -59,7 +60,7 @@ namespace Stacker.Controllers
             StopCoroutine("ActionPhase");
             roundHasEnded = false;
 
-            currentRound = new Round(roundTemplates[Random.Range(0, roundTemplates.Length)]);
+            currentRound = new Round(ChooseRoundTemplate());
             
             ChallengesController.ResetChallengeValues();
 
@@ -217,6 +218,24 @@ namespace Stacker.Controllers
         private IEnumerator TunnelPhase()
         {
             yield return StartCoroutine(VehicleController.Singleton.LaunchVehicles());
+        }
+
+        #endregion
+
+        #region Round templates helpers
+
+        private RoundTemplate ChooseRoundTemplate()
+        {
+            var viableRoundTemplates = roundTemplates.Where(rt => rt.RoundCanAppear(GameController.TotalStars)).ToList();
+
+            if (viableRoundTemplates.Count > 0) // Make sure that there are round we can use.
+            {
+                return viableRoundTemplates[Random.Range(0, viableRoundTemplates.Count)];
+            }
+            else
+            {
+                return roundTemplates[Random.Range(0, roundTemplates.Length)];
+            }
         }
 
         #endregion

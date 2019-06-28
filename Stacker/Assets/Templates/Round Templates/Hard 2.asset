@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24f7d654637fe448a40d8f6054552c2, type: 3}
   m_Name: Hard 2
   m_EditorClassIdentifier: 
+  minStarsToAppear: 40
+  maxStarsToAppear: 10000
   roundBuildingBlockTemplates:
   - buildingBlockTemplate: {fileID: 11400000, guid: e907ccad508d5ec42a90f7a8035ab3cb,
       type: 2}
@@ -29,31 +31,36 @@ MonoBehaviour:
   timeRestraint: 5
   useTimeRestraint: 1
   roundChallengePool:
-  - type: 1
+  - customName: Rocketman
+    type: 1
     starsReward: 1
     buildHeight: 2
     projectiles: 0
     structuralIntegrity: 0
     vehicles: 0
-  - type: 2
+  - customName: Castle
+    type: 2
     starsReward: 3
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 0
-  - type: 4
+  - customName: 
+    type: 4
     starsReward: 2
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 2
-  - type: 1
+  - customName: 
+    type: 1
     starsReward: 1
     buildHeight: 1
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 2
-  - type: 2
+  - customName: King of the castle
+    type: 2
     starsReward: 1
     buildHeight: 2
     projectiles: 2

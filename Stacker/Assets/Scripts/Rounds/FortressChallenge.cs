@@ -18,7 +18,7 @@ namespace Stacker.Rounds
             }
         }
 
-        public FortressChallenge(int starsReward, string description, int projectiles, float structuralIntegrity) : base(starsReward, description)
+        public FortressChallenge(string name, int starsReward, string description, int projectiles, float structuralIntegrity) : base(name, starsReward, description)
         {
             this.Projectiles         = projectiles;
             this.StructuralIntegrity = structuralIntegrity;

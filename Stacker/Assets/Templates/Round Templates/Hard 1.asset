@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24f7d654637fe448a40d8f6054552c2, type: 3}
   m_Name: Hard 1
   m_EditorClassIdentifier: 
+  minStarsToAppear: 40
+  maxStarsToAppear: 10000
   roundBuildingBlockTemplates:
   - buildingBlockTemplate: {fileID: 11400000, guid: 6433e1a30893f06449e9725949bbecfd,
       type: 2}
@@ -25,31 +27,36 @@ MonoBehaviour:
   timeRestraint: 7.5
   useTimeRestraint: 1
   roundChallengePool:
-  - type: 1
+  - customName: Sky high III
+    type: 1
     starsReward: 3
     buildHeight: 4
     projectiles: 0
     structuralIntegrity: 0
     vehicles: 0
-  - type: 2
+  - customName: Lay siege
+    type: 2
     starsReward: 2
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.75
     vehicles: 0
-  - type: 4
+  - customName: Highway
+    type: 4
     starsReward: 2
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 2
-  - type: 1
+  - customName: Sky high II
+    type: 1
     starsReward: 3
     buildHeight: 3
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 2
-  - type: 4
+  - customName: Crossroads
+    type: 4
     starsReward: 3
     buildHeight: 3
     projectiles: 2

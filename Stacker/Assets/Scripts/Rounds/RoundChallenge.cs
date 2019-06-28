@@ -6,6 +6,7 @@ namespace Stacker.Rounds
     abstract class RoundChallenge
     {
 
+        public string Name        { get; private set; }
         public int    StarsReward { get; private set; }
         public string Description { get; private set; }
 
@@ -13,8 +14,9 @@ namespace Stacker.Rounds
 
         public abstract RoundChallengeType RoundChallengeType { get; }
 
-        public RoundChallenge(int starsReward, string description)
+        public RoundChallenge(string name, int starsReward, string description)
         {
+            this.Name        = name;
             this.StarsReward = starsReward;
             this.Description = description;
         }

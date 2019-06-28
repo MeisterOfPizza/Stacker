@@ -36,7 +36,7 @@ namespace Stacker.UI.Challenges
             this.roundChallenge   = roundChallenge;
             this.hasBeenCompleted = false;
 
-            challengeName.text        = roundChallenge.RoundChallengeType.ToString();
+            challengeName.text        = roundChallenge.Name;
             challengeDescription.text = roundChallenge.Description;
 
             challengeName.fontStyle        &= ~FontStyles.Strikethrough; // Remove bit flag

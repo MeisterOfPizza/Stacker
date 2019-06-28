@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24f7d654637fe448a40d8f6054552c2, type: 3}
   m_Name: Normal 1
   m_EditorClassIdentifier: 
+  minStarsToAppear: 10
+  maxStarsToAppear: 50
   roundBuildingBlockTemplates:
   - buildingBlockTemplate: {fileID: 11400000, guid: 3cbf05f6345c86a418472ada13cd03c8,
       type: 2}
@@ -25,31 +27,36 @@ MonoBehaviour:
   timeRestraint: 10
   useTimeRestraint: 1
   roundChallengePool:
-  - type: 1
+  - customName: Sky high I
+    type: 1
     starsReward: 1
     buildHeight: 1
     projectiles: 0
     structuralIntegrity: 0
     vehicles: 0
-  - type: 2
+  - customName: 
+    type: 2
     starsReward: 2
     buildHeight: 2
     projectiles: 1
     structuralIntegrity: 0.25
     vehicles: 0
-  - type: 4
+  - customName: Tunnel-man
+    type: 4
     starsReward: 2
     buildHeight: 2
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 1
-  - type: 1
+  - customName: Sky high II
+    type: 1
     starsReward: 2
     buildHeight: 1.5
     projectiles: 2
     structuralIntegrity: 0.3
     vehicles: 2
-  - type: 2
+  - customName: Watch out!
+    type: 2
     starsReward: 3
     buildHeight: 2
     projectiles: 3
