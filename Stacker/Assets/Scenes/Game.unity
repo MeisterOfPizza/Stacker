@@ -4189,7 +4189,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Fortress
+  m_text: Projectiles
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4258,7 +4258,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 10, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 307522051}
-    characterCount: 8
+    characterCount: 11
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -15115,7 +15115,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Tunnel
+  m_text: Vehicles
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15184,7 +15184,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 10, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 907787780}
-    characterCount: 6
+    characterCount: 8
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -22873,9 +22873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61390b53f7d00ea479b1bef457606bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera_Rotate: Rotate
   camera_Zoom: Mouse ScrollWheel
-  camera_Level: Level
   build_Place: 32
   build_Cancel: 27
   build_RotateX: 97

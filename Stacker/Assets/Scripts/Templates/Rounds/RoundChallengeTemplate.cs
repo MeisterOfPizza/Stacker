@@ -3,6 +3,8 @@ using Stacker.Rounds;
 using System;
 using UnityEngine;
 
+#pragma warning disable 0649
+
 namespace Stacker.Templates.Rounds
 {
 
@@ -27,6 +29,9 @@ namespace Stacker.Templates.Rounds
 
         #region Editor
 
+        [SerializeField] private string customName;
+
+        [Space]
         [SerializeField]              private RoundChallengeType type        = RoundChallengeType.Skyscraper;
         [SerializeField, Range(1, 3)] private int                starsReward = 1;
 
@@ -68,11 +73,11 @@ namespace Stacker.Templates.Rounds
             switch (type)
             {
                 case RoundChallengeType.Skyscraper:
-                    return new SkyscraperChallenge(starsReward, string.Format("Build at least {0} meters high.", buildHeight), buildHeight);
+                    return new SkyscraperChallenge(customName.Length > 0 ? customName : type.ToString(), starsReward, string.Format("Build at least {0} meter{1} high.", buildHeight, buildHeight != 1 ? "s" : ""), buildHeight);
                 case RoundChallengeType.Fortress:
-                    return new FortressChallenge(starsReward, string.Format("{0} of the structure should remain after {1} projectiles have been fired.", structuralIntegrity.ToString("P0"), projectiles), projectiles, structuralIntegrity);
+                    return new FortressChallenge(customName.Length > 0 ? customName : type.ToString(), starsReward, string.Format("{0} of the structure should remain after {1} projectile{2} has been fired.", structuralIntegrity.ToString("P0"), projectiles, projectiles > 1 ? "s" : ""), projectiles, structuralIntegrity);
                 case RoundChallengeType.Tunnel:
-                    return new TunnelChallenge(starsReward, string.Format("Do not let the {0} vehicles crash into the structure.", vehicles), vehicles);
+                    return new TunnelChallenge(customName.Length > 0 ? customName : type.ToString(), starsReward, string.Format("Do not let the {0} vehicle{1} crash into the structure.", vehicles, vehicles > 1 ? "s" : ""), vehicles);
                 default:
                     return null;
             }

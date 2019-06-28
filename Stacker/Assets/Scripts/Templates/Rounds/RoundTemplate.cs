@@ -17,6 +17,12 @@ namespace Stacker.Templates.Rounds
 
         #region Editor
 
+        [Header("General")]
+        [SerializeField, Tooltip("Minimum amount of stars needed to make this round appear.")]
+        private int minStarsToAppear = 0;
+        [SerializeField, Tooltip("Maximum amount of stars the player can have before this round cannot appear anymore.")]
+        private int maxStarsToAppear = 10000;
+
         [Header("Building")]
         [SerializeField] private RoundBuildingBlockTemplate[] roundBuildingBlockTemplates;
 
@@ -70,6 +76,15 @@ namespace Stacker.Templates.Rounds
             {
                 return roundChallengePool;
             }
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        public bool RoundCanAppear(int currentStars)
+        {
+            return currentStars >= minStarsToAppear && currentStars <= maxStarsToAppear;
         }
 
         #endregion

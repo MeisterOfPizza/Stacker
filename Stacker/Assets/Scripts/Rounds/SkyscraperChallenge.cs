@@ -17,7 +17,7 @@ namespace Stacker.Rounds
             }
         }
 
-        public SkyscraperChallenge(int starsReward, string description, float buildHeight) : base(starsReward, description)
+        public SkyscraperChallenge(string name, int starsReward, string description, float buildHeight) : base(name, starsReward, description)
         {
             this.BuildHeight = buildHeight;
         }
