@@ -22681,6 +22681,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d2ef0e2dc7242f141a6f01e143958363, type: 2}
   - {fileID: 11400000, guid: dd18756d1c4fd1f48a391a07e1917978, type: 2}
   - {fileID: 11400000, guid: 1f4b405ae2895b84f9d4b0dec6afd17d, type: 2}
+  buildPhaseTickAudioSource: {fileID: 1743665629}
+  buildPhaseTickSoundEffect: {fileID: 8300000, guid: eb064bb879f6a2e4b8d57f1aff183451,
+    type: 3}
 --- !u!114 &1587339358
 MonoBehaviour:
   m_ObjectHideFlags: 0
