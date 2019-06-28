@@ -6441,7 +6441,7 @@ GameObject:
   m_Component:
   - component: {fileID: 508270794}
   m_Layer: 0
-  m_Name: Level Anchor
+  m_Name: Rotate Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6454,14 +6454,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508270793}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1743665626}
   m_Father: {fileID: 181920613}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!1 &514632170
 GameObject:
   m_ObjectHideFlags: 0
@@ -13072,13 +13072,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 665712874}
-    characterCount: 15
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -22759,15 +22759,15 @@ MonoBehaviour:
   mainCamera: {fileID: 1743665625}
   ui3DOverlayCamera: {fileID: 1952472549}
   canReadInput: 0
+  rotateAnchor: {fileID: 508270794}
   cameraRotateSpeed: 2.5
+  minAngleX: 20
+  maxAngleX: 80
   zoomSpeed: 5
-  minZoomPosition: {x: -2.5, y: 7.5, z: -2.5}
-  maxZoomPosition: {x: -15, y: 20, z: -15}
+  minZoomPosition: {x: 0, y: 0, z: -7.5}
+  maxZoomPosition: {x: 0, y: 0, z: -25}
   zoomStates: 10
   defaultZoom: 2
-  levelAnchor: {fileID: 508270794}
-  levelingSpeed: 5
-  maxLevel: 10
   mainCameraEventMask:
     serializedVersion: 2
     m_Bits: 33554432
@@ -24630,8 +24630,8 @@ Camera:
   m_GameObject: {fileID: 1743665623}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.14, g: 0.14, b: 0.14, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -24671,14 +24671,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1743665623}
-  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -5, y: 10, z: -5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 532779301}
   m_Father: {fileID: 508270794}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1743665627
 MonoBehaviour:
   m_ObjectHideFlags: 0
